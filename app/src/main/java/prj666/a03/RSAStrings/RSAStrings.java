@@ -1,4 +1,8 @@
-package rsastrings;
+package prj666.a03.RSAStrings;
+
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,8 +25,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.imageio.ImageIO;
-import javax.swing.JFrame;
+
 
 
 /**
@@ -30,9 +33,7 @@ import javax.swing.JFrame;
  * @author toyz89
  */
 public class RSAStrings {
-        public static void main(String [] args) throws Exception {
-            JFrame x =  new InterfaceGui();
-            x.setVisible(true);}
+        public static void main(String [] args) throws Exception {}
 
 
     public static KeyPair getKeys() throws NoSuchAlgorithmException{
@@ -68,6 +69,7 @@ public class RSAStrings {
         out.write(pubkey.getEncoded());
         out.close();}
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public static PublicKey loadPub(String pub) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException{
         Path path = Paths.get(pub);
         byte[] bytes = Files.readAllBytes(path);
@@ -80,6 +82,7 @@ public class RSAStrings {
         return pubkey1;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public static PrivateKey loadPriv(String pub) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException{
         Path path = Paths.get(pub);
         byte[] bytes = Files.readAllBytes(path);
