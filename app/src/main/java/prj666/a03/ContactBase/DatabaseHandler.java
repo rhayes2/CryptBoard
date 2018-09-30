@@ -13,7 +13,7 @@ import java.util.List;
 public class DatabaseHandler extends SQLiteOpenHelper {
     private static DatabaseHandler sInstance;
     public DatabaseHandler(Context context) {
-        super(context, "ContactList", null, 5);
+        super(context, "ContactList", null, 12);
     }
 
     public static synchronized DatabaseHandler getInstance(Context context) {
@@ -23,10 +23,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         return sInstance;
     }
-
     @Override
     public void onCreate(SQLiteDatabase db1){
-        db1.execSQL("CREATE TABLE contactLog (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE, favourite INTEGER(1) NOT NULL DEFAULT 0, keyfile TEXT, dateCreated TEXT)");
+        db1.execSQL("CREATE TABLE contactLog (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE, favourite INTEGER(1) NOT NULL DEFAULT 0, myPrivKey TEXT, contactPubKey TEXT, dateCreated TEXT)");
     }
 
     @Override
@@ -43,7 +42,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put("name", newContact.getName());
         values.put("favourite", newContact.isFavouriteInt());
-        values.put("keyfile", newContact.getKeyFile());
+        values.put("myPrivKey", newContact.getMyPrivKey());
+        values.put("contactPubKey", newContact.getContactPubKey());
         values.put("dateCreated", newContact.getDateCreated());
         db3.insert("contactLog", null, values);
         db3.close();
@@ -55,7 +55,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put("name", theContact.getName());
         values.put("favourite", theContact.isFavouriteInt());
-        values.put("keyfile", theContact.getKeyFile());
+        values.put("myPrivKey", theContact.getMyPrivKey());
+        values.put("contactPubKey", theContact.getContactPubKey());
         values.put("dateCreated", theContact.getDateCreated());
         db4.update("contactLog", values, "name = ?", new String[] {theContact.getName()});
         db4.close();
@@ -76,9 +77,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if(cursor.moveToFirst()) {
             String name = cursor.getString(1);
             Boolean favourite = ( 1 == cursor.getInt(2) );
-            String keyFile = cursor.getString(3);
-            String date = cursor.getString(4);
-            contact = new Contact(name, favourite, keyFile, date );
+            String myPrivKey = cursor.getString(3);
+            String contactPubKey = cursor.getString(4);
+            String date = cursor.getString(5);
+            contact = new Contact(name, favourite, myPrivKey, contactPubKey, date );
         }
         else {
             contact = new Contact();
@@ -99,9 +101,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             do {
                 String name = cursor.getString(1);
                 Boolean favourite = ( 1 == cursor.getInt(2) );
-                String keyFile = cursor.getString(3);
-                String date = cursor.getString(4);
-                Contact currentContact = new Contact(name, favourite, keyFile, date);
+                String myPrivKey = cursor.getString(3);
+                String contactPubKey = cursor.getString(4);
+                String date = cursor.getString(5);
+                Contact currentContact = new Contact(name, favourite, myPrivKey, contactPubKey, date);
                 contactList.add(currentContact);
             } while (cursor.moveToNext());
         }

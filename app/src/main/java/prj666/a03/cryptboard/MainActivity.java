@@ -1,20 +1,16 @@
 package prj666.a03.cryptboard;
 
-import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.StringReader;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
@@ -87,31 +83,34 @@ public class MainActivity extends AppCompatActivity {
         KeyPair MitchKeys, LarryKeys;
         MitchKeys = null;
         LarryKeys = null;
-        String x;
-        String x2;
+        String larrypub, larrypriv;
+        String Mitchpub, Mitchpriv;
         try {
             LarryKeys = RSAStrings.getKeys();
+            MitchKeys = RSAStrings.getKeys();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }finally {
-            x = new String(Base64.getEncoder().encode(LarryKeys.getPublic().getEncoded()));
-            System.out.println("Larry Public Key Generated: "+x);
-            x2 = new String(Base64.getEncoder().encode(LarryKeys.getPrivate().getEncoded()));
-            System.out.println("Larry Private Key Generated: "+x2);
+            larrypub = new String(Base64.getEncoder().encode(LarryKeys.getPublic().getEncoded()));
+            larrypriv = new String(Base64.getEncoder().encode(LarryKeys.getPrivate().getEncoded()));
+            Mitchpub = new String(Base64.getEncoder().encode(MitchKeys.getPublic().getEncoded()));
+            Mitchpriv = new String(Base64.getEncoder().encode(MitchKeys.getPrivate().getEncoded()));
+            System.out.println("Larry Private Key Generated: \n"+larrypub+"\n"+larrypriv);
         }
         System.out.println("---------------------------------------------------------------------");
         System.out.println("Get All Contacts: ");
         List<Contact> clist =  db.getContactList();
         System.out.println(clist);
         System.out.println("---------------------------------------------------------------------");
-        //System.out.println("FOR THE SAKE OF THE TEST, KEYS ARE STORED INCORRECTLY");
-        //System.out.println("Inserting Contacts: ");
-        //Contact tmp = new Contact("Mitch Headburg",Boolean.TRUE,x);
-        //Contact tmp2 = new Contact("Larry David",Boolean.FALSE,x2);
-        //System.out.println("Inserting Contact: "+ tmp.toString());
-        //System.out.println("Inserting Contact: "+ tmp2.toString());
-        //db.insertContact(tmp);
-        //db.insertContact(tmp2);
+        System.out.println("FOR THE SAKE OF THE TEST, KEYS ARE STORED INCORRECTLY");
+        if (clist.size()<1){
+            System.out.println("Inserting Contacts: ");
+            Contact tmp = new Contact("Mitch Headburg",Boolean.TRUE,Mitchpriv,Mitchpub);
+            Contact tmp2 = new Contact("Larry David",Boolean.FALSE,larrypriv,larrypub);
+            System.out.println("Inserting Contact: "+ tmp.toString());
+            System.out.println("Inserting Contact: "+ tmp2.toString());
+            db.insertContact(tmp);
+            db.insertContact(tmp2);}
         System.out.println("---------------------------------------------------------------------");
         System.out.println("Get All Contacts: ");
         clist =  db.getContactList();
@@ -119,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("---------------------------------------------------------------------");
         System.out.println("Loading byte[] array X509EncodedKey");
         KeyFactory rsaKeyFac = KeyFactory.getInstance("RSA");
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(clist.get(0).getKeyFile()));
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(clist.get(1).getContactPubKey()));
         RSAPublicKey pubKey = (RSAPublicKey)rsaKeyFac.generatePublic(keySpec);
         System.out.println("---------------------------------------------------------------------");
         System.out.println("Test Encryption String Mitch -> David");
@@ -128,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("Encrypted Msg: Test String HeLLo wOrLd!!\n" + new String(base64Encyption));
         System.out.println("---------------------------------------------------------------------");
         System.out.println("Loading byte[] array PKCS8Encoded key");
-        String testkey = clist.get(1).getKeyFile();
+        String testkey = clist.get(1).getMyPrivKey();
         PKCS8EncodedKeySpec encodedKeySpec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(testkey));
         RSAPrivateKey privKey = (RSAPrivateKey)rsaKeyFac.generatePrivate(encodedKeySpec);;
         System.out.println("---------------------------------------------------------------------");
@@ -142,11 +141,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         System.out.println("Orignal msg: "+ new String(decrypted));
-
-
-
-
-
 
         return  true;
     }

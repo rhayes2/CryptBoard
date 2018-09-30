@@ -10,7 +10,8 @@ public class Contact {
     // keyFile contains the name of the file containing public and private key information .it is not the key itself. file extraction code must be implemented.
     private String name;
     private boolean favourite;
-    private String keyFile;
+    private String myPrivKey;
+    private String contactPubKey;
     private String dateCreated;
 
 
@@ -25,21 +26,23 @@ public class Contact {
         }
     */
     // used for contact creation
-    public Contact(String name, Boolean favourite, String keyFile) {
+    public Contact(String name, Boolean favourite, String myKeyFile, String theirKeyFile) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         Date date = new Date();
 
         this.name = name;
         this.favourite = favourite;
-        this.keyFile = keyFile;
+        this.myPrivKey = myKeyFile;
+        this.contactPubKey = theirKeyFile;
         this.dateCreated = dateFormat.format(date);
     }
 
     // used for fetching from database
-    public Contact(String name, Boolean favourite, String keyFile, String date) {
+    public Contact(String name, Boolean favourite, String myPrivKey, String contactPubKey, String date) {
         this.name = name;
         this.favourite = favourite;
-        this.keyFile = keyFile;
+        this.myPrivKey = myPrivKey;
+        this.contactPubKey = contactPubKey;
         this.dateCreated = date;
     }
 
@@ -66,12 +69,20 @@ public class Contact {
         this.favourite = favourite;
     }
 
-    public String getKeyFile() {
-        return this.keyFile;
+    public String getMyPrivKey() {
+        return this.myPrivKey;
     }
 
-    public void setKeyFile(String keyFile) {
-        this.keyFile = keyFile;
+    public void setMyPrivKey(String keyFile) {
+        this.myPrivKey = keyFile;
+    }
+
+    public String getContactPubKey() {
+        return this.contactPubKey;
+    }
+
+    public void setContactPubKey(String keyFile) {
+        this.contactPubKey = keyFile;
     }
 
 //  no set date because creation date should remain the same
@@ -79,6 +90,7 @@ public class Contact {
     public String getDateCreated(){
         return this.dateCreated;
     }
+
 
 
     public void setContactKey(String key) {
@@ -92,6 +104,6 @@ public class Contact {
 
     @Override
     public String toString() {
-        return name +" "+ dateCreated ;
+        return name + " "+ dateCreated;
     }
 }
