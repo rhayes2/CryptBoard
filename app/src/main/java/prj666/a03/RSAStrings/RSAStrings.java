@@ -48,7 +48,6 @@ public class RSAStrings {
             InvalidKeyException,
             IllegalBlockSizeException,
             BadPaddingException{
-        System.out.println(priv.getEncoded());
         Cipher crypt = Cipher.getInstance("RSA");
         crypt.init(Cipher.ENCRYPT_MODE, priv);
         return crypt.doFinal(msg.getBytes());}
