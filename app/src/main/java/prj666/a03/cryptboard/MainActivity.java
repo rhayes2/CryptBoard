@@ -47,6 +47,28 @@ public class MainActivity extends AppCompatActivity {
         db = DatabaseHandler.getInstance(this);
         frontEndHelper control = new frontEndHelper(db);
         System.out.println(control.getContacts());
+        try {
+            String testSend = control.sendMsg("Mitch Headburg","Your a cool guy");
+            System.out.println(testSend);
+            testSend = control.decryptMsg("Mitch Headburg",testSend);
+            System.out.println(testSend);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     /**

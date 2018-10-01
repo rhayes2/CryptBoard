@@ -91,17 +91,6 @@ public class Contact {
         return this.dateCreated;
     }
 
-
-
-    public void setContactKey(String key) {
-        //needs implementation
-    }
-
-    public String getContactKey() {
-        //needs implementation
-        return "";
-    }
-
     @Override
     public String toString() {
         return name + " "+ dateCreated;
