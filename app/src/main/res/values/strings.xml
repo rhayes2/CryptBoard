@@ -1,0 +1,53 @@
+<resources>
+    <string name="app_name">CryptBoard</string>
+    <string name="title_activity_contact__list__main">Contact_List_Main</string>
+    <string name="tab_text_1">Favs</string>
+    <string name="tab_text_2">All</string>
+    <string name="tab_text_3">Quick Access</string>
+    <string name="action_settings">Settings</string>
+
+    <string-array name="all">
+        <item>Sun</item>
+        <item>Mercury</item>
+        <item>Venus</item>
+        <item>Earth</item>
+        <item>Mars</item>
+        <item>Jupiter</item>
+        <item>Saturn</item>
+        <item>Uranus</item>
+        <item>Neptune</item>
+    </string-array>
+
+    <string-array name="quick">
+        <item>uno</item>
+        <item>dos</item>
+        <item>tres</item>
+        <item>cuatro</item>
+        <item>cinco</item>
+        <item>seis</item>
+        <item>siete</item>
+        <item>ocho</item>
+        <item>nueve</item>
+        <item>diez</item>
+        <item>once</item>
+        <item>doce</item>
+    </string-array>
+
+
+    <string-array name="favs">
+        <item>Dillon Coull</item>
+        <item>Ryan Hayes</item>
+        <item>Alejandra Latorraca</item>
+        <item>Thomas Luu</item>
+        <item>Muchtar Salimov</item>
+    </string-array>
+
+    <string name="cryptboard">CryptBoard</string>
+    <string name="contactName">ContactName</string>
+    <string name="keyExchange">keyExchange</string>
+    <string name="subtype_en_US">English US</string>
+    <string name="done_button">Done</string>
+    <string name="scan_button">Scan QR Code</string>
+    <string name="qrScan_instructions">Scan Me!</string>
+    <string name="publicKeyQR">QR generated based on public key</string>
+</resources>
