@@ -180,7 +180,6 @@ public class CryptBoard extends InputMethodService
 
     @Override
     public void swipeUp() {
-        unlock = false;
         if (unlock) {
             if (numMode){
                 keyboardView.setKeyboard(keyboardNum);
