@@ -42,6 +42,18 @@
         <item>Muchtar Salimov</item>
     </string-array>
 
+    <string name="installation_standard">Welcome to CryptBoard - Installation</string>
+    <string name="installation_standard_1">Press the \"Input Settings\" button, enable CryptBoard, accept any prompts,
+        and press your device\'s back button. CryptBoard does not log any keystrokes and does not transmit any information
+    \n\nPress the \"Keyboard Selection\" button and select CryptBoard from the list to make it your default keyboard.
+    \n\nYou can switch back to another keyboard at any time by using the keyboard icon on the navigation bar on the bottom
+    of your device screen whenever they keyboard is displayed</string>
+
+    <string name="installation_samsung_1">Press the \"Input Settings\" button, enable CryptBoard, accept any prompts,
+        and press your device\'s back button. CryptBoard does not log any keystrokes and does not transmit any information
+    \n\nPress the \"Keyboard Selection\" button and select CryptBoard from the list to make it your default keyboard</string>
+
+
     <string name="cryptboard">CryptBoard</string>
     <string name="contactName">ContactName</string>
     <string name="keyExchange">keyExchange</string>
