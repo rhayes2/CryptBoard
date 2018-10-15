@@ -26,16 +26,22 @@ public class CryptBoard extends InputMethodService
     private KeyboardView keyboardView;
     private Keyboard keyboard;
     private Keyboard keyboardNum;
+    private Keyboard keyboardNormal;
+    private Keyboard keyboardNumNormal;
     private View contactsView;
     private PopupWindow popup;
     private boolean caps = false;
     private boolean numMode = false;
+    private boolean unlock = false;
+    private boolean stegMode = false;
 
     @Override
     public View onCreateInputView() {
         keyboardView = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard, null);
         keyboard = new Keyboard(this, R.xml.qwerty);
         keyboardNum = new Keyboard(this, R.xml.alt_qwerty);
+        keyboardNormal = new Keyboard(this, R.xml.qwerty_normal);
+        keyboardNumNormal = new Keyboard(this, R.xml.alt_qwerty_normal);
 
         contactsView = getLayoutInflater().inflate(R.layout.activity_main, null);
         popup = new PopupWindow();
@@ -44,8 +50,9 @@ public class CryptBoard extends InputMethodService
         popup.setHeight(400);
         popup.setClippingEnabled(false);
 
+
         keyboardView.setPreviewEnabled(false);
-        keyboardView.setKeyboard(keyboard);
+        keyboardView.setKeyboard(keyboardNormal);
         keyboardView.setOnKeyboardActionListener(this);
 
         return keyboardView;
@@ -69,6 +76,7 @@ public class CryptBoard extends InputMethodService
     }
     @Override
     public void onPress(int primaryCode) {
+        unlock = false;
         InputConnection ic = getCurrentInputConnection();
         playClick(primaryCode);
         switch (primaryCode) {
@@ -77,12 +85,12 @@ public class CryptBoard extends InputMethodService
                 break;
             case Keyboard.KEYCODE_SHIFT:
                 caps = !caps;
-                keyboard.setShifted(caps);
+                keyboardView.getKeyboard().setShifted(caps);
                 keyboardView.invalidateAllKeys();
                 break;
             case Keyboard.KEYCODE_MODE_CHANGE:
                 caps = false;
-                keyboard.setShifted(caps);
+                keyboardView.getKeyboard().setShifted(caps);
 
                 numMode = !numMode;
                 if (numMode)
@@ -91,6 +99,7 @@ public class CryptBoard extends InputMethodService
                     keyboardView.setKeyboard(keyboard);
                 keyboardView.invalidateAllKeys();
                 break;
+
             case Keyboard.KEYCODE_DONE:
                 ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
                 break;
@@ -142,22 +151,45 @@ public class CryptBoard extends InputMethodService
 
     @Override
     public void swipeLeft() {
-
+        unlock = false;
     }
 
     @Override
     public void swipeRight() {
-
+        unlock = false;
     }
 
     @Override
     public void swipeDown() {
-        popup.dismiss();
+        if (stegMode) {
+            if (numMode){
+                keyboardView.setKeyboard(keyboardNumNormal);
+            }
+            else{
+                keyboardView.setKeyboard(keyboardNormal);
+            }
+            keyboardView.invalidateAllKeys();
+            unlock = false;
+            stegMode = false;
+        }
+        else{
+            unlock = true;
+        }
+
     }
 
     @Override
     public void swipeUp() {
-
+        if (unlock) {
+            if (numMode){
+                keyboardView.setKeyboard(keyboardNum);
+            }
+            else{
+                keyboardView.setKeyboard(keyboard);
+            }
+            keyboardView.invalidateAllKeys();
+            stegMode = true;
+        }
     }
 
 }
