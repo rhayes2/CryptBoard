@@ -26,11 +26,15 @@ import prj666.a03.cryptboard.ContactBase.DatabaseHandler;
 
 public class MainActivity extends AppCompatActivity {
 
+    DatabaseHandler db;
+    frontEndHelper control;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        db = DatabaseHandler.getInstance(this);
+        control = new frontEndHelper(db,this);
 
         Button settingsButton, keyboardButton;
         TextView step1;
