@@ -59,7 +59,7 @@ public class KeyExchange extends AppCompatActivity {
         }
 
 
-
+        //TODO: Check orientation of recognition function/code generation to increase scanning speed
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

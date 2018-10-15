@@ -21,44 +21,13 @@ import prj666.a03.cryptboard.ContactBase.DatabaseHandler;
 
 public class MainActivity extends AppCompatActivity {
 
-    DatabaseHandler db;
-    frontEndHelper control;
 
-    // Used to load the 'native-lib' library on application startup.
-    static {
-        System.loadLibrary("native-lib");
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        db = DatabaseHandler.getInstance(this);
-        control = new frontEndHelper(db,this);
-
-
-        Button con = findViewById(R.id.Contacts);
-
-        con.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, Contact_List_Main.class);
-                startActivity(intent);
-            }
-        });
 
     }
-
-    /**
-     * A native method that is implemented by the 'native-lib' native library,
-     * which is packaged with this application.
-     */
-
-    //public native String stringFromJNI();
-
-
-
-    }
+}
 
 
