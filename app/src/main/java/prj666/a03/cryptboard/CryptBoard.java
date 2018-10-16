@@ -30,10 +30,13 @@ public class CryptBoard extends InputMethodService
     private Keyboard keyboardNumNormal;
     private View contactsView;
     private PopupWindow popup;
+
+    private InputConnection ic;
     private boolean caps = false;
     private boolean numMode = false;
     private boolean unlock = false;
     private boolean stegMode = false;
+
 
     @Override
     public View onCreateInputView() {
@@ -76,8 +79,7 @@ public class CryptBoard extends InputMethodService
     }
     @Override
     public void onPress(int primaryCode) {
-        unlock = false;
-        InputConnection ic = getCurrentInputConnection();
+        ic = getCurrentInputConnection();
         playClick(primaryCode);
         switch (primaryCode) {
             case Keyboard.KEYCODE_DELETE:
@@ -93,10 +95,18 @@ public class CryptBoard extends InputMethodService
                 keyboardView.getKeyboard().setShifted(caps);
 
                 numMode = !numMode;
-                if (numMode)
-                    keyboardView.setKeyboard(keyboardNum);
-                else
-                    keyboardView.setKeyboard(keyboard);
+                if (stegMode) {
+                    if (numMode)
+                        keyboardView.setKeyboard(keyboardNum);
+                    else
+                        keyboardView.setKeyboard(keyboard);
+                }
+                else{
+                    if (numMode)
+                        keyboardView.setKeyboard(keyboardNumNormal);
+                    else
+                        keyboardView.setKeyboard(keyboardNormal);
+                }
                 keyboardView.invalidateAllKeys();
                 break;
 
@@ -128,8 +138,6 @@ public class CryptBoard extends InputMethodService
                     code = Character.toUpperCase(code);
                 }
                 ic.commitText(String.valueOf(code),1);
-
-
         }
 
     }
@@ -151,12 +159,10 @@ public class CryptBoard extends InputMethodService
 
     @Override
     public void swipeLeft() {
-        unlock = false;
     }
 
     @Override
     public void swipeRight() {
-        unlock = false;
     }
 
     @Override
@@ -189,6 +195,7 @@ public class CryptBoard extends InputMethodService
             }
             keyboardView.invalidateAllKeys();
             stegMode = true;
+            unlock = true;
         }
     }
 
