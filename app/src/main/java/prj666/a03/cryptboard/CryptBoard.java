@@ -33,6 +33,7 @@ public class CryptBoard extends InputMethodService
 
     private InputConnection ic;
     private boolean caps = false;
+    private boolean capsLock = false;
     private boolean numMode = false;
     private boolean unlock = false;
     private boolean stegMode = false;
@@ -86,12 +87,26 @@ public class CryptBoard extends InputMethodService
                 ic.deleteSurroundingText(1,0);
                 break;
             case Keyboard.KEYCODE_SHIFT:
-                caps = !caps;
-                keyboardView.getKeyboard().setShifted(caps);
-                keyboardView.invalidateAllKeys();
+                if (capsLock) {
+                    capsLock = false;
+                    caps = false;
+                    keyboardView.getKeyboard().setShifted(caps);
+                    keyboardView.invalidateAllKeys();
+                }
+                else {
+                    if (caps) {
+                        capsLock = true;
+                    }
+                    else {
+                        caps = !caps;
+                        keyboardView.getKeyboard().setShifted(caps);
+                        keyboardView.invalidateAllKeys();
+                    }
+                }
                 break;
             case Keyboard.KEYCODE_MODE_CHANGE:
                 caps = false;
+                capsLock = false;
                 keyboardView.getKeyboard().setShifted(caps);
 
                 numMode = !numMode;
@@ -138,6 +153,11 @@ public class CryptBoard extends InputMethodService
                     code = Character.toUpperCase(code);
                 }
                 ic.commitText(String.valueOf(code),1);
+                if (!capsLock && caps){
+                    caps = false;
+                    keyboardView.getKeyboard().setShifted(caps);
+                    keyboardView.invalidateAllKeys();
+                }
         }
 
     }
