@@ -20,11 +20,12 @@ public class Contact_Details extends AppCompatActivity {
         TextView date = (TextView)findViewById(R.id.Contact_key_date);
         ImageView img = (ImageView)findViewById(R.id.Contact_Detail_Picture);
 
+        if(tmp.getContactPubKey()!=null){
         try {
             img.setImageBitmap(QRCodeGenerator.encodeAsBitmap(tmp.getContactPubKey()));
         } catch (WriterException e) {
             e.printStackTrace();
-        }
+        }}
         name.setText(tmp.getName());
         date.setText(tmp.getDateCreated());
 

@@ -1,5 +1,6 @@
 package prj666.a03.cryptboard;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -36,6 +37,10 @@ public class Contact_List_All extends ListFragment implements AdapterView.OnItem
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Contact clicked = frontEndHelper.getInstance().getPos(position);
+        Intent contactDetails = new Intent(getContext(),Contact_Details.class);
+        contactDetails.putExtra("contact", clicked);
+        startActivity(contactDetails);
 
     }
 
