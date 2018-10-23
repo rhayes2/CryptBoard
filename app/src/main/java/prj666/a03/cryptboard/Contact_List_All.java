@@ -14,6 +14,8 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import prj666.a03.cryptboard.ContactBase.Contact;
+
 public class Contact_List_All extends ListFragment implements AdapterView.OnItemClickListener {
 
 
@@ -26,8 +28,7 @@ public class Contact_List_All extends ListFragment implements AdapterView.OnItem
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(), R.array.all, android.R.layout.simple_list_item_1);
+        ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(getActivity(), android.R.layout.simple_list_item_1, frontEndHelper.getInstance().getContacts());
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
     }

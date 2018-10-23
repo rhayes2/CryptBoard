@@ -2,11 +2,12 @@ package prj666.a03.cryptboard.ContactBase;
 
 
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Contact {
+public class Contact implements Serializable {
     // keyFile contains the name of the file containing public and private key information .it is not the key itself. file extraction code must be implemented.
     private String name;
     private boolean favourite;
