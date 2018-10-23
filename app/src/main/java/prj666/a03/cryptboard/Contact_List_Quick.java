@@ -11,9 +11,10 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Contact_List_Quick extends  ListFragment {
-    String[] Contact_Quick_list = {"Seneca", "College", "Alejandra", "Dillon", "Ryan", "Muchtar", "Thomas"};
+    List<String> Contact_Quick_list = null;
     int[] Cont_Image = { R.drawable.star , R.drawable.star ,R.drawable.star , R.drawable.star , R.drawable.star , R.drawable.star , R.drawable.star };
 
 
@@ -22,15 +23,15 @@ public class Contact_List_Quick extends  ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        loadContact();
 
         HashMap<String, String> hMap=new HashMap<String, String>();
 
         //FILL
-        for(int i = 0; i< Contact_Quick_list.length; i++)
+        for(int i = 0; i< Contact_Quick_list.size(); i++)
         {
             hMap = new HashMap<String, String>();
-            hMap.put("Name", Contact_Quick_list[i]);
+            hMap.put("Name", Contact_Quick_list.get(i));
             hMap.put("Image", Integer.toString(Cont_Image[i]));
 
             data.add(hMap);
@@ -58,6 +59,7 @@ public class Contact_List_Quick extends  ListFragment {
     public void onStart() {
         // TODO Auto-generated method stub
         super.onStart();
+        Contact_Quick_list = frontEndHelper.getInstance().getNames();
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> av, View v, int pos, long id) {
@@ -67,5 +69,9 @@ public class Contact_List_Quick extends  ListFragment {
 
             }
         });
+    }
+
+    public void loadContact(){
+        if(Contact_Quick_list!=frontEndHelper.getInstance().getNames())Contact_Quick_list=frontEndHelper.getInstance().getNames(); //TODO CleanThis?
     }
 }

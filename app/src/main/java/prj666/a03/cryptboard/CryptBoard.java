@@ -34,8 +34,8 @@ public class CryptBoard extends InputMethodService
     private InputConnection ic;
     private boolean caps = false;
     private boolean numMode = false;
-    private boolean unlock = false;
-    private boolean stegMode = false;
+    private boolean unlock = true;
+    private boolean stegMode = true;
 
 
     @Override

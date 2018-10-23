@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.text.Editable;
 import android.widget.Toast;
 
-import java.io.Serializable;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -17,7 +15,7 @@ import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Base64;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.crypto.BadPaddingException;
@@ -29,19 +27,21 @@ import prj666.a03.cryptboard.ContactBase.Contact;
 import prj666.a03.cryptboard.ContactBase.DatabaseHandler;
 import prj666.a03.cryptboard.RSAStrings.RSAStrings;
 
-public class frontEndHelper implements Serializable {
+public class frontEndHelper {
 
     public static DatabaseHandler db;
     Activity MainAct;
     public static String scanTarget;
-    public static frontEndHelper sInstance;
+    private static frontEndHelper sInstance;
+    private List<Contact> Clist;
 
     public frontEndHelper(DatabaseHandler dbpass, Activity tmp) {
         db = dbpass;
         MainAct = tmp;
         sInstance = this;
+        Clist = getContacts();
     }
-    public frontEndHelper getInstance(){return sInstance;}
+    public static frontEndHelper getInstance(){return sInstance;}
 
     public List<Contact> getContacts(){
         return db.getContactList();
@@ -135,5 +135,16 @@ public class frontEndHelper implements Serializable {
         Toast.makeText(MainAct, "Contact: " +tmp.getName()+" Updated to:\n"+ tmp.toString() + " ", Toast.LENGTH_LONG).show();
         db.updateContact(tmp);
     }
+
+
+    public List<String> getNames(){
+        List<String> names = new ArrayList<String>();
+        for(Contact x : Clist){
+            names.add(x.getName());
+        }
+        return names;
+    }
+
+    public Contact getPos(int pos){return Clist.get(pos);}
 
 }
