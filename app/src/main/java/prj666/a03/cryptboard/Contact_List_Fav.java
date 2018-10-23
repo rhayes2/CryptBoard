@@ -38,7 +38,7 @@ public class Contact_List_Fav extends ListFragment implements AdapterView.OnItem
         ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(getActivity(), android.R.layout.simple_list_item_1, frontEndHelper.getInstance().getContacts());
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
-    }
+}
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

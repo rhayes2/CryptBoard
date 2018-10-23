@@ -73,7 +73,7 @@ public class frontEndHelper {
         displayKey(tmpPub,act);
         // GET THEIR PublicKey before Saving
 
-
+        Clist = db.getContactList();
         System.out.println(db.getContactList());
         // Save Contact
 
@@ -138,6 +138,7 @@ public class frontEndHelper {
 
 
     public List<String> getNames(){
+        Clist = db.getContactList();
         List<String> names = new ArrayList<String>();
         for(Contact x : Clist){
             names.add(x.getName());
