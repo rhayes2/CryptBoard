@@ -38,12 +38,11 @@
         android:layout_width="310dp"
         android:layout_height="77dp"
         android:layout_marginTop="50dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="8dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Contact_Detail_Picture"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@+id/Contact_Detail_Picture">
 
         <TextView
             android:id="@+id/Contact_public_key"
@@ -61,6 +60,7 @@
             android:textSize="20sp"
 
             />
+
     </LinearLayout>
 
     <ImageView
@@ -76,5 +76,52 @@
         app:layout_constraintTop_toBottomOf="@+id/Contact_Detail_Picture"
         app:layout_constraintVertical_bias="0.033"
         app:srcCompat="@android:drawable/btn_star_big_off" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="100dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/showQRButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="0.25"
+                android:text="Show QR"
+                tools:layout_editor_absoluteX="74dp"
+                tools:layout_editor_absoluteY="307dp" />
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="0.25"
+                android:text="EDIT"
+                tools:layout_editor_absoluteX="74dp"
+                tools:layout_editor_absoluteY="307dp" />
+
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="0.25"
+                android:text="Delete"
+                tools:layout_editor_absoluteX="74dp"
+                tools:layout_editor_absoluteY="307dp" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
