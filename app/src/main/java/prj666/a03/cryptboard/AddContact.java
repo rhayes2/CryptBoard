@@ -32,7 +32,7 @@ public class AddContact extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
-                control = frontEndHelper.sInstance;
+                control = frontEndHelper.getInstance();
                 System.out.println(control.getContacts());
                 //Intent intent = new Intent(AddContact.this, KeyExchange.class);
                 //startActivity(intent);

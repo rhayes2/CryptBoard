@@ -1,5 +1,6 @@
 package prj666.a03.cryptboard;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -14,6 +15,8 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import prj666.a03.cryptboard.ContactBase.Contact;
+
 public class Contact_List_All extends ListFragment implements AdapterView.OnItemClickListener {
 
 
@@ -26,8 +29,7 @@ public class Contact_List_All extends ListFragment implements AdapterView.OnItem
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(), R.array.all, android.R.layout.simple_list_item_1);
+        ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(getActivity(), android.R.layout.simple_list_item_1, frontEndHelper.getInstance().getContacts());
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
     }
@@ -35,6 +37,10 @@ public class Contact_List_All extends ListFragment implements AdapterView.OnItem
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Contact clicked = frontEndHelper.getInstance().getPos(position);
+        Intent contactDetails = new Intent(getContext(),Contact_Details.class);
+        contactDetails.putExtra("contact", clicked);
+        startActivity(contactDetails);
 
     }
 
