@@ -1,5 +1,7 @@
 package prj666.a03.cryptboard;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -47,6 +49,7 @@ public class Contact_Details extends AppCompatActivity {
                 // show QR code
                 // TO DO:
                 //       1) launch activity to show QR
+                //           (make sure uses current value for tmp in  case it was changed
             }
         });
 
@@ -56,6 +59,9 @@ public class Contact_Details extends AppCompatActivity {
                 // TO DO:
                 //       1) launch edit contact activity
                 //       2) make sure this activity refreshes when coming back
+                Intent editContactIntent = new Intent(Contact_Details.this, Contact_Edit_Details.class);
+                editContactIntent.putExtra("contactToEdit", tmp);
+                startActivityForResult(editContactIntent, 1);
             }
         });
 
@@ -70,4 +76,32 @@ public class Contact_Details extends AppCompatActivity {
         });
 
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                if ((Boolean) data.getBooleanExtra("changedStatus", false)) {
+
+                    tmp = (Contact) data.getSerializableExtra("updatedContactInfo");
+
+                    if(tmp.getContactPubKey()!=null){
+                        try {
+                            img.setImageBitmap(QRCodeGenerator.encodeAsBitmap(tmp.getContactPubKey()));
+                        } catch (WriterException e) {
+                            e.printStackTrace();
+                        }}
+                    name.setText(tmp.getName());
+                    date.setText(tmp.getDateCreated());
+                }
+
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
+    }//onActivityResult
+
 }

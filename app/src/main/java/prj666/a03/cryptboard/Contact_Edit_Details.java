@@ -1,5 +1,7 @@
 package prj666.a03.cryptboard;
 
+        import android.app.Activity;
+        import android.content.Intent;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
         import android.view.View;
@@ -20,11 +22,12 @@ public class Contact_Edit_Details extends AppCompatActivity {
     Button deleteKeyButton;
     Button scanNewQRButton;
     Button saveEditButton;
+    Boolean changed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tmp = (Contact) getIntent().getSerializableExtra("contact");
+        tmp = (Contact) getIntent().getSerializableExtra("contactToEdit");
         setContentView(R.layout.activity_contact__details__edit);
         name = (TextView)findViewById(R.id.Contact_Deatil_Edit_name);
         date = (TextView)findViewById(R.id.Contact_key_date_Edit);
@@ -82,7 +85,21 @@ public class Contact_Edit_Details extends AppCompatActivity {
                 // TO DO:
                 //       1) commit changes to db
                 //       3) refresh current activity
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("changeStatus", changed);
+                returnIntent.putExtra("updatedContactInfo", tmp);
+                setResult(Activity.RESULT_OK, returnIntent);
+                finish();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("changeStatus", changed);
+        returnIntent.putExtra("updatedContactInfo", tmp);
+        setResult(Activity.RESULT_OK, returnIntent);
+        finish();
     }
 }
