@@ -45,7 +45,7 @@ public class Contact_List_Quick extends  ListFragment {
         String[] from={"Name","Image"};
 
         //object that will get the names and images
-        int[] to={R.id.Contact_Name,R.id.Contact_Image};
+        int[] to={R.id.Contact_Name,R.id.imageView};
 
         //array(list later on) adapter
         //Contact_Quick_list = frontEndHelper.getInstance().getNames();

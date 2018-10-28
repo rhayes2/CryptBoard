@@ -112,4 +112,55 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db6.close();
         return contactList;
     }
+
+    //will get all the contact names from the database
+    public List<String> getContactListNames() {
+        List<String> names = new ArrayList<>();
+        String selectQuery = "SELECT * FROM contactLog ORDER BY name";
+        SQLiteDatabase db6 = this.getReadableDatabase();
+        Cursor cursor = db6.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                names.add(cursor.getString(1));
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db6.close();
+        return names;
+    }
+
+    //Will get all the names of those contact where favourite is true
+    public List<String> getContactListNamesFav() {
+        List<String> names = new ArrayList<>();
+        String selectQuery = "SELECT * FROM contactLog WHERE favourite = 1 ORDER BY name";
+        SQLiteDatabase db6 = this.getReadableDatabase();
+        Cursor cursor = db6.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                names.add(cursor.getString(1));
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db6.close();
+        return names;
+    }
+
+    //will get the last 3 contact added to the contact list
+    public List<String> getContactListNamesLast() {
+        List<String> names = new ArrayList<>();
+        String selectQuery = "SELECT * FROM contactLog ORDER BY id desc LIMIT 3; ";
+        SQLiteDatabase db6 = this.getReadableDatabase();
+        Cursor cursor = db6.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                names.add(cursor.getString(1));
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db6.close();
+        return names;
+    }
 }

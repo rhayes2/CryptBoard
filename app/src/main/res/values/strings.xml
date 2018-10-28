@@ -62,4 +62,5 @@
     <string name="scan_button">Scan QR Code</string>
     <string name="qrScan_instructions">Scan Me!</string>
     <string name="publicKeyQR">QR generated based on public key</string>
+    <string name="title_activity_contact__list">Contact_List</string>
 </resources>
