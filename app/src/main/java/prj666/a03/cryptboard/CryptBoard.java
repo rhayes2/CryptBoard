@@ -125,7 +125,9 @@ public class CryptBoard extends InputMethodService
             case KEYCODE_CONTACTS:
                 //popup.showAtLocation(keyboardView,0,0, -1);
                 //Toast.makeText(this, "Contacts!", Toast.LENGTH_SHORT).show();
-                Intent contacts = new Intent(this, Contact_List_Main.class);
+//                Intent contacts = new Intent(this, Contact_List_Main.class);
+                Intent contacts = new Intent(this, Contact_List.class);
+
                 startActivity(contacts);
                 break;
             case KEYCODE_ADD:
