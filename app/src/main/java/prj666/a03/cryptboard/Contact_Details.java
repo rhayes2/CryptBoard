@@ -12,18 +12,25 @@ import com.google.zxing.WriterException;
 import prj666.a03.cryptboard.ContactBase.Contact;
 
 public class Contact_Details extends AppCompatActivity {
+    Contact tmp;
+    TextView name;
+    TextView date;
+    ImageView img;
+    Button showQRButton;
+    Button editContactButton;
+    Button deleteContactButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Contact tmp = (Contact) getIntent().getSerializableExtra("contact");
+        tmp = (Contact) getIntent().getSerializableExtra("contact");
         setContentView(R.layout.activity_contact__details);
-        TextView name = (TextView)findViewById(R.id.Contact_Deatil_name);
-        TextView date = (TextView)findViewById(R.id.Contact_key_date);
-        ImageView img = (ImageView)findViewById(R.id.Contact_Detail_Picture);
-        Button showQRButton = (Button) findViewById(R.id.showQRButton);
-        Button editContactButton = (Button) findViewById(R.id.editContactButton);
-        Button deleteContactButton = (Button) findViewById(R.id.deleteContactButton);
+        name = (TextView)findViewById(R.id.Contact_Deatil_name);
+        date = (TextView)findViewById(R.id.Contact_key_date);
+        img = (ImageView)findViewById(R.id.Contact_Detail_Picture);
+        showQRButton = (Button) findViewById(R.id.showQRButton);
+        editContactButton = (Button) findViewById(R.id.editContactButton);
+        deleteContactButton = (Button) findViewById(R.id.deleteContactButton);
 
         if(tmp.getContactPubKey()!=null){
         try {

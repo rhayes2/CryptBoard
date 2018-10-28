@@ -12,19 +12,27 @@ package prj666.a03.cryptboard;
         import prj666.a03.cryptboard.ContactBase.Contact;
 
 public class Contact_Edit_Details extends AppCompatActivity {
+    Contact tmp ;
+    TextView name;
+    TextView date;
+    ImageView img;
+    Button createNewKeyButton;
+    Button deleteKeyButton;
+    Button scanNewQRButton;
+    Button saveEditButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Contact tmp = (Contact) getIntent().getSerializableExtra("contact");
+        tmp = (Contact) getIntent().getSerializableExtra("contact");
         setContentView(R.layout.activity_contact__details__edit);
-        TextView name = (TextView)findViewById(R.id.Contact_Deatil_Edit_name);
-        TextView date = (TextView)findViewById(R.id.Contact_key_date_Edit);
-        ImageView img = (ImageView)findViewById(R.id.Contact_Detail_Edit_Picture);
-        Button createNewKeyButton = (Button) findViewById(R.id.CreateNewPrivateKeyButton);
-        Button deleteKeyButton = (Button) findViewById(R.id.DeletePrivateKeyButton);
-        Button scanNewQRButton = (Button) findViewById(R.id.ScanNewQRButton);
-        Button saveEditButton = (Button) findViewById(R.id.SaveEditButton);
+        name = (TextView)findViewById(R.id.Contact_Deatil_Edit_name);
+        date = (TextView)findViewById(R.id.Contact_key_date_Edit);
+        img = (ImageView)findViewById(R.id.Contact_Detail_Edit_Picture);
+        createNewKeyButton = (Button) findViewById(R.id.CreateNewPrivateKeyButton);
+        deleteKeyButton = (Button) findViewById(R.id.DeletePrivateKeyButton);
+        scanNewQRButton = (Button) findViewById(R.id.ScanNewQRButton);
+        saveEditButton = (Button) findViewById(R.id.SaveEditButton);
 
         if(tmp.getContactPubKey()!=null){
             try {
