@@ -1,14 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Contact_Details">
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".Contact_Details">
 
 
     <ImageView
-        android:id="@+id/Contact_Detail_Picture"
+        android:id="@+id/Contact_Detail_Edit_Picture"
         android:layout_width="388dp"
         android:layout_height="203dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -18,7 +17,7 @@
         app:srcCompat="@drawable/ic_launcher_background" />
 
     <TextView
-        android:id="@+id/Contact_Deatil_name"
+        android:id="@+id/Contact_Deatil_Edit_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -34,18 +33,18 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/linearLayout3"
+        android:id="@+id/linearLayout3Edit"
         android:layout_width="310dp"
         android:layout_height="77dp"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="8dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayoutEdit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Contact_Detail_Picture">
 
         <TextView
-            android:id="@+id/Contact_public_key"
+            android:id="@+id/Contact_public_key_Edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Keyy"
@@ -53,7 +52,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/Contact_key_date"
+            android:id="@+id/Contact_key_date_Edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Generated On"
@@ -64,62 +63,100 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/imageView3Edit"
         android:layout_width="62dp"
         android:layout_height="62dp"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/linearLayout3"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout3Edit"
         app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Contact_Detail_Picture"
+        app:layout_constraintTop_toBottomOf="@+id/Contact_Detail_Edit_Picture"
         app:layout_constraintVertical_bias="0.033"
         app:srcCompat="@android:drawable/btn_star_big_off" />
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/linearLayoutEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="20dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/showQRButton"
+            <TextView
+                android:id="@+id/EditContact_Label1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_weight="0.25"
-                android:text="Show QR"
+                android:text="Private Key:"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/CreateNewPrivateKeyButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="0.25"
+                android:text="Create New Key"
                 tools:layout_editor_absoluteX="74dp"
                 tools:layout_editor_absoluteY="307dp" />
 
             <Button
-                android:id="@+id/editContactButton"
+                android:id="@+id/DeletePrivateKeyButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_weight="0.25"
-                android:text="EDIT"
+                android:text="Delete Key"
+                tools:layout_editor_absoluteX="74dp"
+                tools:layout_editor_absoluteY="307dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/EditContact_Label2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="0.25"
+                android:text="Public Key:"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/ScanNewQRButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="0.25"
+                android:text="Scan New QR"
                 tools:layout_editor_absoluteX="74dp"
                 tools:layout_editor_absoluteY="307dp" />
 
             <Button
-                android:id="@+id/deleteContactButton"
+                android:id="@+id/SaveEditButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="15dp"
                 android:layout_weight="0.25"
-                android:text="Delete"
-                tools:layout_editor_absoluteX="74dp"
-                tools:layout_editor_absoluteY="307dp" />
+                android:text="Save"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp" />
         </LinearLayout>
 
     </LinearLayout>

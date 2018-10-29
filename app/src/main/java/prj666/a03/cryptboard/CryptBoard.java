@@ -11,6 +11,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import java.security.InvalidKeyException;
@@ -47,11 +48,14 @@ public class CryptBoard extends InputMethodService
     private Keyboard keyboardNum;
     private Keyboard keyboardNormal;
     private Keyboard keyboardNumNormal;
+    private View contactsView;
+    private PopupWindow popup;
 
     private InputConnection ic;
     private boolean caps = false;
     private boolean capsLock = false;
     private boolean numMode = false;
+    private boolean unlock = true;
     private boolean stegMode = true;
 
     private String text = "";
@@ -91,13 +95,20 @@ public class CryptBoard extends InputMethodService
     long currentTime = 0;
 
     @Override
-
     public View onCreateInputView() {
         keyboardView = (KeyboardView) getLayoutInflater().inflate(R.layout.keyboard, null);
         keyboard = new Keyboard(this, R.xml.qwerty);
         keyboardNum = new Keyboard(this, R.xml.alt_qwerty);
         keyboardNormal = new Keyboard(this, R.xml.qwerty_normal);
         keyboardNumNormal = new Keyboard(this, R.xml.alt_qwerty_normal);
+
+        contactsView = getLayoutInflater().inflate(R.layout.activity_main, null);
+        popup = new PopupWindow();
+        popup.setContentView(contactsView);
+        popup.setWidth(400);
+        popup.setHeight(400);
+        popup.setClippingEnabled(false);
+
 
         keyboardView.setPreviewEnabled(false);
         keyboardView.setKeyboard(keyboardNormal);
@@ -150,9 +161,15 @@ public class CryptBoard extends InputMethodService
                 }
                 break;
             case KEYCODE_CAM:
+                Intent camera = new Intent(this, CarrierSelection.class);
+                camera.putExtra("MODE", 1);
+                startActivity(camera);
                 break;
 
             case KEYCODE_PHOTO:
+                Intent photo = new Intent(this, CarrierSelection.class);
+                photo.putExtra("MODE", 2);
+                startActivity(photo);
                 break;
 
             case Keyboard.KEYCODE_MODE_CHANGE:

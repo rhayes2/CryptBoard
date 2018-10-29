@@ -142,4 +142,22 @@ public class Contact_List_Main extends AppCompatActivity  {
             return 3;
         }
     }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        SectionsPagerAdapter pagerAdapt;
+
+        pagerAdapt = new SectionsPagerAdapter(getSupportFragmentManager());
+
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+
+    }
 }
