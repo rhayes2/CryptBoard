@@ -17,11 +17,13 @@ import android.widget.Toast;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.List;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
+import prj666.a03.cryptboard.ContactBase.Contact;
 import prj666.a03.cryptboard.ContactBase.DatabaseHandler;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         db = DatabaseHandler.getInstance(this);
         control = new frontEndHelper(db,this);
-
         Button settingsButton, keyboardButton;
         TextView step1;
         ImageView tutorial;
