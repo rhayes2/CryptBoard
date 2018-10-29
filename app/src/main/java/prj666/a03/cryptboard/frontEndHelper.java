@@ -146,6 +146,37 @@ public class frontEndHelper {
         return names;
     }
 
+
+    public List<String> getNamesAll() {
+        Clist = db.getContactList();
+        List<String> names = new ArrayList<String>();
+        for (Contact x : Clist) {
+            names.add(x.getName());
+        }
+        return names;
+    }
+
+    public List<String> getNamesFav() {
+        Clist = db.getContactList();
+        List<String> names = new ArrayList<String>();
+        for (Contact x : Clist) {
+            if (x.isFavourite() == true) {
+                names.add(x.getName());
+            }
+        }
+        return names;
+    }
+
+    public List<String> getNamesLast() {
+        Clist = db.getContactList();
+        List<String> names = new ArrayList<String>();
+        for (Contact x : Clist) {
+            names.add(x.getName());
+
+        }
+        return names;
+    }
+    
     public Contact getPos(int pos){return Clist.get(pos);}
 
 }
