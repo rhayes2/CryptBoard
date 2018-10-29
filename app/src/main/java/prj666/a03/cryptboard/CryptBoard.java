@@ -35,10 +35,11 @@ public class CryptBoard extends InputMethodService
         implements KeyboardView.OnKeyboardActionListener{
 
     private static final int KEYCODE_ENCRYPT = -100; // ENCRYPT KEYCODE_CAMERA
-    private static final int KEYCODE_PHOTO = -101; // SEND
+    private static final int KEYCODE_PHOTO = -107; // SEND
     private static final int KEYCODE_DECRYPT = -102; // TOGGLE
     private static final int KEYCODE_CONTACTS = -104;
     private static final int KEYCODE_CLEAR = -105;
+    private static final int KEYCODE_CAM = -106;
     private static final int KEYCODE_MATH_MODE = -200;
 
     private KeyboardView keyboardView;
@@ -148,6 +149,12 @@ public class CryptBoard extends InputMethodService
                     }
                 }
                 break;
+            case KEYCODE_CAM:
+                break;
+
+            case KEYCODE_PHOTO:
+                break;
+
             case Keyboard.KEYCODE_MODE_CHANGE:
                 caps = false;
                 capsLock = false;
@@ -176,9 +183,6 @@ public class CryptBoard extends InputMethodService
             case  KEYCODE_ENCRYPT:
                 EncryptMessage();
                 break;
-            case KEYCODE_PHOTO:
-                getMessage();
-                break;
             case KEYCODE_DECRYPT:
                 DecryptMessage();
                 break;
@@ -191,6 +195,7 @@ public class CryptBoard extends InputMethodService
                 break;
             case KEYCODE_MATH_MODE:
                 break;
+
             default:
                 char code = (char) primaryCode;
                 if(Character.isLetter(code) && caps) {
