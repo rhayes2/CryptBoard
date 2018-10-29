@@ -6,9 +6,11 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,13 +19,29 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class CarrierSelection extends AppCompatActivity {
     public static final int PICK_IMAGE = 1;
     public static final int CAPTURE_IMAGE = 2;
+    String currentPhotoPath;
 
     Button accept, camera, gallery;
     TextView confirm;
     ImageView carrierImage;
+
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,11 +103,35 @@ public class CarrierSelection extends AppCompatActivity {
             }
         });
 
+        accept.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), CryptBoard.class);
+                setResult(RESULT_OK);
+                startActivity(intent);
+            }
+        });
+
 
         if (carrierSelectMode == 1){ //Camera Capture
             Toast.makeText(this, "Launching Camera", Toast.LENGTH_SHORT).show();
             intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(intent, CAPTURE_IMAGE);
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex){
+                System.err.println(ex);
+            }
+            if (photoFile != null){
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        getApplicationContext().getPackageName() + ".provider",
+                        photoFile);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(intent, CAPTURE_IMAGE);
+            } else {
+                Toast.makeText(this, "Criss, il n'y a pas un ficher de photo", Toast.LENGTH_SHORT).show();
+            }
+
         } else if (carrierSelectMode == 2){ //Gallery Selection
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -100,19 +142,29 @@ public class CarrierSelection extends AppCompatActivity {
 
     }
 
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         if (resultCode == RESULT_OK){
+            Uri selectedImage = null;
             if(requestCode == PICK_IMAGE){
-                Toast.makeText(this, "IMAGE SELECTED!", Toast.LENGTH_SHORT).show();
-                Uri selectedImage = data.getData();
+                selectedImage = data.getData();
                 carrierImage.setImageURI(selectedImage);
+                //confirm.setText(selectedImage.toString());
+                //Toast.makeText(this, "IMAGE SELECTED! " + selectedImage.toString(), Toast.LENGTH_SHORT).show();
             } else if (requestCode == CAPTURE_IMAGE){
-                Toast.makeText(this, "IMAGE CAPTURED!", Toast.LENGTH_SHORT).show();
                 Bundle extras = data.getExtras();
                 Bitmap capturedImage = (Bitmap) extras.get("data");
                 carrierImage.setImageBitmap(capturedImage);
+
+                /*Uri capturedImage = data.getData();
+                carrierImage.setImageURI(capturedImage);
+                Toast.makeText(this, "IMAGE CAPTURED! " + capturedImage.toString(), Toast.LENGTH_SHORT).show();*/
             }
+            //Intent intent = new Intent();
+            //intent.setData(RESULT_OK, selectedImage);
+
         } else if (resultCode == RESULT_CANCELED){
             Toast.makeText(this, "Capture Cancelled", Toast.LENGTH_SHORT).show();
         }
