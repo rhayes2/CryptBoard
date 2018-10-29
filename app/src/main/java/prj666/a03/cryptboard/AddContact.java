@@ -45,12 +45,19 @@ public class AddContact extends AppCompatActivity {
                 }
             }
         });
+
+        doneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent resultIntent) {
         // Check which request it is that we're responding to
-        Toast.makeText(this, "INMAIN!@@@@ resultCode: " + resultCode,Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "INMAIN!@@@@ resultCode: " + resultCode,Toast.LENGTH_LONG).show();
 
         if (resultCode == 1){
             control.saveLastKey(resultIntent.getStringExtra("KEY"));
