@@ -34,8 +34,9 @@ public class Contact_List_Quick extends ListFragment implements AdapterView.OnIt
 
         adapter.notifyDataSetChanged();
         setListAdapter(adapter);
-        getListView().setOnItemClickListener(this);
         adapter.notifyDataSetChanged();
+
+        getListView().setOnItemClickListener(this);
 
 
     }

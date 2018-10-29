@@ -1,5 +1,6 @@
 package prj666.a03.cryptboard;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -49,7 +50,12 @@ public class AddContact extends AppCompatActivity {
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+
+                Intent intent = new Intent(AddContact.this, Contact_List_Main.class);
+
+
+                setResult(Activity.RESULT_OK, intent );
+                startActivity(intent);
             }
         });
     }

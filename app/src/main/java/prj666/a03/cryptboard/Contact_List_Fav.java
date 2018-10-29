@@ -41,8 +41,9 @@ public class Contact_List_Fav extends ListFragment implements AdapterView.OnItem
 
         adapter.notifyDataSetChanged();
         setListAdapter(adapter);
-        getListView().setOnItemClickListener(this);
         adapter.notifyDataSetChanged();
+
+        getListView().setOnItemClickListener(this);
 
 
     }
