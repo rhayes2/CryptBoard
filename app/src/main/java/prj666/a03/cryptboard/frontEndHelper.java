@@ -124,7 +124,7 @@ public class frontEndHelper {
         if (tmp.getName().length()<2)System.out.println("Not Loaded");
         KeyFactory rsaKeyFac = KeyFactory.getInstance("RSA");
         PKCS8EncodedKeySpec encodedKeySpec = new PKCS8EncodedKeySpec(android.util.Base64.decode(tmp.getMyPrivKey(),0));
-        RSAPrivateKey privKey = (RSAPrivateKey)rsaKeyFac.generatePrivate(encodedKeySpec);;
+        RSAPrivateKey privKey = (RSAPrivateKey)rsaKeyFac.generatePrivate(encodedKeySpec);
         byte [] decrypted = RSAStrings.decryptString(privKey,android.util.Base64.decode(msg.getBytes(),0));
         return new String(decrypted);
     }
