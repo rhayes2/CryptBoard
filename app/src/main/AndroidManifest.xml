@@ -41,6 +41,12 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".Contact_Edit_Details">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
         <activity android:name=".AddContact">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT"/>

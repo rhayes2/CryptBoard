@@ -8,12 +8,12 @@
 
 
     <Row>
-        <Key android:codes="-100" android:keyLabel="ENCRYPT" android:keyWidth="22%p" android:keyEdgeFlags="left"/>
-        <Key android:codes="-104" android:keyLabel="CONTACT" android:keyWidth="22%p"/>
-        <Key android:codes="-102" android:keyLabel="DECRYPT" android:keyWidth="22%p"/>
-        <Key android:codes="-105" android:keyLabel="ADD" android:keyWidth="22%p" android:keyEdgeFlags="right"/>
-        <Key android:codes="-106" android:keyLabel="CAM" android:keyWidth="22%p"/>
-        <Key android:codes="-107" android:keyLabel="PHOTO" android:keyWidth="22%p" android:keyEdgeFlags="right"/>
+        <Key android:codes="-100" android:keyLabel="ENCRYPT" android:keyWidth="21%p" android:keyEdgeFlags="left"/>
+        <Key android:codes="-104" android:keyLabel="CONTACT" android:keyWidth="21%p"/>
+        <Key android:codes="-102" android:keyLabel="DECRYPT" android:keyWidth="21%p"/>
+        <Key android:codes="-105" android:keyLabel="ADD" android:keyWidth="21%p" android:keyEdgeFlags="right"/>
+        <Key android:codes="-106" android:keyLabel="CAM" android:keyWidth="21%p"/>
+        <Key android:codes="-107" android:keyLabel="PHOTO" android:keyWidth="21%p" android:keyEdgeFlags="right"/>
     </Row>
     <Row>
         <Key android:codes="113" android:keyLabel="q" android:keyEdgeFlags="left"/>
