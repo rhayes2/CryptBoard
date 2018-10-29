@@ -41,7 +41,7 @@
         <Key android:codes="58" android:keyLabel=":"/>
         <Key android:codes="59" android:keyLabel=";"/>
         <Key android:codes="33" android:keyLabel="!"/>
-        <Key android:codes="63" android:keyLabel="?"/>
+        <Key android:codes="63" android:keyLabel="\\?"/>
         <Key android:codes="-5" android:keyIcon="@drawable/sym_keyboard_delete"
             android:keyLabel="DEL" android:keyWidth="15%p" android:keyEdgeFlags="right"
             android:isRepeatable="true"/>
