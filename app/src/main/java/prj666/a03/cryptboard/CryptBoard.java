@@ -129,8 +129,14 @@ public class CryptBoard extends InputMethodService
                 ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
                 break;
             case  KEYCODE_CAMERA:
+                Intent camera = new Intent(this, CarrierSelection.class);
+                camera.putExtra("MODE", 1);
+                startActivity(camera);
                 break;
             case KEYCODE_PHOTO:
+                Intent photo = new Intent(this, CarrierSelection.class);
+                photo.putExtra("MODE", 2);
+                startActivity(photo);
                 break;
             case KEYCODE_DOCUMENT:
                 break;

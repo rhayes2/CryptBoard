@@ -53,6 +53,11 @@
         and press your device\'s back button. CryptBoard does not log any keystrokes and does not transmit any information
     \n\nPress the \"Keyboard Selection\" button and select CryptBoard from the list to make it your default keyboard</string>
 
+    <string name="carrier_confirmation">Would you like to use this image as the carrier?</string>
+    <string name="carrier_camera_recapture">Recapture Image</string>
+    <string name="carrier_reselect_from_storage">Reselect Image from Storage</string>
+    <string name="OK">Ok</string>
+
 
     <string name="cryptboard">CryptBoard</string>
     <string name="contactName">ContactName</string>
