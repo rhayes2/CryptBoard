@@ -106,9 +106,10 @@ public class CarrierSelection extends AppCompatActivity {
         accept.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), CryptBoard.class);
+                /*Intent intent = new Intent(getApplicationContext(), CryptBoard.class);
                 setResult(RESULT_OK);
-                startActivity(intent);
+                startActivity(intent);*/
+                finishAffinity();
             }
         });
 
