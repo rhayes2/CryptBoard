@@ -16,6 +16,7 @@ package prj666.a03.cryptboard;
 public class Contact_Edit_Details extends AppCompatActivity {
     Contact tmp ;
     TextView name;
+    String oldname;
     TextView date;
     ImageView img;
     Button createNewKeyButton;
@@ -30,6 +31,7 @@ public class Contact_Edit_Details extends AppCompatActivity {
         tmp = (Contact) getIntent().getSerializableExtra("contactToEdit");
         setContentView(R.layout.activity_contact__details__edit);
         name = (TextView)findViewById(R.id.Contact_Deatil_Edit_name);
+        oldname = name.getText().toString();
         date = (TextView)findViewById(R.id.Contact_key_date_Edit);
         img = (ImageView)findViewById(R.id.Contact_Detail_Edit_Picture);
         createNewKeyButton = (Button) findViewById(R.id.CreateNewPrivateKeyButton);

@@ -22,6 +22,8 @@ public class Contact_Details extends AppCompatActivity {
     Button editContactButton;
     Button deleteContactButton;
 
+    frontEndHelper frontEndH;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,10 +57,6 @@ public class Contact_Details extends AppCompatActivity {
 
         editContactButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // edit contact activity
-                // TO DO:
-                //       1) launch edit contact activity
-                //       2) make sure this activity refreshes when coming back
                 Intent editContactIntent = new Intent(Contact_Details.this, Contact_Edit_Details.class);
                 editContactIntent.putExtra("contactToEdit", tmp);
                 startActivityForResult(editContactIntent, 1);
@@ -72,6 +70,10 @@ public class Contact_Details extends AppCompatActivity {
                 //       1) "are you sure" type popup
                 //       2) delete contact from database
                 //       3) return to previous activity
+
+                frontEndH = frontEndHelper.getInstance();
+                frontEndH.deleteContact(tmp);
+                finish();
             }
         });
 

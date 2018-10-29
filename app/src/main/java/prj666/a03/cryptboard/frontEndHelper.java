@@ -136,6 +136,10 @@ public class frontEndHelper {
         db.updateContact(tmp);
     }
 
+    public void deleteContact(Contact contactToDelete) {
+        db.deleteContact(contactToDelete);
+    }
+
 
     public List<String> getNames(){
         Clist = db.getContactList();
