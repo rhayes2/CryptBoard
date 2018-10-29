@@ -8,11 +8,10 @@
 
 
     <Row>
-        <Key android:codes="-100" android:keyLabel="CAM" android:keyWidth="15%p" android:keyEdgeFlags="left"/>
-        <Key android:codes="-101" android:keyLabel="PHOTO" android:keyWidth="15%p"/>
-        <Key android:codes="-102" android:keyLabel="DOC" android:keyWidth="15%p"/>
+        <Key android:codes="-100" android:keyLabel="ENCRYPT" android:keyWidth="25%p" android:keyEdgeFlags="left"/>
         <Key android:codes="-104" android:keyLabel="CONTACT" android:keyWidth="25%p"/>
-        <Key android:codes="-105" android:keyLabel="ADD" android:keyWidth="15%p" android:keyEdgeFlags="right"/>
+        <Key android:codes="-102" android:keyLabel="DECRYPT" android:keyWidth="25%p"/>
+        <Key android:codes="-105" android:keyLabel="CLEAR" android:keyWidth="25%p" android:keyEdgeFlags="right"/>
     </Row>
     <Row>
         <Key android:codes="113" android:keyLabel="q" android:keyEdgeFlags="left"/>
