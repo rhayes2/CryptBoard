@@ -87,12 +87,6 @@ public class Contact_Details extends AppCompatActivity {
 
                     tmp = (Contact) data.getSerializableExtra("updatedContactInfo");
 
-                    if(tmp.getContactPubKey()!=null){
-                        try {
-                            img.setImageBitmap(QRCodeGenerator.encodeAsBitmap(tmp.getContactPubKey()));
-                        } catch (WriterException e) {
-                            e.printStackTrace();
-                        }}
                     name.setText(tmp.getName());
                     date.setText(tmp.getDateCreated());
                 }
