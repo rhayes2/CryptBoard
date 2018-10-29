@@ -113,6 +113,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return contactList;
     }
 
+    
+
+
     //will get all the contact names from the database
     public List<String> getContactListNames() {
         List<String> names = new ArrayList<>();

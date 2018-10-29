@@ -78,12 +78,16 @@ public class KeyExchange extends AppCompatActivity {
                     Intent result = new Intent();
                     result.putExtra("KEY", scanResult);
                     setResult(1, result);
+
+
                 } else {                                       // 1 Option result and 1 Flavor result code
                     setResult(404);
                 }
+
                 finish();
             }
         });
+
     }
 
     @Override

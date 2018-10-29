@@ -29,9 +29,14 @@ public class Contact_List_All extends ListFragment implements AdapterView.OnItem
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(getActivity(), android.R.layout.simple_list_item_1, frontEndHelper.getInstance().getContacts());
+//        ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(getActivity(), android.R.layout.simple_list_item_1, frontEndHelper.getInstance().getContacts());
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, frontEndHelper.getInstance().getNamesAll());
+
+
+        adapter.notifyDataSetChanged();
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
+        adapter.notifyDataSetChanged();
     }
 
 

@@ -2,7 +2,6 @@ package prj666.a03.cryptboard;
 
 import android.content.Intent;
 import android.os.Build;
-import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -47,14 +46,12 @@ public class AddContact extends AppCompatActivity {
             }
         });
 
-//        doneButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent NewContact = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                startActivityForResult(NewContact, 100);
-////                onBackPressed();
-//            }
-//        });
+        doneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     @Override
@@ -65,6 +62,7 @@ public class AddContact extends AppCompatActivity {
         if (resultCode == 1){
             control.saveLastKey(resultIntent.getStringExtra("KEY"));
         }
+
     }
 
 }

@@ -15,6 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import prj666.a03.cryptboard.ContactBase.DatabaseHandler;
+
 public class Contact_List_Main extends AppCompatActivity  {
 
 
@@ -141,5 +143,14 @@ public class Contact_List_Main extends AppCompatActivity  {
             // Show 3 total pages.
             return 3;
         }
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+//        Intent UpdateList = new Intent(Contact_List_Main.this, AddContact.class);
+//
+//
+//        this.finish();
+
     }
 }

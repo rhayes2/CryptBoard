@@ -15,8 +15,16 @@ import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -34,6 +42,11 @@ public class frontEndHelper {
     public static String scanTarget;
     private static frontEndHelper sInstance;
     private List<Contact> Clist;
+//    Date c = Calendar.getInstance().getTime();
+//    SimpleDateFormat df = new SimpleDateFormat("yyyy/mm/dd");
+
+    String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+
 
     public frontEndHelper(DatabaseHandler dbpass, Activity tmp) {
         db = dbpass;
@@ -41,11 +54,45 @@ public class frontEndHelper {
         sInstance = this;
         Clist = getContacts();
     }
-    public static frontEndHelper getInstance(){return sInstance;}
 
-    public List<Contact> getContacts(){
+    public static frontEndHelper getInstance() {
+        return sInstance;
+    }
+
+    public List<Contact> getContacts() {
         return db.getContactList();
     }
+
+    public List<String> getNamesAll() {
+        Clist = db.getContactList();
+        List<String> names = new ArrayList<String>();
+        for (Contact x : Clist) {
+            names.add(x.getName());
+        }
+        return names;
+    }
+
+    public List<String> getNamesFav() {
+        Clist = db.getContactList();
+        List<String> names = new ArrayList<String>();
+        for (Contact x : Clist) {
+            if (x.isFavourite() == true) {
+                names.add(x.getName());
+            }
+        }
+        return names;
+    }
+
+    public List<String> getNamesLast() {
+        Clist = db.getContactList();
+        List<String> names = new ArrayList<String>();
+        for (Contact x : Clist) {
+            names.add(x.getName());
+
+        }
+        return names;
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void createNewContact(Activity act, String text) throws InvalidKeySpecException, NoSuchAlgorithmException {
@@ -59,18 +106,18 @@ public class frontEndHelper {
 
         ///SAVE Keys to String
 
-        String tmpPub = android.util.Base64.encodeToString(tmp.getPublic().getEncoded(),0);
-        String tmpPriv = android.util.Base64.encodeToString(tmp.getPrivate().getEncoded(),0);
+        String tmpPub = android.util.Base64.encodeToString(tmp.getPublic().getEncoded(), 0);
+        String tmpPriv = android.util.Base64.encodeToString(tmp.getPrivate().getEncoded(), 0);
 
-        String name =  text;
+        String name = text;
         boolean favourite = false;
 
         //// Load Into a Contact var
-        Contact toSave = new Contact(name,favourite,tmpPriv, null); /// FIX FIX FIX TESTING TESTING
+        Contact toSave = new Contact(name, favourite, tmpPriv, null); /// FIX FIX FIX TESTING TESTING
         scanTarget = toSave.getName();
 
         db.insertContact(toSave);
-        displayKey(tmpPub,act);
+        displayKey(tmpPub, act);
         // GET THEIR PublicKey before Saving
 
         Clist = db.getContactList();
@@ -85,12 +132,12 @@ public class frontEndHelper {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public String sendMsg(String name, String msg) throws NoSuchAlgorithmException, InvalidKeySpecException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchPaddingException {
         Contact tmp = db.getContact(name);
-        if (tmp.getName().length()<2)System.out.println("Not Loaded");
-        System.out.println("Loading byte[] array X509EncodedKey for Contact: "+ name);
+        if (tmp.getName().length() < 2) System.out.println("Not Loaded");
+        System.out.println("Loading byte[] array X509EncodedKey for Contact: " + name);
         KeyFactory rsaKeyFac = KeyFactory.getInstance("RSA");
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(android.util.Base64.decode(tmp.getContactPubKey(),0));
-        RSAPublicKey pubKey = (RSAPublicKey)rsaKeyFac.generatePublic(keySpec);
-        String encryptMsg = android.util.Base64.encodeToString(RSAStrings.encryptString(pubKey,msg),0);
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(android.util.Base64.decode(tmp.getContactPubKey(), 0));
+        RSAPublicKey pubKey = (RSAPublicKey) rsaKeyFac.generatePublic(keySpec);
+        String encryptMsg = android.util.Base64.encodeToString(RSAStrings.encryptString(pubKey, msg), 0);
         return encryptMsg;
     }
 
@@ -112,40 +159,44 @@ public class frontEndHelper {
         // GenKey and display to UI
         // CALLS TO QR STUFF
 
-        Intent intent = new Intent(act,KeyExchange.class);
-        intent.putExtra("Key",key);
-        act.startActivityForResult(intent,1);
+        Intent intent = new Intent(act, KeyExchange.class);
+        intent.putExtra("Key", key);
+        act.startActivityForResult(intent, 1);
         System.out.println("Testing Display Key");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public String decryptMsg(String name, String msg) throws Exception {
         Contact tmp = db.getContact(name);
-        if (tmp.getName().length()<2)System.out.println("Not Loaded");
+        if (tmp.getName().length() < 2) System.out.println("Not Loaded");
         KeyFactory rsaKeyFac = KeyFactory.getInstance("RSA");
-        PKCS8EncodedKeySpec encodedKeySpec = new PKCS8EncodedKeySpec(android.util.Base64.decode(tmp.getMyPrivKey(),0));
-        RSAPrivateKey privKey = (RSAPrivateKey)rsaKeyFac.generatePrivate(encodedKeySpec);;
-        byte [] decrypted = RSAStrings.decryptString(privKey,android.util.Base64.decode(msg.getBytes(),0));
+        PKCS8EncodedKeySpec encodedKeySpec = new PKCS8EncodedKeySpec(android.util.Base64.decode(tmp.getMyPrivKey(), 0));
+        RSAPrivateKey privKey = (RSAPrivateKey) rsaKeyFac.generatePrivate(encodedKeySpec);
+        ;
+        byte[] decrypted = RSAStrings.decryptString(privKey, android.util.Base64.decode(msg.getBytes(), 0));
         return new String(decrypted);
     }
 
-    public void saveLastKey(String key){
+    public void saveLastKey(String key) {
         Contact tmp = db.getContact(scanTarget);
         tmp.setContactPubKey(key);
-        Toast.makeText(MainAct, "Contact: " +tmp.getName()+" Updated to:\n"+ tmp.toString() + " ", Toast.LENGTH_LONG).show();
+        Toast.makeText(MainAct, "Contact: " + tmp.getName() + " Updated to:\n" + tmp.toString() + " ", Toast.LENGTH_LONG).show();
         db.updateContact(tmp);
     }
 
 
-    public List<String> getNames(){
+    public List<String> getNames() {
         Clist = db.getContactList();
         List<String> names = new ArrayList<String>();
-        for(Contact x : Clist){
+        for (Contact x : Clist) {
             names.add(x.getName());
         }
         return names;
     }
 
-    public Contact getPos(int pos){return Clist.get(pos);}
+
+    public Contact getPos(int pos) {
+        return Clist.get(pos);
+    }
 
 }
