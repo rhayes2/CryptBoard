@@ -198,10 +198,16 @@ public class CryptBoard extends InputMethodService
                 currentTime = Calendar.getInstance().getTimeInMillis();
                 break;
             case  KEYCODE_ENCRYPT:
-                EncryptMessage();
+                Intent EncryptPhoto = new Intent(this, CarrierSelection.class);
+                EncryptPhoto.putExtra("MODE", 2);
+                EncryptPhoto.putExtra("Msg",getMessage());
+                startActivity(EncryptPhoto);
                 break;
+
             case KEYCODE_DECRYPT:
-                DecryptMessage();
+                Intent DecryptPhoto = new Intent(this, DecodePhoto.class);
+                DecryptPhoto.putExtra("MODE", 2);
+                startActivity(DecryptPhoto);
                 break;
             case KEYCODE_CONTACTS:
                 Intent contacts = new Intent(this, Contact_List_Main.class);
@@ -332,9 +338,10 @@ public class CryptBoard extends InputMethodService
 
     }*/
 
-    private void getMessage(){
+    private String getMessage(){
         text = ic.getExtractedText(new ExtractedTextRequest(), 0).text.toString();
         Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+        return text;
     }
 
     private void clearMessage(){

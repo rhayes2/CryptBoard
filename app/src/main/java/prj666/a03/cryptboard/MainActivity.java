@@ -2,6 +2,8 @@ package prj666.a03.cryptboard;
 
 import android.content.ComponentName;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -14,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -25,6 +28,8 @@ import javax.crypto.NoSuchPaddingException;
 
 import prj666.a03.cryptboard.ContactBase.Contact;
 import prj666.a03.cryptboard.ContactBase.DatabaseHandler;
+import prj666.a03.cryptboard.TestSteg.Steg;
+import prj666.a03.cryptboard.TestSteg.Test;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,11 +46,19 @@ public class MainActivity extends AppCompatActivity {
         TextView step1;
         ImageView tutorial;
 
+
         settingsButton = findViewById(R.id.settingsButton);
         keyboardButton = findViewById(R.id.keyboardSelect);
         step1 = findViewById(R.id.textView2);
         //tutorial = findViewById(R.id.tutorialImage);
         String brand = Build.BRAND;
+
+
+        try {
+            Test.runTests();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         if (brand.contains("sam")){ //Handles Samsung's protectionist bs
             step1.setText(R.string.installation_samsung_1);
