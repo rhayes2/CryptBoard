@@ -10,6 +10,7 @@ import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
@@ -180,7 +181,30 @@ public class frontEndHelper {
         }
         return names;
     }
+
+    public RSAPublicKey getContactsPublicKey(String name){
+        Contact tmp = db.getContact(name);
+        KeyFactory rsaKeyFac = null;
+        RSAPublicKey pubKey = null;
+
+        try {
+            rsaKeyFac = KeyFactory.getInstance("RSA");
+            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(android.util.Base64.decode(tmp.getContactPubKey(),0));
+            pubKey = (RSAPublicKey)rsaKeyFac.generatePublic(keySpec);
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+        }
+
+        return pubKey;
+    }
     
     public Contact getPos(int pos){return Clist.get(pos);}
+
+
+
+
 
 }
