@@ -77,14 +77,14 @@ public class DecodePhoto extends AppCompatActivity {
          * */
 
         accept = findViewById(R.id.acceptCarrier);
-        camera = findViewById(R.id.recaptureCamera);
+//        camera = findViewById(R.id.recaptureCamera);
         gallery = findViewById(R.id.reselectionFromStorage);
         confirm = findViewById(R.id.carrierConfirmation);
         carrierImage = findViewById(R.id.carrierImage);
         SpinnerContact = findViewById(R.id.spinner);
 
         confirm.setText(R.string.carrier_confirmation);
-        camera.setText(R.string.carrier_camera_recapture);
+//        camera.setText(R.string.carrier_camera_recapture);
         accept.setText(R.string.OK);
         gallery.setText(R.string.carrier_reselect_from_storage);
 
@@ -122,14 +122,14 @@ public class DecodePhoto extends AppCompatActivity {
             }
         });
 
-        camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Intent cameraIntent = new Intent();
-                //cameraIntent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                //startActivityForResult(cameraIntent, CAPTURE_IMAGE);
-            }
-        });
+//        camera.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //Intent cameraIntent = new Intent();
+//                //cameraIntent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+//                //startActivityForResult(cameraIntent, CAPTURE_IMAGE);
+//            }
+//        });
 
         accept.setOnClickListener(new View.OnClickListener(){
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -162,26 +162,26 @@ public class DecodePhoto extends AppCompatActivity {
         });
 
 
-        if (carrierSelectMode == 1){ //Camera Capture
-            Toast.makeText(this, "Launching Camera", Toast.LENGTH_SHORT).show();
-            intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex){
-                System.err.println(ex);
-            }
-            if (photoFile != null){
-                Uri photoURI = FileProvider.getUriForFile(this,
-                        getApplicationContext().getPackageName() + ".provider",
-                        photoFile);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(intent, CAPTURE_IMAGE);
-            } else {
-                Toast.makeText(this, "Criss, il n'y a pas un ficher de photo", Toast.LENGTH_SHORT).show();
-            }
+//        if (carrierSelectMode == 1){ //Camera Capture
+//            Toast.makeText(this, "Launching Camera", Toast.LENGTH_SHORT).show();
+//            intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+//            File photoFile = null;
+//            try {
+//                photoFile = createImageFile();
+//            } catch (IOException ex){
+//                System.err.println(ex);
+//            }
+//            if (photoFile != null){
+//                Uri photoURI = FileProvider.getUriForFile(this,
+//                        getApplicationContext().getPackageName() + ".provider",
+//                        photoFile);
+//                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+//                startActivityForResult(intent, CAPTURE_IMAGE);
+//            } else {
+//                Toast.makeText(this, "Criss, il n'y a pas un ficher de photo", Toast.LENGTH_SHORT).show();
+//            }
 
-        } else if (carrierSelectMode == 2){ //Gallery Selection
+        /*} else*/ if (carrierSelectMode == 2){ //Gallery Selection
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Select Carrier"), PICK_IMAGE);
@@ -208,15 +208,15 @@ public class DecodePhoto extends AppCompatActivity {
                 carrierImage.setImageURI(selectedImage);
                 //confirm.setText(selectedImage.toString());
                 //Toast.makeText(this, "IMAGE SELECTED! " + selectedImage.toString(), Toast.LENGTH_SHORT).show();
-            } else if (requestCode == CAPTURE_IMAGE){
-                Bundle extras = data.getExtras();
-                Bitmap capturedImage = (Bitmap) extras.get("data");
-                carrierImage.setImageBitmap(capturedImage);
-
-                /*Uri capturedImage = data.getData();
-                carrierImage.setImageURI(capturedImage);
-                Toast.makeText(this, "IMAGE CAPTURED! " + capturedImage.toString(), Toast.LENGTH_SHORT).show();*/
-            }
+            } //else if (requestCode == CAPTURE_IMAGE){
+//                Bundle extras = data.getExtras();
+//                Bitmap capturedImage = (Bitmap) extras.get("data");
+//                carrierImage.setImageBitmap(capturedImage);
+//
+//                /*Uri capturedImage = data.getData();
+//                carrierImage.setImageURI(capturedImage);
+//                Toast.makeText(this, "IMAGE CAPTURED! " + capturedImage.toString(), Toast.LENGTH_SHORT).show();*/
+//            }
             //Intent intent = new Intent();
             //intent.setData(RESULT_OK, selectedImage);
 
