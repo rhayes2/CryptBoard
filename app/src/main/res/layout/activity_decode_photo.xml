@@ -20,19 +20,6 @@ tools:context=".DecodePhoto">
         app:srcCompat="@android:drawable/ic_menu_gallery" />
 
     <Button
-        android:id="@+id/recaptureCamera"
-        style="@style/Widget.AppCompat.Button"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="18dp"
-        android:layout_marginBottom="18dp"
-        android:text="Button"
-        app:layout_constraintBottom_toTopOf="@+id/acceptCarrier"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/carrierConfirmation" />
-
-    <Button
         android:id="@+id/acceptCarrier"
         style="@style/Widget.AppCompat.Button"
         android:layout_width="wrap_content"
@@ -50,15 +37,14 @@ tools:context=".DecodePhoto">
         style="@style/Widget.AppCompat.Button"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="18dp"
         android:layout_marginTop="18dp"
         android:layout_marginEnd="18dp"
         android:layout_marginBottom="18dp"
         android:text="Button"
         app:layout_constraintBottom_toTopOf="@+id/acceptCarrier"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.8"
-        app:layout_constraintStart_toEndOf="@+id/recaptureCamera"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/carrierConfirmation" />
 
     <Spinner
