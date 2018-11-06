@@ -10,12 +10,14 @@ import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.crypto.BadPaddingException;
@@ -173,14 +175,43 @@ public class frontEndHelper {
 
     public List<String> getNamesLast() {
         Clist = db.getContactList();
+        Collections.reverse(Clist);
+        int co = 0;
+
         List<String> names = new ArrayList<String>();
         for (Contact x : Clist) {
-            names.add(x.getName());
-
+            if (co < 7) {
+                names.add(x.getName());
+                co++;
+            }
         }
         return names;
     }
+
+
+    public RSAPublicKey getContactsPublicKey(String name){
+        Contact tmp = db.getContact(name);
+        KeyFactory rsaKeyFac = null;
+        RSAPublicKey pubKey = null;
+
+        try {
+            rsaKeyFac = KeyFactory.getInstance("RSA");
+            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(android.util.Base64.decode(tmp.getContactPubKey(),0));
+            pubKey = (RSAPublicKey)rsaKeyFac.generatePublic(keySpec);
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+        }
+
+        return pubKey;
+    }
     
     public Contact getPos(int pos){return Clist.get(pos);}
+
+
+
+
 
 }

@@ -10,14 +10,18 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.WriterException;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import java.util.List;
 
 public class KeyExchange extends AppCompatActivity {
 
@@ -26,6 +30,7 @@ public class KeyExchange extends AppCompatActivity {
     String scanResult, publicKey;
     TextView textContent;
     Bitmap generatedQR;
+
     //@RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +44,15 @@ public class KeyExchange extends AppCompatActivity {
         qrDisplay = findViewById(R.id.qrDisplay);
         textContent = findViewById(R.id.textView);
 
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.CAMERA},
                     1);
         }
+
+
 
         //TODO: Wire this up properly when parent activity is implemented
         //publicKey = getIntent().getStringExtra("KEY");
