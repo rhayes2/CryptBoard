@@ -6,6 +6,8 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 /**
+   Stealthcopter
+   https://github.com/stealthcopter/steganography
  * Created by mat on 16/11/15.
  */
 public class BitmapEncoder {
