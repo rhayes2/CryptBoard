@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import java.io.File;
 
 /**
+   Stealthcopter
+   https://github.com/stealthcopter/steganography
  * Created by mat on 12/11/15.
  */
 public class Steg {
