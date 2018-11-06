@@ -7,6 +7,8 @@ import android.support.annotation.ColorInt;
 import java.util.Random;
 
 /**
+   Stealthcopter
+   https://github.com/stealthcopter/steganography
  * Created by mat on 16/11/15.
  */
 public class BitmapHelper {
