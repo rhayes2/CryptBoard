@@ -2,6 +2,7 @@ package prj666.a03.cryptboard;
 
         import android.app.Activity;
         import android.content.Intent;
+        import android.graphics.Color;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
         import android.view.View;
@@ -25,19 +26,26 @@ public class Contact_Edit_Details extends AppCompatActivity {
     Button saveEditButton;
     Boolean changed = false;
 
+    TextView PrivKeyIndicator;
+    TextView PubKeyIndicator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tmp = (Contact) getIntent().getSerializableExtra("contactToEdit");
         setContentView(R.layout.activity_contact__details__edit);
-        name = (TextView)findViewById(R.id.Contact_Deatil_Edit_name);
+        name = (TextView)findViewById(R.id.Contact_Detail_Edit_name);
         oldname = name.getText().toString();
         date = (TextView)findViewById(R.id.Contact_key_date_Edit);
         img = (ImageView)findViewById(R.id.Contact_Detail_Edit_Picture);
+
         createNewKeyButton = (Button) findViewById(R.id.CreateNewPrivateKeyButton);
         deleteKeyButton = (Button) findViewById(R.id.DeletePrivateKeyButton);
         scanNewQRButton = (Button) findViewById(R.id.ScanNewQRButton);
         saveEditButton = (Button) findViewById(R.id.SaveEditButton);
+
+        PrivKeyIndicator = (TextView) findViewById(R.id.contact_private_key_Edit);
+        PubKeyIndicator = (TextView) findViewById(R.id.Contact_public_key_Edit);
 
         if(tmp.getContactPubKey()!=null){
             try {
@@ -48,6 +56,8 @@ public class Contact_Edit_Details extends AppCompatActivity {
 
         name.setText(tmp.getName());
         date.setText(tmp.getDateCreated());
+        refreshPrivKeyInfo();
+        refreshPubKeyInfo();
 
         createNewKeyButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -63,10 +73,12 @@ public class Contact_Edit_Details extends AppCompatActivity {
             public void onClick(View v) {
                 // delete private key code
                 // TO DO:
-                //
-                //     1) "ARE YOU SURE" type popup
-                //     2) Delete private key
-                //     3) Toast
+                //  1) add confirmation dialog
+                //  2) add success toast
+
+
+                tmp.setMyPrivKey(null);
+                refreshPrivKeyInfo();
             }
         });
 
@@ -103,5 +115,25 @@ public class Contact_Edit_Details extends AppCompatActivity {
         returnIntent.putExtra("updatedContactInfo", tmp);
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
+    }
+
+    public void refreshPrivKeyInfo(){
+        if (tmp.getMyPrivKey() != null) {
+            deleteKeyButton.setVisibility(View.VISIBLE);
+            PrivKeyIndicator.setTextColor(Color.GREEN);
+        }
+        else {
+            deleteKeyButton.setVisibility(View.INVISIBLE);
+            PrivKeyIndicator.setTextColor(Color.RED);
+        }
+    }
+
+    public void refreshPubKeyInfo(){
+        if (tmp.getContactPubKey() != null) {
+            PubKeyIndicator.setTextColor(Color.GREEN);
+        }
+        else {
+            PubKeyIndicator.setTextColor(Color.RED);
+        }
     }
 }
