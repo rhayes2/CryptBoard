@@ -9,7 +9,7 @@ tools:context=".Contact_Details">
     <ImageView
         android:id="@+id/Contact_Detail_Edit_Picture"
         android:layout_width="388dp"
-        android:layout_height="203dp"
+        android:layout_height="199dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,7 +21,7 @@ tools:context=".Contact_Details">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="205dp"
+        android:layout_marginTop="200dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="My Name"
@@ -29,25 +29,29 @@ tools:context=".Contact_Details">
         android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/linearLayout3Edit"
-        android:layout_width="310dp"
+        android:layout_width="246dp"
         android:layout_height="77dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="50dp"
-        android:layout_marginBottom="8dp"
         android:orientation="vertical"
+        android:weightSum="100"
         app:layout_constraintBottom_toTopOf="@+id/linearLayoutEdit"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Contact_Detail_Picture">
 
         <TextView
             android:id="@+id/Contact_public_key_Edit"
-            android:layout_width="match_parent"
+            android:layout_width="245dp"
             android:layout_height="wrap_content"
-            android:text="Keyy"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="50"
+            android:text="Key Generated On: "
             android:textColor="#000000"
             android:textSize="20sp" />
 
@@ -55,6 +59,8 @@ tools:context=".Contact_Details">
             android:id="@+id/Contact_key_date_Edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="50"
             android:text="Generated On"
             android:textSize="20sp"
 
@@ -66,15 +72,17 @@ tools:context=".Contact_Details">
         android:id="@+id/imageView3Edit"
         android:layout_width="62dp"
         android:layout_height="62dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/linearLayout3Edit"
-        app:layout_constraintHorizontal_bias="0.666"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Contact_Detail_Edit_Picture"
-        app:layout_constraintVertical_bias="0.033"
-        app:srcCompat="@android:drawable/btn_star_big_off" />
+        app:layout_constraintBottom_toTopOf="@+id/linearLayoutEdit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.846"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout3Edit"
+        app:layout_constraintTop_toBottomOf="@+id/Contact_Deatil_Edit_name"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/favourite_unselected_24dp" />
 
     <LinearLayout
         android:id="@+id/linearLayoutEdit"

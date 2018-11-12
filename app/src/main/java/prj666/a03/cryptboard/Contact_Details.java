@@ -8,10 +8,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.zxing.WriterException;
 
 import prj666.a03.cryptboard.ContactBase.Contact;
+import prj666.a03.cryptboard.ContactBase.DatabaseHandler;
 
 public class Contact_Details extends AppCompatActivity {
     Contact tmp;
@@ -23,6 +25,7 @@ public class Contact_Details extends AppCompatActivity {
     Button deleteContactButton;
 
     frontEndHelper frontEndH;
+    DatabaseHandler dbH;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,17 +88,32 @@ public class Contact_Details extends AppCompatActivity {
 
         if (requestCode == 1) {
             if(resultCode == Activity.RESULT_OK){
-                if ((Boolean) data.getBooleanExtra("changedStatus", false)) {
+                if ((boolean) data.getSerializableExtra("changeStatus") == true) {
 
                     tmp = (Contact) data.getSerializableExtra("updatedContactInfo");
 
+                    dbH = DatabaseHandler.getInstance(this);
+                    dbH.updateContact(tmp);
+                    //frontEndH = frontEndHelper.getInstance();
+                    //frontEndH.updateName(tmp, name.getText().toString());
+                    //frontEndH.updateContact(tmp);
+
                     name.setText(tmp.getName());
                     date.setText(tmp.getDateCreated());
+
+                    Toast.makeText(this, "Contact Updated", Toast.LENGTH_SHORT).show();
                 }
+                else if ((boolean) data.getSerializableExtra("changeStatus") == false){
+                    Toast.makeText(this, "Contact Unchanged", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(this, "Error processing change", Toast.LENGTH_SHORT).show();
+                }
+
 
             }
             if (resultCode == Activity.RESULT_CANCELED) {
-                //Write your code if there's no result
+                Toast.makeText(this, "RESULT_CANCELED", Toast.LENGTH_SHORT).show();
             }
         }
     }//onActivityResult

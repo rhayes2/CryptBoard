@@ -48,7 +48,7 @@
             android:id="@+id/Contact_public_key"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Keyy"
+            android:text="Key Generated On:"
             android:textColor="#000000"
             android:textSize="20sp" />
 
