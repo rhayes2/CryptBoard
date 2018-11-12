@@ -91,7 +91,7 @@ public class Contact_Details extends AppCompatActivity {
                     frontEndH = frontEndHelper.getInstance();
                     frontEndH.updateName(tmp, name.getText().toString());
                     frontEndH.updateContact(tmp);
-                    finish();
+                    //finish();
 
                     name.setText(tmp.getName());
                     date.setText(tmp.getDateCreated());
