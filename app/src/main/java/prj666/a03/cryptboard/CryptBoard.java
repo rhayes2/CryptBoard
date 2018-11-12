@@ -10,7 +10,7 @@ import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.media.AudioManager;
 import android.net.Uri;
-import android.os.Build;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v13.view.inputmethod.InputConnectionCompat;
 import android.support.v13.view.inputmethod.InputContentInfoCompat;
@@ -194,13 +194,12 @@ public class CryptBoard extends InputMethodService
                 }
                 break;
             case KEYCODE_CAM:
-                launchCamera();
+                //launchCamera();
+                commitImage();
                 break;
-
             case KEYCODE_PHOTO:
                 launchPhotos();
                 break;
-
             case Keyboard.KEYCODE_MODE_CHANGE:
                 caps = false;
                 capsLock = false;
@@ -280,24 +279,26 @@ public class CryptBoard extends InputMethodService
         return Uri.parse(path);
     }
 
-    public void commitImage(Uri contentUri, String imageDescription) {
+    public Uri getEncodedImgUri(){
+        return Uri.parse(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "EncodedMsg.PNG");
+    }
+
+    public void commitImage() {
         InputContentInfoCompat inputContentInfo = new InputContentInfoCompat(
-                contentUri,
-                new ClipDescription(imageDescription, new String[]{"image/gif"}),
+                getEncodedImgUri(),
+                new ClipDescription("Encoded image", new String[]{"image/PNG"}),
                 null
         );
-        InputConnection inputConnection = ic;
         EditorInfo editorInfo = getCurrentInputEditorInfo();
         int flags = 0;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             flags |= InputConnectionCompat.INPUT_CONTENT_GRANT_READ_URI_PERMISSION;
-        }
+        }*/
         InputConnectionCompat.commitContent(
-                inputConnection, editorInfo, inputContentInfo, flags, null);
+                ic, editorInfo, inputContentInfo, flags, null);
     }
 
     public void saveAndGetImage(Context inContext, Bitmap inImage){
-
         try (FileOutputStream out = new FileOutputStream("test.jpeg")) {
             inImage.compress(Bitmap.CompressFormat.PNG, 100, out);
             String path = MediaStore.Images.Media.insertImage(getContentResolver(), inImage, "Title", "test");
@@ -335,7 +336,7 @@ public class CryptBoard extends InputMethodService
             getMessage();
             byte [] decrypted = RSAStrings.decryptString(privateKey,android.util.Base64.decode(text.trim().getBytes(),0));
             setMessage(new String(decrypted));
-            Toast.makeText(this, new String(decrypted), Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, new String(decrypted), Toast.LENGTH_LONG).show();
         }
         catch (Exception e){
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();

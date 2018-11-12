@@ -1,14 +1,12 @@
 package prj666.a03.cryptboard;
 
 import android.Manifest;
-import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
@@ -16,7 +14,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -32,8 +29,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
-import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -43,8 +38,6 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-import prj666.a03.cryptboard.TestSteg.BitmapEncoder;
-import prj666.a03.cryptboard.TestSteg.BitmapHelper;
 import prj666.a03.cryptboard.TestSteg.Steg;
 
 public class CarrierSelection extends AppCompatActivity {
@@ -180,7 +173,6 @@ public class CarrierSelection extends AppCompatActivity {
 
                 saveToInternalStorage(crypts, "EncodedMsg");
                 carrierImage.setImageBitmap(crypts);
-
 
                 // TODO ADD STEGtoIMG
                 finishAffinity();
