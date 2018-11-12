@@ -87,8 +87,6 @@ public class Contact_Details extends AppCompatActivity {
             }
         });
 
-
-
     }
 
 
@@ -101,11 +99,13 @@ public class Contact_Details extends AppCompatActivity {
 
                     tmp = (Contact) data.getSerializableExtra("updatedContactInfo");
 
-                    dbH = DatabaseHandler.getInstance(this);
-                    dbH.updateContact(tmp);
-                    //frontEndH = frontEndHelper.getInstance();
-                    //frontEndH.updateName(tmp, name.getText().toString());
-                    //frontEndH.updateContact(tmp);
+                    frontEndH = frontEndHelper.getInstance();
+                    frontEndH.updateName(tmp, name.getText().toString());
+                    frontEndH.updateContact(tmp);
+
+                    //dbH = DatabaseHandler.getInstance(this);
+                    //dbH.updateContact(tmp);
+                    //finish();
 
                     name.setText(tmp.getName());
                     date.setText(tmp.getDateCreated());

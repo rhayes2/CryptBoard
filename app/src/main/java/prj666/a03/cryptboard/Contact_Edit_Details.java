@@ -3,6 +3,7 @@ package prj666.a03.cryptboard;
         import android.app.Activity;
         import android.content.Intent;
         import android.graphics.drawable.Drawable;
+        import android.graphics.Color;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
         import android.view.View;
@@ -13,7 +14,11 @@ package prj666.a03.cryptboard;
 
         import com.google.zxing.WriterException;
 
+        import java.security.KeyPair;
+        import java.security.NoSuchAlgorithmException;
+
         import prj666.a03.cryptboard.ContactBase.Contact;
+        import prj666.a03.cryptboard.RSAStrings.RSAStrings;
 
 public class Contact_Edit_Details extends AppCompatActivity {
     Contact tmp ;
@@ -27,20 +32,27 @@ public class Contact_Edit_Details extends AppCompatActivity {
     Button saveEditButton;
     Boolean changed = false;
 
+    TextView PrivKeyIndicator;
+    TextView PubKeyIndicator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tmp = (Contact) getIntent().getSerializableExtra("contactToEdit");
         setContentView(R.layout.activity_contact__details__edit);
-        name = (TextView)findViewById(R.id.Contact_Deatil_Edit_name);
+        name = (TextView)findViewById(R.id.Contact_Detail_Edit_name);
         oldname = name.getText().toString();
         date = (TextView)findViewById(R.id.Contact_key_date_Edit);
         img = (ImageView)findViewById(R.id.Contact_Detail_Edit_Picture);
+
         createNewKeyButton = (Button) findViewById(R.id.CreateNewPrivateKeyButton);
         deleteKeyButton = (Button) findViewById(R.id.DeletePrivateKeyButton);
         scanNewQRButton = (Button) findViewById(R.id.ScanNewQRButton);
         saveEditButton = (Button) findViewById(R.id.SaveEditButton);
         favourite = findViewById(R.id.imageView3Edit);
+
+        PrivKeyIndicator = (TextView) findViewById(R.id.contact_private_key_Edit);
+        PubKeyIndicator = (TextView) findViewById(R.id.Contact_public_key_Edit);
 
         if(tmp.getContactPubKey()!=null){
             try {
@@ -51,6 +63,8 @@ public class Contact_Edit_Details extends AppCompatActivity {
 
         name.setText(tmp.getName());
         date.setText(tmp.getDateCreated());
+        //refreshPrivKeyInfo(); <- where do these come from?
+        //refreshPubKeyInfo();
 
         if(tmp.isFavourite() == true){ //checks the star if contact is favourite
             favourite.setImageResource(R.drawable.favourite_selected_24dp);
@@ -60,9 +74,17 @@ public class Contact_Edit_Details extends AppCompatActivity {
             public void onClick(View v) {
                 // Create new private key code
                 // TO DO:
-                //       1)  Generate Key
-                //       2)  Save key to database
-                //       3)  toast?
+                //       1)add success toast
+                KeyPair keytmp = null;
+                try {
+                    keytmp = RSAStrings.getKeys();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
+                String tmpPriv = android.util.Base64.encodeToString(keytmp.getPrivate().getEncoded(),0);
+                tmp.setMyPrivKey(tmpPriv);
+                changed = true;
+                refreshPrivKeyInfo();
             }
         });
 
@@ -70,10 +92,12 @@ public class Contact_Edit_Details extends AppCompatActivity {
             public void onClick(View v) {
                 // delete private key code
                 // TO DO:
-                //
-                //     1) "ARE YOU SURE" type popup
-                //     2) Delete private key
-                //     3) Toast
+                //  1) add confirmation dialog
+                //  2) add success toast
+
+                tmp.setMyPrivKey(null);
+                changed = true;
+                refreshPrivKeyInfo();
             }
         });
 
@@ -95,7 +119,7 @@ public class Contact_Edit_Details extends AppCompatActivity {
                 //       1) commit changes to db
                 //       3) refresh current activity
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("changeStatus", changed);
+                returnIntent.putExtra("changedStatus", changed);
                 returnIntent.putExtra("updatedContactInfo", tmp);
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
@@ -122,10 +146,27 @@ public class Contact_Edit_Details extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra("changeStatus", changed);
-        returnIntent.putExtra("updatedContactInfo", tmp);
-        setResult(Activity.RESULT_OK, returnIntent);
+        setResult(Activity.RESULT_CANCELED);
         finish();
+    }
+
+    public void refreshPrivKeyInfo(){
+        if (tmp.getMyPrivKey() != null) {
+            deleteKeyButton.setVisibility(View.VISIBLE);
+            PrivKeyIndicator.setTextColor(Color.GREEN);
+        }
+        else {
+            deleteKeyButton.setVisibility(View.INVISIBLE);
+            PrivKeyIndicator.setTextColor(Color.RED);
+        }
+    }
+
+    public void refreshPubKeyInfo(){
+        if (tmp.getContactPubKey() != null) {
+            PubKeyIndicator.setTextColor(Color.GREEN);
+        }
+        else {
+            PubKeyIndicator.setTextColor(Color.RED);
+        }
     }
 }
