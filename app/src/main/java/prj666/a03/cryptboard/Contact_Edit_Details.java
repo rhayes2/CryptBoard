@@ -76,6 +76,7 @@ public class Contact_Edit_Details extends AppCompatActivity {
                 }
                 String tmpPriv = android.util.Base64.encodeToString(keytmp.getPrivate().getEncoded(),0);
                 tmp.setMyPrivKey(tmpPriv);
+                changed = true;
                 refreshPrivKeyInfo();
             }
         });
@@ -88,6 +89,7 @@ public class Contact_Edit_Details extends AppCompatActivity {
                 //  2) add success toast
 
                 tmp.setMyPrivKey(null);
+                changed = true;
                 refreshPrivKeyInfo();
             }
         });
@@ -110,7 +112,7 @@ public class Contact_Edit_Details extends AppCompatActivity {
                 //       1) commit changes to db
                 //       3) refresh current activity
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("changeStatus", changed);
+                returnIntent.putExtra("changedStatus", changed);
                 returnIntent.putExtra("updatedContactInfo", tmp);
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
@@ -120,10 +122,7 @@ public class Contact_Edit_Details extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra("changeStatus", changed);
-        returnIntent.putExtra("updatedContactInfo", tmp);
-        setResult(Activity.RESULT_OK, returnIntent);
+        setResult(Activity.RESULT_CANCELED);
         finish();
     }
 

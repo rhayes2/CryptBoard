@@ -86,8 +86,12 @@ public class Contact_Details extends AppCompatActivity {
         if (requestCode == 1) {
             if(resultCode == Activity.RESULT_OK){
                 if ((Boolean) data.getBooleanExtra("changedStatus", false)) {
-
                     tmp = (Contact) data.getSerializableExtra("updatedContactInfo");
+
+                    frontEndH = frontEndHelper.getInstance();
+                    frontEndH.updateName(tmp, name.getText().toString());
+                    frontEndH.updateContact(tmp);
+                    finish();
 
                     name.setText(tmp.getName());
                     date.setText(tmp.getDateCreated());

@@ -49,11 +49,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db3.close();
     }
 
+    public void updateName(Contact theContact, String oldname) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("name", theContact.getName());
+        db.update("contactLog", values, "name = ?", new String[] {oldname});
+        db.close();
+    }
+
     public void updateContact(Contact theContact) {
         SQLiteDatabase db4 = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put("name", theContact.getName());
         values.put("favourite", theContact.isFavouriteInt());
         values.put("myPrivKey", theContact.getMyPrivKey());
         values.put("contactPubKey", theContact.getContactPubKey());
