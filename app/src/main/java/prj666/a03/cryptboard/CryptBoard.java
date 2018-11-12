@@ -194,8 +194,8 @@ public class CryptBoard extends InputMethodService
                 }
                 break;
             case KEYCODE_CAM:
-                //launchCamera();
-                commitImage();
+                launchCamera();
+                //commitImage();
                 break;
             case KEYCODE_PHOTO:
                 launchPhotos();
