@@ -12,7 +12,11 @@ package prj666.a03.cryptboard;
 
         import com.google.zxing.WriterException;
 
+        import java.security.KeyPair;
+        import java.security.NoSuchAlgorithmException;
+
         import prj666.a03.cryptboard.ContactBase.Contact;
+        import prj666.a03.cryptboard.RSAStrings.RSAStrings;
 
 public class Contact_Edit_Details extends AppCompatActivity {
     Contact tmp ;
@@ -63,9 +67,16 @@ public class Contact_Edit_Details extends AppCompatActivity {
             public void onClick(View v) {
                 // Create new private key code
                 // TO DO:
-                //       1)  Generate Key
-                //       2)  Save key to database
-                //       3)  toast?
+                //       1)add success toast
+                KeyPair keytmp = null;
+                try {
+                    keytmp = RSAStrings.getKeys();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
+                String tmpPriv = android.util.Base64.encodeToString(keytmp.getPrivate().getEncoded(),0);
+                tmp.setMyPrivKey(tmpPriv);
+                refreshPrivKeyInfo();
             }
         });
 
@@ -75,7 +86,6 @@ public class Contact_Edit_Details extends AppCompatActivity {
                 // TO DO:
                 //  1) add confirmation dialog
                 //  2) add success toast
-
 
                 tmp.setMyPrivKey(null);
                 refreshPrivKeyInfo();
