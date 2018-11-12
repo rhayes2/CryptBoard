@@ -19,7 +19,7 @@ public class Contact_Details extends AppCompatActivity {
     Contact tmp;
     TextView name;
     TextView date;
-    ImageView img;
+    ImageView img, favourite;
     Button showQRButton;
     Button editContactButton;
     Button deleteContactButton;
@@ -38,6 +38,7 @@ public class Contact_Details extends AppCompatActivity {
         showQRButton = (Button) findViewById(R.id.showQRButton);
         editContactButton = (Button) findViewById(R.id.editContactButton);
         deleteContactButton = (Button) findViewById(R.id.deleteContactButton);
+        favourite = findViewById(R.id.imageView3);
 
         if(tmp.getContactPubKey()!=null){
         try {
@@ -47,6 +48,12 @@ public class Contact_Details extends AppCompatActivity {
         }}
         name.setText(tmp.getName());
         date.setText(tmp.getDateCreated());
+
+        if (tmp.isFavourite() == true){
+            favourite.setImageResource(R.drawable.favourite_selected_24dp);
+        } else {
+            favourite.setImageResource(R.drawable.favourite_unselected_24dp);
+        }
 
 
         showQRButton.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +87,8 @@ public class Contact_Details extends AppCompatActivity {
             }
         });
 
+
+
     }
 
 
@@ -100,6 +109,13 @@ public class Contact_Details extends AppCompatActivity {
 
                     name.setText(tmp.getName());
                     date.setText(tmp.getDateCreated());
+
+                    if (tmp.isFavourite() == true){
+                        favourite.setImageResource(R.drawable.favourite_selected_24dp);
+                    }
+                    else {
+                        favourite.setImageResource(R.drawable.favourite_unselected_24dp);
+                    }
 
                     Toast.makeText(this, "Contact Updated", Toast.LENGTH_SHORT).show();
                 }
