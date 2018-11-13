@@ -1,9 +1,9 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context=".Contact_Details">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Contact_Details">
 
 
     <ImageView
@@ -17,7 +17,7 @@ tools:context=".Contact_Details">
         app:srcCompat="@drawable/ic_launcher_background" />
 
     <TextView
-        android:id="@+id/Contact_Deatil_Edit_name"
+        android:id="@+id/Contact_Detail_Edit_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -44,10 +44,18 @@ tools:context=".Contact_Details">
         app:layout_constraintTop_toBottomOf="@+id/Contact_Detail_Picture">
 
         <TextView
+            android:id="@+id/contact_private_key_Edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Private Key"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
+        <TextView
             android:id="@+id/Contact_public_key_Edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Keyy"
+            android:text="Public Key"
             android:textColor="#000000"
             android:textSize="20sp" />
 
