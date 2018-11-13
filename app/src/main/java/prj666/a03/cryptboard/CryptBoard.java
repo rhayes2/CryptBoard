@@ -9,6 +9,7 @@ import android.inputmethodservice.KeyboardView;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
+import android.support.v13.view.inputmethod.EditorInfoCompat;
 import android.support.v13.view.inputmethod.InputConnectionCompat;
 import android.support.v13.view.inputmethod.InputContentInfoCompat;
 import android.view.KeyEvent;
@@ -85,7 +86,23 @@ public class CryptBoard extends InputMethodService
             e.printStackTrace();
         }
     }
+    @Override
+    public void onStartInputView(EditorInfo editorInfo, boolean restarting) {
+        String[] mimeTypes = EditorInfoCompat.getContentMimeTypes(editorInfo);
+        
+        boolean pngSupported = false;
+        for (String mimeType : mimeTypes) {
+            if (ClipDescription.compareMimeTypes(mimeType, "image/png")) {
+                pngSupported = true;
+            }
+        }
 
+        if (pngSupported) {
+            Toast.makeText(this, "PNG supported", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "PNG not supported :(", Toast.LENGTH_LONG).show();
+        }
+    }
 
 
     @Override
