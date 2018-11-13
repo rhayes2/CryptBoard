@@ -95,7 +95,7 @@ public class Contact_Details extends AppCompatActivity {
 
         if (requestCode == 1) {
             if(resultCode == Activity.RESULT_OK){
-                if ((boolean) data.getSerializableExtra("changeStatus") == true) {
+                if ((boolean) data.getSerializableExtra("changedStatus") == true) {
 
                     tmp = (Contact) data.getSerializableExtra("updatedContactInfo");
 
