@@ -17,4 +17,10 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="CryptBoard" parent="AppTheme.NoActionBar" >
+        <item name="colorPrimary">@color/colourPrimary</item>
+        <item name="colorPrimaryDark">@color/colourPrimaryDark</item>
+        <item name="colorAccent">@color/colourConfirmation</item>
+    </style>
+
 </resources>

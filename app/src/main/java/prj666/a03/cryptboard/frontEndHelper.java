@@ -179,7 +179,7 @@ public class frontEndHelper {
 
     public List<String> getNamesLast() {
         Clist = db.getContactList();
-        Collections.reverse(Clist);
+        //Collections.reverse(Clist);
         int co = 0;
 
         List<String> names = new ArrayList<String>();

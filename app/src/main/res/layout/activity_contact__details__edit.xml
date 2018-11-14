@@ -5,16 +5,15 @@
     android:layout_height="match_parent"
     tools:context=".Contact_Details">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-    <ImageView
-        android:id="@+id/Contact_Detail_Edit_Picture"
-        android:layout_width="388dp"
-        android:layout_height="203dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_launcher_background" />
 
     <TextView
         android:id="@+id/Contact_Detail_Edit_name"
@@ -43,7 +42,7 @@
         android:weightSum="100"
         app:layout_constraintBottom_toTopOf="@+id/linearLayoutEdit"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Contact_Detail_Picture">
+        >
 
         <TextView
             android:id="@+id/contact_private_key_Edit"

@@ -6,11 +6,13 @@ package prj666.a03.cryptboard;
         import android.graphics.Color;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
+        import android.support.v7.widget.Toolbar;
         import android.view.View;
         import android.widget.Button;
         import android.widget.ImageView;
         import android.widget.TextView;
         import android.widget.Toast;
+
 
         import com.google.zxing.WriterException;
 
@@ -40,10 +42,16 @@ public class Contact_Edit_Details extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         tmp = (Contact) getIntent().getSerializableExtra("contactToEdit");
         setContentView(R.layout.activity_contact__details__edit);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+
+
+
+
         name = (TextView)findViewById(R.id.Contact_Detail_Edit_name);
         oldname = name.getText().toString();
         date = (TextView)findViewById(R.id.Contact_key_date_Edit);
-        img = (ImageView)findViewById(R.id.Contact_Detail_Edit_Picture);
+        //img = (ImageView)findViewById(R.id.Contact_Detail_Edit_Picture);
 
         createNewKeyButton = (Button) findViewById(R.id.CreateNewPrivateKeyButton);
         deleteKeyButton = (Button) findViewById(R.id.DeletePrivateKeyButton);
@@ -54,12 +62,12 @@ public class Contact_Edit_Details extends AppCompatActivity {
         PrivKeyIndicator = (TextView) findViewById(R.id.contact_private_key_Edit);
         PubKeyIndicator = (TextView) findViewById(R.id.Contact_public_key_Edit);
 
-        if(tmp.getContactPubKey()!=null){
+        /*if(tmp.getContactPubKey()!=null){
             try {
-                img.setImageBitmap(QRCodeGenerator.encodeAsBitmap(tmp.getContactPubKey()));
+                //img.setImageBitmap(QRCodeGenerator.encodeAsBitmap(tmp.getContactPubKey()));
             } catch (WriterException e) {
                 e.printStackTrace();
-            }}
+            }}*/
 
         name.setText(tmp.getName());
         date.setText(tmp.getDateCreated());

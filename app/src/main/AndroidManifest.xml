@@ -13,7 +13,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,6 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".KeyExchange">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,6 +30,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".Contact_List_Main"
             android:label="@string/title_activity_contact__list__main"
@@ -36,16 +39,20 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
         <activity android:name=".Contact_Details">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".Contact_Edit_Details">
+
+        <activity android:name=".Contact_Edit_Details"
+            android:theme="@style/CryptBoard">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
         <activity android:name=".AddContact">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
