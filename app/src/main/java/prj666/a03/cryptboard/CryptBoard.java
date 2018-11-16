@@ -1,34 +1,34 @@
 package prj666.a03.cryptboard;
 
 
-import android.annotation.TargetApi;
+import android.content.ClipDescription;
 import android.content.Intent;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.media.AudioManager;
+import android.net.Uri;
+import android.os.Build;
+import android.support.v13.view.inputmethod.EditorInfoCompat;
+import android.support.v13.view.inputmethod.InputConnectionCompat;
+import android.support.v13.view.inputmethod.InputContentInfoCompat;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
-import android.widget.PopupWindow;
 import android.widget.Toast;
 
-import java.security.InvalidKeyException;
+import java.io.File;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Calendar;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 import prj666.a03.cryptboard.RSAStrings.RSAStrings;
 
@@ -41,21 +41,22 @@ public class CryptBoard extends InputMethodService
     private static final int KEYCODE_CONTACTS = -104;
     private static final int KEYCODE_CLEAR = -105;
     private static final int KEYCODE_CAM = -106;
-    private static final int KEYCODE_MATH_MODE = -200;
+
+    private static final String TAG = "ImageKeyboard";
+    private static final String AUTHORITY = "com.example.android.commitcontent.ime.inputcontent";
+    private static final String MIME_TYPE_PNG = "image/png";
+    private File file;
 
     private KeyboardView keyboardView;
     private Keyboard keyboard;
     private Keyboard keyboardNum;
     private Keyboard keyboardNormal;
     private Keyboard keyboardNumNormal;
-    private View contactsView;
-    private PopupWindow popup;
 
     private InputConnection ic;
     private boolean caps = false;
     private boolean capsLock = false;
     private boolean numMode = false;
-    private boolean unlock = true;
     private boolean stegMode = true;
 
     private String text = "";
@@ -66,7 +67,7 @@ public class CryptBoard extends InputMethodService
     private RSAPublicKey  publicKey =  null;
 
     private PrivateKey privateKey = null;
-
+    long holdStartTime = 0;
 
     KeyFactory rsaKeyFac;
     {
@@ -85,14 +86,24 @@ public class CryptBoard extends InputMethodService
             e.printStackTrace();
         }
     }
+    @Override
+    public void onStartInputView(EditorInfo editorInfo, boolean restarting) {
+        String[] mimeTypes = EditorInfoCompat.getContentMimeTypes(editorInfo);
+        
+        boolean pngSupported = false;
+        for (String mimeType : mimeTypes) {
+            if (ClipDescription.compareMimeTypes(mimeType, "image/png")) {
+                pngSupported = true;
+            }
+        }
 
+        if (pngSupported) {
+            Toast.makeText(this, "PNG supported", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "PNG not supported :(", Toast.LENGTH_LONG).show();
+        }
+    }
 
-
-
-
-
-
-    long currentTime = 0;
 
     @Override
     public View onCreateInputView() {
@@ -102,14 +113,6 @@ public class CryptBoard extends InputMethodService
         keyboardNormal = new Keyboard(this, R.xml.qwerty_normal);
         keyboardNumNormal = new Keyboard(this, R.xml.alt_qwerty_normal);
 
-        contactsView = getLayoutInflater().inflate(R.layout.activity_main, null);
-        popup = new PopupWindow();
-        popup.setContentView(contactsView);
-        popup.setWidth(400);
-        popup.setHeight(400);
-        popup.setClippingEnabled(false);
-
-
         keyboardView.setPreviewEnabled(false);
         keyboardView.setKeyboard(keyboardNormal);
         keyboardView.setOnKeyboardActionListener(this);
@@ -118,7 +121,7 @@ public class CryptBoard extends InputMethodService
     }
 
     private void playClick(int keyCode) {
-/*        AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
+        AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
         switch(keyCode) {
             case 32:
                 am.playSoundEffect(AudioManager.FX_KEYPRESS_SPACEBAR);
@@ -131,13 +134,59 @@ public class CryptBoard extends InputMethodService
                 break;
             default:
                 am.playSoundEffect(AudioManager.FX_KEYPRESS_STANDARD);
-        }*/
+        }
     }
+
     @Override
-    @TargetApi(25)
+    //@TargetApi(25)
     public void onPress(int primaryCode) {
         ic = getCurrentInputConnection();
-        playClick(primaryCode);
+        holdStartTime = Calendar.getInstance().getTimeInMillis();
+        switch (primaryCode) {
+            case Keyboard.KEYCODE_DELETE:
+                break;
+            case Keyboard.KEYCODE_SHIFT:
+                break;
+            case KEYCODE_CAM:
+                break;
+            case KEYCODE_PHOTO:
+                break;
+            case Keyboard.KEYCODE_MODE_CHANGE:
+                break;
+            case Keyboard.KEYCODE_DONE:
+                break;
+            case  KEYCODE_ENCRYPT:
+                break;
+            case KEYCODE_DECRYPT:
+                break;
+            case KEYCODE_CONTACTS:
+                break;
+            case KEYCODE_CLEAR:
+                break;
+            default:
+        }
+
+    }
+
+    @Override
+    public void onRelease(int primaryCode) {
+        switch (primaryCode){
+            case Keyboard.KEYCODE_DONE:
+                long holdDuration = (Calendar.getInstance().getTimeInMillis() - holdStartTime);
+                if (holdDuration > 1000) {
+                    toggleStegMode(!stegMode);
+                }
+                else{
+                    ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
+                }
+                break;
+
+        }
+    }
+
+    @Override
+    public void onKey(int primaryCode, int[] keyCodes){
+        ic = getCurrentInputConnection();
         switch (primaryCode) {
             case Keyboard.KEYCODE_DELETE:
                 ic.deleteSurroundingText(1,0);
@@ -161,17 +210,12 @@ public class CryptBoard extends InputMethodService
                 }
                 break;
             case KEYCODE_CAM:
-                Intent camera = new Intent(this, CarrierSelection.class);
-                camera.putExtra("MODE", 1);
-                startActivity(camera);
+                //launchCamera();
+                commitImage();
                 break;
-
             case KEYCODE_PHOTO:
-                Intent photo = new Intent(this, CarrierSelection.class);
-                photo.putExtra("MODE", 2);
-                startActivity(photo);
+                launchPhotos();
                 break;
-
             case Keyboard.KEYCODE_MODE_CHANGE:
                 caps = false;
                 capsLock = false;
@@ -194,31 +238,19 @@ public class CryptBoard extends InputMethodService
                 break;
 
             case Keyboard.KEYCODE_DONE:
-                ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
-                currentTime = Calendar.getInstance().getTimeInMillis();
                 break;
             case  KEYCODE_ENCRYPT:
-                Intent EncryptPhoto = new Intent(this, CarrierSelection.class);
-                EncryptPhoto.putExtra("MODE", 2);
-                EncryptPhoto.putExtra("Msg",getMessage());
-                startActivity(EncryptPhoto);
+                encryptMessage();
                 break;
-
             case KEYCODE_DECRYPT:
-                Intent DecryptPhoto = new Intent(this, DecodePhoto.class);
-                DecryptPhoto.putExtra("MODE", 2);
-                startActivity(DecryptPhoto);
+                decryptMessage();
                 break;
             case KEYCODE_CONTACTS:
-                Intent contacts = new Intent(this, Contact_List_Main.class);
-                startActivity(contacts);
+                launchContacts();
                 break;
             case KEYCODE_CLEAR:
                 clearMessage();
                 break;
-            case KEYCODE_MATH_MODE:
-                break;
-
             default:
                 char code = (char) primaryCode;
                 if(Character.isLetter(code) && caps) {
@@ -231,38 +263,6 @@ public class CryptBoard extends InputMethodService
                     keyboardView.invalidateAllKeys();
                 }
         }
-
-    }
-
-    @Override
-    public void onRelease(int primaryCode) {
-        // this isnt working
-/*        if (primaryCode == Keyboard.KEYCODE_DONE){
-            if (stegMode) {
-                if (numMode) {
-                    keyboardView.setKeyboard(keyboardNumNormal);
-                }
-                else {
-                    keyboardView.setKeyboard(keyboardNormal);
-                }
-                keyboardView.invalidateAllKeys();
-                stegMode = false;
-            }
-            else {
-                if (numMode) {
-                    keyboardView.setKeyboard(keyboardNum);
-                } else {
-                    keyboardView.setKeyboard(keyboard);
-                }
-                keyboardView.invalidateAllKeys();
-                stegMode = true;
-            }
-        }*/
-    }
-
-    @Override
-    public void onKey(int primaryCode, int[] keyCodes) {
-
     }
 
     @Override
@@ -280,68 +280,44 @@ public class CryptBoard extends InputMethodService
 
     @Override
     public void swipeDown() {
-        if (stegMode) {
-            if (numMode){
-                keyboardView.setKeyboard(keyboardNumNormal);
-            }
-            else{
-                keyboardView.setKeyboard(keyboardNormal);
-            }
-            keyboardView.invalidateAllKeys();
-            stegMode = false;
-        }
+        toggleStegMode(false);
     }
 
     @Override
     public void swipeUp() {
-        if (numMode){
-            keyboardView.setKeyboard(keyboardNum);
-        }
-        else{
-            keyboardView.setKeyboard(keyboard);
-        }
-        keyboardView.invalidateAllKeys();
-        stegMode = true;
+        toggleStegMode(true);
     }
 
-/*    public Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", "test");
-        return Uri.parse(path);
+
+    public void commitImage() {
+        Uri path = Uri.parse("android.resource://prj666.a03.cryptboard/" + R.raw.cat);
+        commitPngImage(path, "cat");
     }
 
-    public void commitImage(Uri contentUri, String imageDescription) {
+    /**
+     * Commits a PNG image
+     *
+     * @param contentUri Content URI of the GIF image to be sent
+     * @param imageDescription Description of the GIF image to be sent
+     */
+    public void commitPngImage(Uri contentUri, String imageDescription) {
         InputContentInfoCompat inputContentInfo = new InputContentInfoCompat(
                 contentUri,
-                new ClipDescription(imageDescription, new String[]{"image/gif"}),
+                new ClipDescription(imageDescription, new String[]{MIME_TYPE_PNG}),
                 null
         );
-        InputConnection inputConnection = ic;
         EditorInfo editorInfo = getCurrentInputEditorInfo();
-        int flags = 0;
+        Integer flags = 0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             flags |= InputConnectionCompat.INPUT_CONTENT_GRANT_READ_URI_PERMISSION;
         }
         InputConnectionCompat.commitContent(
-                inputConnection, editorInfo, inputContentInfo, flags, null);
+                ic, editorInfo, inputContentInfo, flags, null);
     }
 
-    public void saveAndGetImage(Context inContext, Bitmap inImage){
-
-        try (FileOutputStream out = new FileOutputStream("test.jpeg")) {
-            inImage.compress(Bitmap.CompressFormat.PNG, 100, out);
-            String path = MediaStore.Images.Media.insertImage(getContentResolver(), inImage, "Title", "test");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }*/
-
-    private String getMessage(){
+    private void getMessage(){
         text = ic.getExtractedText(new ExtractedTextRequest(), 0).text.toString();
         Toast.makeText(this, text, Toast.LENGTH_LONG).show();
-        return text;
     }
 
     private void clearMessage(){
@@ -351,7 +327,7 @@ public class CryptBoard extends InputMethodService
         ic.deleteSurroundingText(beforeCursorText.length(), afterCursorText.length());
     }
 
-    private void EncryptMessage(){
+    private void encryptMessage(){
         try {
             getMessage();
             encryptedText =  android.util.Base64.encodeToString(RSAStrings.encryptString(publicKey, text.trim()),0);
@@ -362,12 +338,12 @@ public class CryptBoard extends InputMethodService
         }
     }
 
-    private void DecryptMessage(){
+    private void decryptMessage(){
         try {
             getMessage();
             byte [] decrypted = RSAStrings.decryptString(privateKey,android.util.Base64.decode(text.trim().getBytes(),0));
             setMessage(new String(decrypted));
-            Toast.makeText(this, new String(decrypted), Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, new String(decrypted), Toast.LENGTH_LONG).show();
         }
         catch (Exception e){
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -379,31 +355,46 @@ public class CryptBoard extends InputMethodService
         ic.commitText(message,1);
     }
 
+    private void toggleStegMode(boolean stegModeOn){
 
-/*    private void checkPermissions(){
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_CONTACTS)
-                != PackageManager.PERMISSION_GRANTED) {
 
-            // Permission is not granted
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(thisActivity,
-                    Manifest.permission.READ_CONTACTS)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
+        if (stegModeOn) {
+            if (numMode) {
+                keyboardView.setKeyboard(keyboardNum);
             } else {
-                // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_CONTACTS},
-                        MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
+                keyboardView.setKeyboard(keyboard);
             }
-        } else {
-            // Permission has already been granted
+            keyboardView.invalidateAllKeys();
+            stegMode = true;
         }
-    }*/
+        else {
+            if (stegMode) {
+                if (numMode){
+                    keyboardView.setKeyboard(keyboardNumNormal);
+                }
+                else{
+                    keyboardView.setKeyboard(keyboardNormal);
+                }
+                keyboardView.invalidateAllKeys();
+                stegMode = false;
+            }
+        }
+    }
+
+    private void launchContacts(){
+        Intent contacts = new Intent(this, Contact_List_Main.class);
+        startActivity(contacts);
+    }
+
+    private void launchPhotos(){
+        Intent photo = new Intent(this, CarrierSelection.class);
+        photo.putExtra("MODE", 2);
+        startActivity(photo);
+    }
+
+    private void launchCamera(){
+        Intent camera = new Intent(this, CarrierSelection.class);
+        camera.putExtra("MODE", 1);
+        startActivity(camera);
+    }
 }

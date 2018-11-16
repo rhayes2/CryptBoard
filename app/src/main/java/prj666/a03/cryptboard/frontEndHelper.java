@@ -17,6 +17,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.crypto.BadPaddingException;
@@ -141,6 +142,10 @@ public class frontEndHelper {
         db.deleteContact(contactToDelete);
     }
 
+    public void updateContact(Contact contactToUpdate) {db.updateContact(contactToUpdate);}
+
+    public void updateName(Contact newContactInfo, String oldName){ db.updateName(newContactInfo, oldName);}
+
 
     public List<String> getNames(){
         Clist = db.getContactList();
@@ -174,13 +179,19 @@ public class frontEndHelper {
 
     public List<String> getNamesLast() {
         Clist = db.getContactList();
+        Collections.reverse(Clist);
+        int co = 0;
+
         List<String> names = new ArrayList<String>();
         for (Contact x : Clist) {
-            names.add(x.getName());
-
+            if (co < 7) {
+                names.add(x.getName());
+                co++;
+            }
         }
         return names;
     }
+
 
     public RSAPublicKey getContactsPublicKey(String name){
         Contact tmp = db.getContact(name);
