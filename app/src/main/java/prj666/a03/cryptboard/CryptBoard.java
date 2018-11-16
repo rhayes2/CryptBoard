@@ -2,16 +2,14 @@ package prj666.a03.cryptboard;
 
 
 import android.content.ClipDescription;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.media.AudioManager;
 import android.net.Uri;
-import android.os.Environment;
-import android.provider.MediaStore;
+import android.os.Build;
+import android.support.v13.view.inputmethod.EditorInfoCompat;
 import android.support.v13.view.inputmethod.InputConnectionCompat;
 import android.support.v13.view.inputmethod.InputContentInfoCompat;
 import android.view.KeyEvent;
@@ -21,9 +19,7 @@ import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.File;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -46,6 +42,10 @@ public class CryptBoard extends InputMethodService
     private static final int KEYCODE_CLEAR = -105;
     private static final int KEYCODE_CAM = -106;
 
+    private static final String TAG = "ImageKeyboard";
+    private static final String AUTHORITY = "com.example.android.commitcontent.ime.inputcontent";
+    private static final String MIME_TYPE_PNG = "image/png";
+    private File file;
 
     private KeyboardView keyboardView;
     private Keyboard keyboard;
@@ -86,7 +86,23 @@ public class CryptBoard extends InputMethodService
             e.printStackTrace();
         }
     }
+    @Override
+    public void onStartInputView(EditorInfo editorInfo, boolean restarting) {
+        String[] mimeTypes = EditorInfoCompat.getContentMimeTypes(editorInfo);
+        
+        boolean pngSupported = false;
+        for (String mimeType : mimeTypes) {
+            if (ClipDescription.compareMimeTypes(mimeType, "image/png")) {
+                pngSupported = true;
+            }
+        }
 
+        if (pngSupported) {
+            Toast.makeText(this, "PNG supported", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "PNG not supported :(", Toast.LENGTH_LONG).show();
+        }
+    }
 
 
     @Override
@@ -164,8 +180,8 @@ public class CryptBoard extends InputMethodService
         switch (primaryCode){
             case Keyboard.KEYCODE_DONE:
                 long holdDuration = (Calendar.getInstance().getTimeInMillis() - holdStartTime);
-                if (holdDuration > 2000) {
-                    toggleStegMode(true);
+                if (holdDuration > 1000) {
+                    toggleStegMode(!stegMode);
                 }
                 else{
                     ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
@@ -201,8 +217,8 @@ public class CryptBoard extends InputMethodService
                 }
                 break;
             case KEYCODE_CAM:
-                launchCamera();
-                //commitImage();
+                //launchCamera();
+                commitImage();
                 break;
             case KEYCODE_PHOTO:
                 launchPhotos();
@@ -279,28 +295,29 @@ public class CryptBoard extends InputMethodService
         toggleStegMode(true);
     }
 
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", "test");
-        return Uri.parse(path);
-    }
-
-    public Uri getEncodedImgUri(){
-        return Uri.parse(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "EncodedMsg.PNG");
-    }
 
     public void commitImage() {
+        Uri path = Uri.parse("android.resource://prj666.a03.cryptboard/" + R.raw.cat);
+        commitPngImage(path, "cat");
+    }
+
+    /**
+     * Commits a PNG image
+     *
+     * @param contentUri Content URI of the GIF image to be sent
+     * @param imageDescription Description of the GIF image to be sent
+     */
+    public void commitPngImage(Uri contentUri, String imageDescription) {
         InputContentInfoCompat inputContentInfo = new InputContentInfoCompat(
-                getEncodedImgUri(),
-                new ClipDescription("Encoded image", new String[]{"image/PNG"}),
+                contentUri,
+                new ClipDescription(imageDescription, new String[]{MIME_TYPE_PNG}),
                 null
         );
         EditorInfo editorInfo = getCurrentInputEditorInfo();
-        int flags = 0;
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+        Integer flags = 0;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             flags |= InputConnectionCompat.INPUT_CONTENT_GRANT_READ_URI_PERMISSION;
-        }*/
+        }
         InputConnectionCompat.commitContent(
                 ic, editorInfo, inputContentInfo, flags, null);
     }
@@ -357,6 +374,8 @@ public class CryptBoard extends InputMethodService
     }
 
     private void toggleStegMode(boolean stegModeOn){
+
+
         if (stegModeOn) {
             if (numMode) {
                 keyboardView.setKeyboard(keyboardNum);
@@ -396,30 +415,4 @@ public class CryptBoard extends InputMethodService
         camera.putExtra("MODE", 1);
         startActivity(camera);
     }
-/*    private void checkPermissions(){
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_CONTACTS)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Permission is not granted
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(thisActivity,
-                    Manifest.permission.READ_CONTACTS)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-            } else {
-                // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_CONTACTS},
-                        MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-        } else {
-            // Permission has already been granted
-        }
-    }*/
 }
