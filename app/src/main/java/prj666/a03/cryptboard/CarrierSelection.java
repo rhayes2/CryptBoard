@@ -16,6 +16,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -51,6 +52,7 @@ public class CarrierSelection extends AppCompatActivity {
     Spinner SpinnerContact;
     Bitmap SelectedImg;
     String msgForEncryption;
+    AutoCompleteTextView SearchContacts;
 
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -83,6 +85,7 @@ public class CarrierSelection extends AppCompatActivity {
         confirm = findViewById(R.id.carrierConfirmation);
         carrierImage = findViewById(R.id.carrierImage);
         SpinnerContact = findViewById(R.id.spinner);
+        SearchContacts = findViewById(R.id.ContactSearchBarCarrier);
 
         confirm.setText(R.string.carrier_confirmation);
         camera.setText(R.string.carrier_camera_recapture);
@@ -94,6 +97,7 @@ public class CarrierSelection extends AppCompatActivity {
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        SearchContacts.setAdapter(dataAdapter);
         SpinnerContact.setAdapter(dataAdapter);
 
 
