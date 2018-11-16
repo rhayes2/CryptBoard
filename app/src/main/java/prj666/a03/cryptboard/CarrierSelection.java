@@ -149,34 +149,29 @@ public class CarrierSelection extends AppCompatActivity {
                 /*Intent intent = new Intent(getApplicationContext(), CryptBoard.class);
                 setResult(RESULT_OK);
                 startActivity(intent);*/
-                String x  = (String) SpinnerContact.getSelectedItem();
-                String Ecrypted = null;
-                try {
-                    Ecrypted = frontEndHelper.getInstance().sendMsg(x,msgForEncryption);
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                } catch (InvalidKeySpecException e) {
-                    e.printStackTrace();
-                } catch (IllegalBlockSizeException e) {
-                    e.printStackTrace();
-                } catch (InvalidKeyException e) {
-                    e.printStackTrace();
-                } catch (BadPaddingException e) {
-                    e.printStackTrace();
-                } catch (NoSuchPaddingException e) {
-                    e.printStackTrace();
-                }
-                Bitmap tocrypts = SelectedImg;
-                Bitmap crypts = null;
 
-                try {
-                    crypts = Steg.withInput(tocrypts).encode(Ecrypted).intoBitmap();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                saveToInternalStorage(crypts, "EncodedMsg");
-                carrierImage.setImageBitmap(crypts);
+                final String x = (String) SpinnerContact.getSelectedItem();
+                final Bitmap tocrypts = SelectedImg;
+                final String finmsg = msgForEncryption;
+                Thread PerformEncoding = new Thread(new Runnable(){
+                    @Override
+                    public void run() {
+                        String inThreadContact = x;
+                        String Ecrypted = null;
+                        Bitmap inThreadToEncode = tocrypts;
+                        String inThreadMsg = finmsg;
+                        Bitmap crypts = null;
+                        try {
+                            Ecrypted = frontEndHelper.getInstance().sendMsg(inThreadContact, inThreadMsg);
+                            crypts = Steg.withInput(inThreadToEncode).encode(Ecrypted).intoBitmap();
+                            saveToInternalStorage(crypts, "EncodedMsg");
+                        } catch (NoSuchAlgorithmException | InvalidKeySpecException | IllegalBlockSizeException | InvalidKeyException | BadPaddingException | NoSuchPaddingException e) {
+                            e.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();}
+                        }
+                    });
+                PerformEncoding.start();
 
                 // TODO ADD STEGtoIMG
                 finishAffinity();

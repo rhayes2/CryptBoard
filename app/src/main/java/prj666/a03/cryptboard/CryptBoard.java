@@ -2,13 +2,16 @@ package prj666.a03.cryptboard;
 
 
 import android.content.ClipDescription;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.support.v13.view.inputmethod.EditorInfoCompat;
 import android.support.v13.view.inputmethod.InputConnectionCompat;
 import android.support.v13.view.inputmethod.InputContentInfoCompat;
@@ -20,6 +23,8 @@ import android.view.inputmethod.InputConnection;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -137,10 +142,11 @@ public class CryptBoard extends InputMethodService
         }
     }
 
+
     @Override
     //@TargetApi(25)
     public void onPress(int primaryCode) {
-        ic = getCurrentInputConnection();
+        /**ic = getCurrentInputConnection();
         holdStartTime = Calendar.getInstance().getTimeInMillis();
         switch (primaryCode) {
             case Keyboard.KEYCODE_DELETE:
@@ -172,8 +178,9 @@ public class CryptBoard extends InputMethodService
                 break;
             default:
         }
-
+ **/
     }
+
 
     @Override
     public void onRelease(int primaryCode) {
@@ -218,7 +225,7 @@ public class CryptBoard extends InputMethodService
                 break;
             case KEYCODE_CAM:
                 //launchCamera();
-                commitImage();
+                //commitImage();  //TODO fix keycode
                 break;
             case KEYCODE_PHOTO:
                 launchPhotos();
@@ -247,10 +254,15 @@ public class CryptBoard extends InputMethodService
             case Keyboard.KEYCODE_DONE:
                 break;
             case  KEYCODE_ENCRYPT:
-                encryptMessage();
+                Intent EncryptPhoto = new Intent(this, CarrierSelection.class);
+                EncryptPhoto.putExtra("MODE", 2);
+                EncryptPhoto.putExtra("Msg",getMessage());
+                startActivity(EncryptPhoto);
                 break;
             case KEYCODE_DECRYPT:
-                decryptMessage();
+                Intent DecryptPhoto = new Intent(this, DecodePhoto.class);
+                DecryptPhoto.putExtra("MODE", 2);
+                startActivity(DecryptPhoto);
                 break;
             case KEYCODE_CONTACTS:
                 launchContacts();
@@ -296,12 +308,13 @@ public class CryptBoard extends InputMethodService
     }
 
 
-    public void commitImage() {
+    /**public void commitImage() {
         Uri path = Uri.parse("android.resource://prj666.a03.cryptboard/" + R.raw.cat);
         commitPngImage(path, "cat");
     }
+    )
 
-    /**
+
      * Commits a PNG image
      *
      * @param contentUri Content URI of the GIF image to be sent
@@ -334,7 +347,6 @@ public class CryptBoard extends InputMethodService
 
     private String getMessage(){
         text = ic.getExtractedText(new ExtractedTextRequest(), 0).text.toString();
-        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
         return text;
     }
 
