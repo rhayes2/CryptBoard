@@ -2,13 +2,16 @@ package prj666.a03.cryptboard;
 
 
 import android.content.ClipDescription;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.support.v13.view.inputmethod.EditorInfoCompat;
 import android.support.v13.view.inputmethod.InputConnectionCompat;
 import android.support.v13.view.inputmethod.InputContentInfoCompat;
@@ -20,6 +23,8 @@ import android.view.inputmethod.InputConnection;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -59,33 +64,14 @@ public class CryptBoard extends InputMethodService
     private boolean numMode = false;
     private boolean stegMode = true;
 
-    private String text = "";
-    private String decryptedText = "";
-    private String encryptedText = "";
-    private String Stringpubkey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAurl9C573/toKc8XCi+jwQpxzwemUKbxdpxX0+l1MUm7LdPNzDYQeUU+SSdOC5xIQ646nyzRDKZjrCPALIaeXxAbHaiDqX22ab3BA+pSDZuD39KkWhiZuhmXZPY9uQJYlOjPy63pH7LeM03ZQQNiMZz8oXT94u+yeKxU77uHHecBFxGQEzswnXRGUeUYgz5FALrX1LZJG3IY0W7Rr5gvxWQxjA6E9kFG05cY34DFazElc/Z3cv90cle6lNb0szeHIIMAvIYj+gMUcwzVzsOMDVPZVHuglWvxD5jrOc0aq2tiJgqzlvAVTFS5qlwovGtwN34W71FLwscp2GEeryeCH2QIDAQAB";
-    private String Stringprivkey = "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC6uX0Lnvf+2gpzxcKL6PBCnHPB6ZQpvF2nFfT6XUxSbst083MNhB5RT5JJ04LnEhDrjqfLNEMpmOsI8Ashp5fEBsdqIOpfbZpvcED6lINm4Pf0qRaGJm6GZdk9j25AliU6M/Lrekfst4zTdlBA2IxnPyhdP3i77J4rFTvu4cd5wEXEZATOzCddEZR5RiDPkUAutfUtkkbchjRbtGvmC/FZDGMDoT2QUbTlxjfgMVrMSVz9ndy/3RyV7qU1vSzN4cggwC8hiP6AxRzDNXOw4wNU9lUe6CVa/EPmOs5zRqra2ImCrOW8BVMVLmqXCi8a3A3fhbvUUvCxynYYR6vJ4IfZAgMBAAECggEAO4b4y2ShkRi37lKkg+/98G5qJO6vMmL/xE2mrM5jj4AM0rrt+egdtjRU4b5RZBMJW989tPVzV+aNP2svUUpZgr/agQX/Ue7iJha2UGxaO8kKo2/oY1oLMEN17z8zmdmEArse/V0dYuTdO2jjiti+YgfreVbLybVUc02wrqZB7pkGvsSMx8jPT10OLjKDUJm9/Ixf5lXwCWJ4HUcTowGo9AJ4rbnatffCjOTZvcOE67ofnY/PxbiQWcjwaA578Gab0/6myJtOICmjDZzrJIbWtH9RgJAfFkpDcKHo1DMx8XQDxN6BBkKvzi00NLkUniOnmIWtmE7/JTJYJUa2KzqdZQKBgQDoBPUcpYqfoikGAhAUaIbEMEtfwsGbulIKL3r10ZLN5Wq+PCPpuzD8etqxNy7h7CY7abYECiuVWrYsiv6vibZ3SDCSKA3ZdX5d0wK+OH1z8SAfoBcU++u6OdRscN41kEYQ3DFsR0UfI9ZiVIGz7G1aXpZG09Rd9+ySqbagSfiO/wKBgQDOBhFP/PqfGCLl76LvCwuhAZwkJIWtFxJqA3Tp1QlIPSyeti6SmzogZmsVUDKILSiRN8VTc+2RDcumo9KSZ2oC2UpQPmDHnCIVH0YrYwci6S9TCeEoA7C8UOQUbDMIowbCy0ll6mHazfUV2Wlz4D5H68PfPBwdj7XztVp3C0xBJwKBgQCrDHSToOsYkpkBx+WI1iJ8Yko/F7paDztKLQTOUqmSx04xXu7u8kTD7eJqAY+7mLf61w0L31+QJSbmobXvPWxadcrxBTxok7kMfHKqP8UlA5+2EPTTUIHRca7MH02CWZF9/oclF0m7ElWLeleAiI15sP/CyYnnmM48tYdglgf7iwKBgQCdeG3LIaW97IjgDyYOZ/bffYeG6JN0FWpxtWqrP7X0jS2Jsd4vGI55LU8z3zSAeWPEe0hL3RP8Bvtdx2GvnXOd8c+nPcZjS6eRVXIgv3Q47trJMYfzOb7gcUOjiIAJXfJQ+WiEiX157Goj5SWA+Ckid8Yi3qLuxWVhfYBD9VK3iQKBgHa+th8etmPmivviplBtHJ23Y3a6VDoGYr427oB8k3PsalO1LDi0V4JUf7cgtRXiZaGr8R4pQuj+tu8wd1UCpv7wdXEnOOpwNM8gjt9veLSfxy7M8vI2B3V9j7G3fztpBB2GeFsxqp+a9mcx8VPdrGk+azaseRazgGG7FEJiVKUs";
-    private RSAPublicKey  publicKey =  null;
 
     private PrivateKey privateKey = null;
     long holdStartTime = 0;
 
     KeyFactory rsaKeyFac;
-    {
-        try {
-            rsaKeyFac = KeyFactory.getInstance("RSA");
-            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(android.util.Base64.decode(Stringpubkey,0));
-            publicKey = (RSAPublicKey)rsaKeyFac.generatePublic(keySpec);
 
-            KeyFactory rsaKeyFac = KeyFactory.getInstance("RSA");
-            PKCS8EncodedKeySpec encodedKeySpec = new PKCS8EncodedKeySpec(android.util.Base64.decode(Stringprivkey,0));
-            privateKey = (RSAPrivateKey)rsaKeyFac.generatePrivate(encodedKeySpec);
+    private String text = null;
 
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-        }
-    }
     @Override
     public void onStartInputView(EditorInfo editorInfo, boolean restarting) {
         String[] mimeTypes = EditorInfoCompat.getContentMimeTypes(editorInfo);
@@ -137,10 +123,11 @@ public class CryptBoard extends InputMethodService
         }
     }
 
+
     @Override
     //@TargetApi(25)
     public void onPress(int primaryCode) {
-        ic = getCurrentInputConnection();
+        /**ic = getCurrentInputConnection();
         holdStartTime = Calendar.getInstance().getTimeInMillis();
         switch (primaryCode) {
             case Keyboard.KEYCODE_DELETE:
@@ -172,8 +159,9 @@ public class CryptBoard extends InputMethodService
                 break;
             default:
         }
-
+ **/
     }
+
 
     @Override
     public void onRelease(int primaryCode) {
@@ -218,7 +206,7 @@ public class CryptBoard extends InputMethodService
                 break;
             case KEYCODE_CAM:
                 //launchCamera();
-                commitImage();
+                //commitImage();  //TODO fix keycode
                 break;
             case KEYCODE_PHOTO:
                 launchPhotos();
@@ -247,10 +235,16 @@ public class CryptBoard extends InputMethodService
             case Keyboard.KEYCODE_DONE:
                 break;
             case  KEYCODE_ENCRYPT:
-                encryptMessage();
+                Intent EncryptPhoto = new Intent(this, CarrierSelection.class);
+                EncryptPhoto.putExtra("MODE", 2);
+                EncryptPhoto.putExtra("Msg",getMessage());
+                clearMessage();
+                startActivity(EncryptPhoto);
                 break;
             case KEYCODE_DECRYPT:
-                decryptMessage();
+                Intent DecryptPhoto = new Intent(this, DecodePhoto.class);
+                DecryptPhoto.putExtra("MODE", 2);
+                startActivity(DecryptPhoto);
                 break;
             case KEYCODE_CONTACTS:
                 launchContacts();
@@ -296,12 +290,13 @@ public class CryptBoard extends InputMethodService
     }
 
 
-    public void commitImage() {
+    /**public void commitImage() {
         Uri path = Uri.parse("android.resource://prj666.a03.cryptboard/" + R.raw.cat);
         commitPngImage(path, "cat");
     }
+    )
 
-    /**
+
      * Commits a PNG image
      *
      * @param contentUri Content URI of the GIF image to be sent
@@ -334,7 +329,6 @@ public class CryptBoard extends InputMethodService
 
     private String getMessage(){
         text = ic.getExtractedText(new ExtractedTextRequest(), 0).text.toString();
-        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
         return text;
     }
 
@@ -345,28 +339,7 @@ public class CryptBoard extends InputMethodService
         ic.deleteSurroundingText(beforeCursorText.length(), afterCursorText.length());
     }
 
-    private void encryptMessage(){
-        try {
-            getMessage();
-            encryptedText =  android.util.Base64.encodeToString(RSAStrings.encryptString(publicKey, text.trim()),0);
-            setMessage(encryptedText);
-        }
-        catch (Exception e){
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-    }
 
-    private void decryptMessage(){
-        try {
-            getMessage();
-            byte [] decrypted = RSAStrings.decryptString(privateKey,android.util.Base64.decode(text.trim().getBytes(),0));
-            setMessage(new String(decrypted));
-            //Toast.makeText(this, new String(decrypted), Toast.LENGTH_LONG).show();
-        }
-        catch (Exception e){
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-    }
 
     private void setMessage(String message){
         clearMessage();

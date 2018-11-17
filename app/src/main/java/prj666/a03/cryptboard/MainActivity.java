@@ -54,11 +54,15 @@ public class MainActivity extends AppCompatActivity {
         String brand = Build.BRAND;
 
 
+
         try {
             Test.runTests();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
+        System.out.println(control.getNamesAll());
 
         if (brand.contains("sam")){ //Handles Samsung's protectionist bs
             step1.setText(R.string.installation_samsung_1);

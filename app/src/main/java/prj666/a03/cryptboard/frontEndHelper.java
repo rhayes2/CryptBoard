@@ -2,6 +2,7 @@ package prj666.a03.cryptboard;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ import javax.crypto.NoSuchPaddingException;
 import prj666.a03.cryptboard.ContactBase.Contact;
 import prj666.a03.cryptboard.ContactBase.DatabaseHandler;
 import prj666.a03.cryptboard.RSAStrings.RSAStrings;
+import prj666.a03.cryptboard.TestSteg.Steg;
 
 public class frontEndHelper {
 
@@ -41,48 +43,27 @@ public class frontEndHelper {
         db = dbpass;
         MainAct = tmp;
         sInstance = this;
-        Clist = getContacts();
+        LoaderList();
+
     }
+
     public static frontEndHelper getInstance(){return sInstance;}
 
     public List<Contact> getContacts(){
-        return db.getContactList();
+        return Clist;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void createNewContact(Activity act, String text) throws InvalidKeySpecException, NoSuchAlgorithmException {
-        ////  CREATE THE KEY FOR SHARE
-        KeyPair tmp = null;
-        try {
-            tmp = RSAStrings.getKeys();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
+    public void LoaderList(){Clist = db.getContactList();}
 
-        ///SAVE Keys to String
-
-        String tmpPub = android.util.Base64.encodeToString(tmp.getPublic().getEncoded(),0);
-        String tmpPriv = android.util.Base64.encodeToString(tmp.getPrivate().getEncoded(),0);
-
-        String name =  text;
-        boolean favourite = false;
-
-        //// Load Into a Contact var
-        Contact toSave = new Contact(name,favourite,tmpPriv, null); /// FIX FIX FIX TESTING TESTING
-        scanTarget = toSave.getName();
-
-        db.insertContact(toSave);
-        displayKey(tmpPub,act);
-        // GET THEIR PublicKey before Saving
-
-        Clist = db.getContactList();
-        System.out.println(db.getContactList());
-        // Save Contact
-
-        // Display QR
-    }
-
-    //MoreCOMINGSOON
+    /**public void load_List(){
+        Thread PerformLoadContacts = new Thread(new Runnable(){
+            @Override
+            public void run() {
+                Clist = db.getContactList();
+            }
+        });
+        PerformLoadContacts.start();
+    } **/
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public String sendMsg(String name, String msg) throws NoSuchAlgorithmException, InvalidKeySpecException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchPaddingException {
@@ -131,11 +112,9 @@ public class frontEndHelper {
         return new String(decrypted);
     }
 
-    public void saveLastKey(String key){
-        Contact tmp = db.getContact(scanTarget);
-        tmp.setContactPubKey(key);
-        Toast.makeText(MainAct, "Contact: " +tmp.getName()+" Updated to:\n"+ tmp.toString() + " ", Toast.LENGTH_LONG).show();
-        db.updateContact(tmp);
+    public void saveContact(Contact toSave){
+        db.insertContact(toSave);
+        LoaderList();
     }
 
     public void deleteContact(Contact contactToDelete) {
@@ -145,6 +124,8 @@ public class frontEndHelper {
     public void updateContact(Contact contactToUpdate) {db.updateContact(contactToUpdate);}
 
     public void updateName(Contact newContactInfo, String oldName){ db.updateName(newContactInfo, oldName);}
+
+    public Contact getContact(String Name){return db.getContact(Name);}
 
 
     public List<String> getNames(){

@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ListFragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +21,15 @@ import prj666.a03.cryptboard.ContactBase.Contact;
 
 public class Contact_List_All extends ListFragment implements AdapterView.OnItemClickListener {
 
+    public ArrayAdapter<String> adapter = null;
+    public List<String>  names = null;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_contact__list__main, container, false);
+        frontEndHelper.getInstance().LoaderList();
+        names = frontEndHelper.getInstance().getNamesAll();
         return view;
     }
 
@@ -30,7 +37,7 @@ public class Contact_List_All extends ListFragment implements AdapterView.OnItem
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 //        ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(getActivity(), android.R.layout.simple_list_item_1, frontEndHelper.getInstance().getContacts());
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, frontEndHelper.getInstance().getNamesAll());
+        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, names);
 
 
         setListAdapter(adapter);
@@ -41,10 +48,17 @@ public class Contact_List_All extends ListFragment implements AdapterView.OnItem
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Contact clicked = frontEndHelper.getInstance().getPos(position);
+        Contact clicked = frontEndHelper.getInstance().getContact(names.get(position));
         Intent contactDetails = new Intent(getContext(),Contact_Details.class);
         contactDetails.putExtra("contact", clicked);
         startActivity(contactDetails);
+
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        adapter.notifyDataSetChanged();
 
     }
 
