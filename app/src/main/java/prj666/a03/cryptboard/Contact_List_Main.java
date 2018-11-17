@@ -15,7 +15,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.List;
+
 public class Contact_List_Main extends AppCompatActivity  {
+
+    public List<String> AllNames = null;
 
 
     /**
@@ -34,10 +38,13 @@ public class Contact_List_Main extends AppCompatActivity  {
     private ViewPager mViewPager;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact__list__main);
+
+
         getIntent();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
