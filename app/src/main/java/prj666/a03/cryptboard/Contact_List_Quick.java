@@ -43,7 +43,7 @@ public class Contact_List_Quick extends ListFragment implements AdapterView.OnIt
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Contact clicked = frontEndHelper.getInstance().getPos(position);
+        Contact clicked = frontEndHelper.getInstance().getPosQ(position);
         Intent contactDetails = new Intent(getContext(),Contact_Details.class);
         contactDetails.putExtra("contact", clicked);
         startActivity(contactDetails);
