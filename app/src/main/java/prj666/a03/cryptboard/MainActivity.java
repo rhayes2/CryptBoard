@@ -31,7 +31,7 @@ import prj666.a03.cryptboard.ContactBase.Contact;
 import prj666.a03.cryptboard.ContactBase.DatabaseHandler;
 import prj666.a03.cryptboard.RSAStrings.RSAStrings;
 import prj666.a03.cryptboard.TestSteg.Steg;
-import prj666.a03.cryptboard.TestSteg.Test;
+import prj666.a03.cryptboard.Tests.tester;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         String brand = Build.BRAND;
 
 
+        tester x = new tester();
         /**
         try {
             Test.runTests();
