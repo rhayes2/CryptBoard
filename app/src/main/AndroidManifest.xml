@@ -15,15 +15,17 @@
         android:supportsRtl="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:label="Installation Instructions">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".KeyExchange">
+        <activity android:name=".KeyExchange"
+            android:label="Key Exchange"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,20 +42,26 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Contact_Details">
+        <activity android:name=".Contact_Details"
+            android:label="Contact Details"
+            android:parentActivityName=".Contact_List_Main">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
         </activity>
 
         <activity android:name=".Contact_Edit_Details"
-            android:theme="@style/CryptBoard">
+            android:label="Edit Contact"
+            android:theme="@style/CryptBoard"
+            android:parentActivityName=".Contact_Details">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".AddContact">
+        <activity android:name=".AddContact"
+            android:label="Add Contact">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

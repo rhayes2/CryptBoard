@@ -2,13 +2,19 @@ package prj666.a03.cryptboard;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+
 
 import com.google.zxing.WriterException;
 
@@ -22,7 +28,9 @@ public class Contact_Details extends AppCompatActivity {
     ImageView img, favourite;
     Button showQRButton;
     Button editContactButton;
-    Button deleteContactButton;
+    Button doneContactButton;
+
+    MenuItem fav;
 
     frontEndHelper frontEndH;
     DatabaseHandler dbH;
@@ -32,38 +40,19 @@ public class Contact_Details extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         tmp = (Contact) getIntent().getSerializableExtra("contact");
         setContentView(R.layout.activity_contact__details);
-        name = (TextView)findViewById(R.id.Contact_Deatil_name);
-        date = (TextView)findViewById(R.id.Contact_key_date);
-        img = (ImageView)findViewById(R.id.Contact_Detail_Picture);
-        showQRButton = (Button) findViewById(R.id.showQRButton);
+        name = (TextView)findViewById(R.id.contact_Detail_name);
+        date = (TextView)findViewById(R.id.keyGenerationDate);
         editContactButton = (Button) findViewById(R.id.editContactButton);
-        deleteContactButton = (Button) findViewById(R.id.deleteContactButton);
-        favourite = findViewById(R.id.imageView3);
+        doneContactButton = (Button) findViewById(R.id.doneContactButton);
 
-        if(tmp.getContactPubKey()!=null){
-        try {
-            img.setImageBitmap(QRCodeGenerator.encodeAsBitmap(tmp.getContactPubKey()));
-        } catch (WriterException e) {
-            e.printStackTrace();
-        }}
+
+        Toolbar tool = (Toolbar) findViewById(R.id.contact_details_toolbar);
+        setSupportActionBar(tool);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+
         name.setText(tmp.getName());
         date.setText(tmp.getDateCreated());
-
-        if (tmp.isFavourite() == true){
-            favourite.setImageResource(R.drawable.favourite_selected_24dp);
-        } else {
-            favourite.setImageResource(R.drawable.favourite_unselected_24dp);
-        }
-
-
-        showQRButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // show QR code
-                // TO DO:
-                //       1) launch activity to show QR
-                //           (make sure uses current value for tmp in  case it was changed
-            }
-        });
 
         editContactButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -73,7 +62,7 @@ public class Contact_Details extends AppCompatActivity {
             }
         });
 
-        deleteContactButton.setOnClickListener(new View.OnClickListener() {
+        /*deleteContactButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // delete contact code
                 // TO DO:
@@ -83,6 +72,13 @@ public class Contact_Details extends AppCompatActivity {
 
                 frontEndH = frontEndHelper.getInstance();
                 frontEndH.deleteContact(tmp);
+                finish();
+            }
+        });*/
+
+        doneContactButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 finish();
             }
         });
@@ -119,7 +115,7 @@ public class Contact_Details extends AppCompatActivity {
 
                     Toast.makeText(this, "Contact Updated", Toast.LENGTH_SHORT).show();
                 }
-                else if ((boolean) data.getSerializableExtra("changeStatus") == false){
+                else if ((boolean) data.getSerializableExtra("changedStatus") == false){
                     Toast.makeText(this, "Contact Unchanged", Toast.LENGTH_SHORT).show();
                 }
                 else{
@@ -134,4 +130,41 @@ public class Contact_Details extends AppCompatActivity {
         }
     }//onActivityResult
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.contact_action_bar, menu);
+
+        fav = menu.findItem(R.id.action_favourite);
+        if(tmp.isFavourite() == true){
+            fav.setIcon(R.drawable.favourite_selected_24dp);
+        }
+        else{
+            fav.setIcon(R.drawable.favourite_unselected_24dp);
+        }
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.action_favourite:
+                if (tmp.isFavourite() == true){
+                    fav.setIcon(R.drawable.favourite_unselected_24dp);
+                    tmp.setFavourite(false);
+                } else if (tmp.isFavourite() == false){
+                    fav.setIcon(R.drawable.favourite_selected_24dp);
+                    tmp.setFavourite(true);
+                } else {
+                    Toast.makeText(this, "ActBar error", Toast.LENGTH_SHORT).show();
+                }
+                frontEndH = frontEndHelper.getInstance();
+                frontEndH.updateContact(tmp);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
