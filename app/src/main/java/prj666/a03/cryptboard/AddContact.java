@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ public class AddContact extends AppCompatActivity {
     Button keyExchange, doneButton;
     EditText contactName;
     frontEndHelper control;
+    CheckBox favFlag;
     public boolean keyset = false;
     public Contact tmpContact = null;
     public String mypub = null;
@@ -54,6 +56,7 @@ public class AddContact extends AppCompatActivity {
         keyExchange = findViewById(R.id.keyButton);
         doneButton = findViewById(R.id.doneButton);
         contactName = findViewById(R.id.contactName);
+        favFlag = findViewById(R.id.checkBox);
 
         LoadKeys.start();
 
@@ -80,6 +83,7 @@ public class AddContact extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 tmpContact.setName(contactName.getText().toString());
+                tmpContact.setFavourite(favFlag.isChecked());
                 control.saveContact(tmpContact);
                 keyset = true;
                 Intent intent = new Intent(AddContact.this,KeyExchange.class);
