@@ -4,8 +4,6 @@ package prj666.a03.cryptboard;
         import android.app.AlertDialog;
         import android.content.DialogInterface;
         import android.content.Intent;
-        import android.graphics.drawable.Drawable;
-        import android.graphics.Color;
         import android.support.v7.app.ActionBar;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
@@ -18,12 +16,8 @@ package prj666.a03.cryptboard;
         import android.view.View;
         import android.widget.Button;
         import android.widget.EditText;
-        import android.widget.ImageView;
         import android.widget.TextView;
         import android.widget.Toast;
-
-
-        import com.google.zxing.WriterException;
 
         import java.security.KeyPair;
         import java.security.NoSuchAlgorithmException;
@@ -42,7 +36,6 @@ public class Contact_Edit_Details extends AppCompatActivity {
     Boolean deleted = false;
 
     MenuItem favourite;
-    frontEndHelper frontEndH;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,14 +52,10 @@ public class Contact_Edit_Details extends AppCompatActivity {
 
 
         name = findViewById(R.id.contact_name);
-        date = (TextView)findViewById(R.id.keyGenerationDate);
+        date = findViewById(R.id.keyGenerationDate);
 
-        createNewKeyButton = (Button) findViewById(R.id.keyRefresh);
-        saveEditButton = (Button) findViewById(R.id.saveContactButton);
-
-        //PrivKeyIndicator = (TextView) findViewById(R.id.contact_private_key_Edit);
-        //PubKeyIndicator = (TextView) findViewById(R.id.Contact_public_key_Edit);
-
+        createNewKeyButton = findViewById(R.id.keyRefresh);
+        saveEditButton = findViewById(R.id.saveContactButton);
 
         date.setText(tmp.getDateCreated());
 
@@ -98,7 +87,7 @@ public class Contact_Edit_Details extends AppCompatActivity {
         createNewKeyButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Create new private key code
-                // TO DO:
+                // TODO: Send keys to QR Activity
                 //       1)add success toast
                 KeyPair keytmp = null;
                 try {
@@ -109,16 +98,12 @@ public class Contact_Edit_Details extends AppCompatActivity {
                 String tmpPriv = android.util.Base64.encodeToString(keytmp.getPrivate().getEncoded(),0);
                 tmp.setMyPrivKey(tmpPriv);
                 changed = true;
-                //refreshPrivKeyInfo();
             }
         });
 
         saveEditButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // save edits code
-                // TO DO:
-                //       1) commit changes to db
-                //       3) refresh current activity
+
                 if (name.getText().toString() != tmp.getName()){
                     changed = true;
                     tmp.setName(name.getText().toString());
@@ -139,26 +124,6 @@ public class Contact_Edit_Details extends AppCompatActivity {
         setResult(Activity.RESULT_CANCELED);
         finish();
     }
-
-    /*public void refreshPrivKeyInfo(){
-        if (tmp.getMyPrivKey() != null) {
-            deleteKeyButton.setVisibility(View.VISIBLE);
-            PrivKeyIndicator.setTextColor(Color.GREEN);
-        }
-        else {
-            deleteKeyButton.setVisibility(View.INVISIBLE);
-            PrivKeyIndicator.setTextColor(Color.RED);
-        }
-    }
-
-    public void refreshPubKeyInfo(){
-        if (tmp.getContactPubKey() != null) {
-            PubKeyIndicator.setTextColor(Color.GREEN);
-        }
-        else {
-            PubKeyIndicator.setTextColor(Color.RED);
-        }
-    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){

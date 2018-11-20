@@ -10,51 +10,42 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-
-import com.google.zxing.WriterException;
-
 import prj666.a03.cryptboard.ContactBase.Contact;
-import prj666.a03.cryptboard.ContactBase.DatabaseHandler;
+
 
 public class Contact_Details extends AppCompatActivity {
     Contact tmp;
     TextView name;
     TextView date;
-    ImageView img, favourite;
-    Button showQRButton;
     Button editContactButton;
     Button doneContactButton;
 
     MenuItem fav;
 
     frontEndHelper frontEndH;
-    DatabaseHandler dbH;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact__details);
 
-        Toolbar tool = (Toolbar) findViewById(R.id.contact_details_toolbar);
+        Toolbar tool = findViewById(R.id.contact_details_toolbar);
         setSupportActionBar(tool);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
         tmp = (Contact) getIntent().getSerializableExtra("contact");
 
-        name = (TextView)findViewById(R.id.contact_Detail_name);
-        date = (TextView)findViewById(R.id.keyGenerationDate);
-        editContactButton = (Button) findViewById(R.id.editContactButton);
-        doneContactButton = (Button) findViewById(R.id.doneContactButton);
-
-
+        name = findViewById(R.id.contact_Detail_name);
+        date = findViewById(R.id.keyGenerationDate);
+        editContactButton = findViewById(R.id.editContactButton);
+        doneContactButton = findViewById(R.id.doneContactButton);
 
 
         name.setText(tmp.getName());
@@ -68,20 +59,6 @@ public class Contact_Details extends AppCompatActivity {
             }
         });
 
-        /*deleteContactButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // delete contact code
-                // TO DO:
-                //       1) "are you sure" type popup
-                //       2) delete contact from database
-                //       3) return to previous activity
-
-                frontEndH = frontEndHelper.getInstance();
-                frontEndH.deleteContact(tmp);
-                finish();
-            }
-        });*/
-
         doneContactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,7 +67,6 @@ public class Contact_Details extends AppCompatActivity {
         });
 
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -110,10 +86,6 @@ public class Contact_Details extends AppCompatActivity {
                     frontEndH.updateName(tmp, name.getText().toString());
                     frontEndH.updateContact(tmp);
 
-                    //dbH = DatabaseHandler.getInstance(this);
-                    //dbH.updateContact(tmp);
-                    //finish();
-
                     name.setText(tmp.getName());
                     date.setText(tmp.getDateCreated());
 
@@ -125,14 +97,15 @@ public class Contact_Details extends AppCompatActivity {
                 else{
                     Toast.makeText(this, "Error processing change", Toast.LENGTH_SHORT).show();
                 }
-
-
             }
-            if (resultCode == Activity.RESULT_CANCELED) {
+            else if (resultCode == Activity.RESULT_CANCELED) {
                 Toast.makeText(this, "RESULT_CANCELED", Toast.LENGTH_SHORT).show();
             }
+            else {
+                Toast.makeText(this, "Err: result null", Toast.LENGTH_SHORT).show();
+            }
         }
-    }//onActivityResult
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
