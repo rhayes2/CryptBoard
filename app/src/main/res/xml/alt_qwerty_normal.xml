@@ -33,7 +33,7 @@
     </Row>
 
     <Row>
-        <Key android:codes="-200" android:keyLabel="=\&gt;" android:keyWidth="15%p"
+        <Key android:codes="-1" android:keyLabel="=\&gt;" android:keyWidth="15%p"
             android:isSticky="true" android:keyEdgeFlags="left"/>
         <Key android:codes="42" android:keyLabel="*"/>
         <Key android:codes="34" android:keyLabel="&quot;"/>
@@ -42,8 +42,8 @@
         <Key android:codes="59" android:keyLabel=";"/>
         <Key android:codes="33" android:keyLabel="!"/>
         <Key android:codes="63" android:keyLabel="\\?"/>
-        <Key android:codes="-5" android:keyIcon="@drawable/sym_keyboard_delete"
-            android:keyLabel="DEL" android:keyWidth="15%p" android:keyEdgeFlags="right"
+        <Key android:codes="-5" android:keyIcon="@drawable/del"
+            android:keyWidth="15%p" android:keyEdgeFlags="right"
             android:isRepeatable="true"/>
     </Row>
     <Row android:rowEdgeFlags="bottom">
@@ -55,7 +55,7 @@
             android:keyWidth="30%p" android:isRepeatable="true"/>
         <Key android:codes="47" android:keyLabel="/" android:keyWidth="10%p"/>
         <Key android:codes="46" android:keyLabel="." android:keyWidth="10%p"/>
-        <Key android:codes="10" android:keyIcon="@drawable/sym_keyboard_return"
-            android:keyLabel="RETURN" android:keyWidth="15%p" android:keyEdgeFlags="right"/>
+        <Key android:codes="-4"     android:keyIcon="@drawable/enter"
+            android:keyWidth="15%p" android:keyEdgeFlags="right"/>
     </Row>
 </Keyboard>

@@ -6,14 +6,12 @@
     android:keyHeight="8%p"
     >
 
-
     <Row >
-        <Key android:codes="-100" android:keyLabel="ENCRYPT" android:keyWidth="21%p" android:keyEdgeFlags="left"/>
-        <Key android:codes="-104" android:keyLabel="CONTACT" android:keyWidth="21%p"/>
-        <Key android:codes="-102" android:keyLabel="DECRYPT" android:keyWidth="21%p"/>
-        <Key android:codes="-105" android:keyLabel="ADD" android:keyWidth="21%p" android:keyEdgeFlags="right"/>
-        <Key android:codes="-106" android:keyLabel="CAM" android:keyWidth="21%p"/>
-        <Key android:codes="-107" android:keyLabel="PHOTO" android:keyWidth="21%p" android:keyEdgeFlags="right"/>
+        <Key android:codes="-100" android:keyIcon="@drawable/lock" android:keyWidth="21%p" android:keyEdgeFlags="left"/>
+        <Key android:codes="-102" android:keyIcon="@drawable/unlock" android:keyWidth="21%p"/>
+        <Key android:codes="-104" android:keyIcon="@drawable/contacts" android:keyWidth="21%p"/>
+        <Key android:codes="-105" android:keyIcon="@drawable/clear" android:keyWidth="21%p"/>
+        <Key android:codes="-107" android:keyIcon="@drawable/photo" android:keyWidth="21%p" android:keyEdgeFlags="right"/>
     </Row>
 
     <Row>
@@ -43,9 +41,8 @@
     </Row>
 
     <Row>
-        <Key android:codes="-1" android:keyIcon="@drawable/sym_keyboard_shift"
-            android:keyLabel="SHIFT" android:keyWidth="15%p" android:isModifier="true"
-            android:isSticky="true" android:keyEdgeFlags="left"/>
+        <Key android:codes="-1" android:keyIcon="@drawable/shift"
+            android:keyWidth="15%p" android:keyEdgeFlags="left"/>
         <Key android:codes="122" android:keyLabel="z"/>
         <Key android:codes="120" android:keyLabel="x"/>
         <Key android:codes="99" android:keyLabel="c"/>
@@ -53,17 +50,16 @@
         <Key android:codes="98" android:keyLabel="b"/>
         <Key android:codes="110" android:keyLabel="n"/>
         <Key android:codes="109" android:keyLabel="m"/>
-        <Key android:codes="-5" android:keyIcon="@drawable/sym_keyboard_delete"
-            android:keyLabel="DEL" android:keyWidth="15%p" android:keyEdgeFlags="right"
+        <Key android:codes="-5" android:keyIcon="@drawable/del"
+            android:keyWidth="15%p" android:keyEdgeFlags="right"
             android:isRepeatable="true"/>
     </Row>
     <Row  android:rowEdgeFlags="bottom">
-        <Key android:codes="-2"     android:keyLabel="123" android:keyWidth="15%p"/>
+        <Key android:codes="-2"     android:keyLabel="123" android:keyWidth="15%p" android:keyEdgeFlags="left"/>
         <Key android:codes="44"     android:keyLabel="," android:keyWidth="10%p"/>
-        <Key android:codes="32"     android:keyIcon="@drawable/sym_keyboard_space"
-            android:keyWidth="50%p" android:isRepeatable="true"/>
+        <Key android:codes="32"    android:keyIcon="@drawable/sym_keyboard_space" android:keyWidth="50%p" android:isRepeatable="true"/>
         <Key android:codes="46"     android:keyLabel="." android:keyWidth="10%p"/>
-        <Key android:codes="-4"     android:keyIcon="@drawable/sym_keyboard_return"
-            android:keyLabel="RETURN" android:keyWidth="15%p" android:keyEdgeFlags="right"/>
+        <Key android:codes="-4"     android:keyIcon="@drawable/enter"
+             android:keyWidth="15%p" android:keyEdgeFlags="right"/>
     </Row>
 </Keyboard>
