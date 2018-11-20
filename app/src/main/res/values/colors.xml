@@ -8,7 +8,7 @@
 
     <color name="colourPrimary">#4a81b2</color>
     <color name="colourPrimaryDark">#426A82</color>
-    <color name="colourConfirmation">#2AAE7E</color>
+    <color name="colourConfirmation">#2aae7e</color>
     <color name="colourRejection">#d78744</color>
     <color name="colourAccent">#FFFFFF</color>
 </resources>

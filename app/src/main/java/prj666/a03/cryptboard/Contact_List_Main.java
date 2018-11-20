@@ -59,7 +59,7 @@ public class Contact_List_Main extends AppCompatActivity  {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout)); //Cyclical ref?
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
         //search bar
