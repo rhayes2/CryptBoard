@@ -13,13 +13,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
+import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+
+import prj666.a03.cryptboard.ContactBase.Contact;
+import prj666.a03.cryptboard.RSAStrings.RSAStrings;
 
 public class AddContact extends AppCompatActivity {
 
@@ -27,6 +32,30 @@ public class AddContact extends AppCompatActivity {
     EditText contactName;
     TextView keyConfirmation;
     frontEndHelper control;
+    CheckBox favFlag;
+    public boolean keyset = false;
+    public Contact tmpContact = null;
+    public String mypub = null;
+
+    Thread LoadKeys = new Thread(new Runnable(){
+        @Override
+        public void run() {
+            KeyPair tmp = null;
+            try {
+                tmp = RSAStrings.getKeys();
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+
+
+            mypub = android.util.Base64.encodeToString(tmp.getPublic().getEncoded(),0);
+            String tmpPriv = android.util.Base64.encodeToString(tmp.getPrivate().getEncoded(),0);
+            boolean favourite = false;
+
+            //// Load Into a Contact var
+            tmpContact = new Contact("404",favourite,tmpPriv, null);
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +100,11 @@ public class AddContact extends AppCompatActivity {
 
             }
         });
+        favFlag = findViewById(R.id.checkBox);
+
+        LoadKeys.start();
+
+
 
         keyExchange.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -91,14 +125,28 @@ public class AddContact extends AppCompatActivity {
                 } else {
                     Toast.makeText(AddContact.this, "Contact Name Cannot be Blank", Toast.LENGTH_LONG).show();
                 }
-
+            } **/
+                try {
+                    LoadKeys.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                tmpContact.setName(contactName.getText().toString());
+                tmpContact.setFavourite(favFlag.isChecked());
+                control.saveContact(tmpContact);
+                keyset = true;
+                Intent intent = new Intent(AddContact.this,KeyExchange.class);
+                intent.putExtra("Key",mypub);
+                startActivityForResult(intent,1);
             }
         });
 
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                if(!keyset) {Toast.makeText(AddContact.this, "You have not Created or Exchanged Keys", Toast.LENGTH_SHORT).show();}
+                else{
+                    finish();}
             }
         });
     }
@@ -134,6 +182,10 @@ public class AddContact extends AppCompatActivity {
 
             default:
                 return super.onOptionsItemSelected(item);
+            keyset=true;
+            tmpContact.setContactPubKey(resultIntent.getStringExtra("KEY"));
+            control.updateContact(tmpContact);
+
         }
     }
 

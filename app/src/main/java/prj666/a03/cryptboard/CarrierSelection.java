@@ -16,6 +16,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -51,6 +52,7 @@ public class CarrierSelection extends AppCompatActivity {
     Spinner SpinnerContact;
     Bitmap SelectedImg;
     String msgForEncryption;
+    AutoCompleteTextView SearchContacts;
 
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -78,6 +80,7 @@ public class CarrierSelection extends AppCompatActivity {
         confirm = findViewById(R.id.carrierConfirmation);
         carrierImage = findViewById(R.id.carrierImage);
         SpinnerContact = findViewById(R.id.spinner);
+        SearchContacts = findViewById(R.id.ContactSearchBarCarrier);
 
         confirm.setText(R.string.carrier_confirmation);
         camera.setText(R.string.carrier_camera_recapture);
@@ -89,6 +92,7 @@ public class CarrierSelection extends AppCompatActivity {
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        SearchContacts.setAdapter(dataAdapter);
         SpinnerContact.setAdapter(dataAdapter);
 
 
@@ -140,34 +144,29 @@ public class CarrierSelection extends AppCompatActivity {
                 /*Intent intent = new Intent(getApplicationContext(), CryptBoard.class);
                 setResult(RESULT_OK);
                 startActivity(intent);*/
-                String x  = (String) SpinnerContact.getSelectedItem();
-                String Ecrypted = null;
-                try {
-                    Ecrypted = frontEndHelper.getInstance().sendMsg(x,msgForEncryption);
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                } catch (InvalidKeySpecException e) {
-                    e.printStackTrace();
-                } catch (IllegalBlockSizeException e) {
-                    e.printStackTrace();
-                } catch (InvalidKeyException e) {
-                    e.printStackTrace();
-                } catch (BadPaddingException e) {
-                    e.printStackTrace();
-                } catch (NoSuchPaddingException e) {
-                    e.printStackTrace();
-                }
-                Bitmap tocrypts = SelectedImg;
-                Bitmap crypts = null;
 
-                try {
-                    crypts = Steg.withInput(tocrypts).encode(Ecrypted).intoBitmap();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                saveToInternalStorage(crypts, "EncodedMsg");
-                carrierImage.setImageBitmap(crypts);
+                final String x = (String) SpinnerContact.getSelectedItem();
+                final Bitmap tocrypts = SelectedImg;
+                final String finmsg = msgForEncryption;
+                Thread PerformEncoding = new Thread(new Runnable(){
+                    @Override
+                    public void run() {
+                        String inThreadContact = x;
+                        String Ecrypted = null;
+                        Bitmap inThreadToEncode = tocrypts;
+                        String inThreadMsg = finmsg;
+                        Bitmap crypts = null;
+                        try {
+                            Ecrypted = frontEndHelper.getInstance().sendMsg(inThreadContact, inThreadMsg);
+                            crypts = Steg.withInput(inThreadToEncode).encode(Ecrypted).intoBitmap();
+                            saveToInternalStorage(crypts, "EncodedMsg");
+                        } catch (NoSuchAlgorithmException | InvalidKeySpecException | IllegalBlockSizeException | InvalidKeyException | BadPaddingException | NoSuchPaddingException e) {
+                            e.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();}
+                        }
+                    });
+                PerformEncoding.start();
 
                 // TODO ADD STEGtoIMG
                 finishAffinity();

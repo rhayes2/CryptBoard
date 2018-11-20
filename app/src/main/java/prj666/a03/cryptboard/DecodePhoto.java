@@ -1,6 +1,8 @@
 package prj666.a03.cryptboard;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -16,6 +18,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -51,6 +54,7 @@ public class DecodePhoto extends AppCompatActivity {
     Spinner SpinnerContact;
     Bitmap SelectedImg;
     String msgForEncryption;
+    AutoCompleteTextView SearchContacts;
 
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -77,6 +81,7 @@ public class DecodePhoto extends AppCompatActivity {
         confirm = findViewById(R.id.carrierConfirmation);
         carrierImage = findViewById(R.id.carrierImage);
         SpinnerContact = findViewById(R.id.spinner);
+        SearchContacts = findViewById(R.id.ContactSearchBarDecode);
 
         confirm.setText(R.string.carrier_confirmation);
 //        camera.setText(R.string.carrier_camera_recapture);
@@ -88,6 +93,7 @@ public class DecodePhoto extends AppCompatActivity {
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        SearchContacts.setAdapter(dataAdapter);
         SpinnerContact.setAdapter(dataAdapter);
 
 
@@ -130,14 +136,11 @@ public class DecodePhoto extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
-                /*Intent intent = new Intent(getApplicationContext(), CryptBoard.class);
-                setResult(RESULT_OK);
-                startActivity(intent);*/
                 String encryptedmsg= null;
+                String output = null;
 
                 try {
                     encryptedmsg = Steg.withInput(SelectedImg).decode().intoString();
-                    System.out.println(encryptedmsg);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -145,14 +148,22 @@ public class DecodePhoto extends AppCompatActivity {
                 String x  = (String) SpinnerContact.getSelectedItem();
 
                 try {
-                    String output = frontEndHelper.getInstance().decryptMsg(x,encryptedmsg);
-                    System.out.println(output);
+                    output = frontEndHelper.getInstance().decryptMsg(x,encryptedmsg);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-
-                // finishAffinity();
+                AlertDialog.Builder testBuild = new AlertDialog.Builder(DecodePhoto.this);
+                testBuild
+                        .setMessage(output)
+                        .setCancelable(false)
+                        .setPositiveButton("Got-it", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finishAffinity();
+                            }
+                        });
+                testBuild.show();
+                //
             }
         });
 
