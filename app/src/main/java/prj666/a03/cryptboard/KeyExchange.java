@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -28,8 +31,9 @@ public class KeyExchange extends AppCompatActivity {
     Button doneButton, scanButton;
     ImageView qrDisplay;
     String scanResult, publicKey;
-    TextView textContent;
+    //TextView textContent;
     Bitmap generatedQR;
+    Boolean keyScanned = false;
 
     //@RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -40,9 +44,9 @@ public class KeyExchange extends AppCompatActivity {
         final Activity activity = this;
 
         doneButton = findViewById(R.id.doneButton);
-        scanButton = findViewById(R.id.scanQR);
+        //scanButton = findViewById(R.id.scanQR);
         qrDisplay = findViewById(R.id.qrDisplay);
-        textContent = findViewById(R.id.textView);
+        //textContent = findViewById(R.id.textView);
 
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
@@ -52,9 +56,6 @@ public class KeyExchange extends AppCompatActivity {
                     1);
         }
 
-
-
-        //TODO: Wire this up properly when parent activity is implemented
         //publicKey = getIntent().getStringExtra("KEY");
         Intent intent = getIntent();
         publicKey = intent.getStringExtra("Key");
@@ -66,30 +67,34 @@ public class KeyExchange extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
-        //TODO: Check orientation of recognition function/code generation to increase scanning speed
-        scanButton.setOnClickListener(new View.OnClickListener() {
+        /*scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IntentIntegrator integrator = new IntentIntegrator(activity);
-                integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-                integrator.setPrompt("Scan Contact QR");
-                integrator.setCameraId(0);
-                integrator.initiateScan();
+
             }
-        });
+        });*/
 
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (scanResult != null){
-                    Intent result = new Intent();
-                    result.putExtra("KEY", scanResult);
-                    setResult(1, result);
-                } else {                                       // 1 Option result and 1 Flavor result code
-                    setResult(404);
+                if (keyScanned == true){
+                    if (scanResult != null){
+                        Intent result = new Intent();
+                        result.putExtra("KEY", scanResult);
+                        setResult(1, result);
+                    } else {                                       // 1 Option result and 1 Flavor result code
+                        setResult(404);
+                    }
+                    finish();
                 }
-                finish();
+                else {
+                    IntentIntegrator integrator = new IntentIntegrator(activity);
+                    integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+                    integrator.setPrompt("Scan Contact QR");
+                    integrator.setCameraId(0);
+                    integrator.initiateScan();
+                }
+
             }
         });
     }
@@ -102,11 +107,36 @@ public class KeyExchange extends AppCompatActivity {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                textContent.setText(result.getContents());
+                //textContent.setText(result.getContents());
                 scanResult = result.getContents();
+                keyScanned = true;
+                doneButton.setText(R.string.save_contact);
+                doneButton.setBackgroundColor(getResources().getColor(R.color.colourConfirmation));
+
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.general_action_bar, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+
+            case android.R.id.home:
+                setResult(404);
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

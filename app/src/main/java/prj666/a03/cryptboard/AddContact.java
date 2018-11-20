@@ -3,13 +3,21 @@ package prj666.a03.cryptboard;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
 
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
@@ -22,6 +30,7 @@ public class AddContact extends AppCompatActivity {
 
     Button keyExchange, doneButton;
     EditText contactName;
+    TextView keyConfirmation;
     frontEndHelper control;
     CheckBox favFlag;
     public boolean keyset = false;
@@ -53,42 +62,70 @@ public class AddContact extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_contact);
 
+        Toolbar toolbar = findViewById(R.id.contact_add_toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+
+
         keyExchange = findViewById(R.id.keyButton);
-        doneButton = findViewById(R.id.doneButton);
+        doneButton = findViewById(R.id.saveNewContactButton);
         contactName = findViewById(R.id.contactName);
-        favFlag = findViewById(R.id.checkBox);
+        keyConfirmation = findViewById(R.id.keyConfirmation);
 
         LoadKeys.start();
 
+        contactName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.length() < 1 &&
+                        (keyConfirmation.getText().toString() ==
+                                getResources().getString(R.string.keyExchange_positive))){
+                    doneButton.setText(R.string.save_contact);
+                    doneButton.setBackgroundColor(getResources().getColor(R.color.colourConfirmation));
+                    doneButton.setEnabled(true);
+                } else {
+                    doneButton.setText("Error");
+                    doneButton.setBackgroundColor(getResources().getColor(R.color.colourRejection));
+                    doneButton.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+
+
+        });
+        //favFlag = findViewById(R.id.checkBox);
 
         keyExchange.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
-                control = frontEndHelper.getInstance();
-                /**try {
+                if (contactName.getText().length() > 0){
+                    control = frontEndHelper.getInstance();
+                    try {
+                        LoadKeys.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    tmpContact.setName(contactName.getText().toString());
+                    //tmpContact.setFavourite(favFlag.isChecked());
+                    control.saveContact(tmpContact);
                     keyset = true;
-                    control.createNewContact(AddContact.this, contactName.getText().toString());
-
-                } catch (InvalidKeySpecException e) {
-                    e.printStackTrace();
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
+                    Intent intent = new Intent(AddContact.this,KeyExchange.class);
+                    intent.putExtra("Key",mypub);
+                    startActivityForResult(intent,1);
+                } else {
+                    Toast.makeText(AddContact.this, "Contact Name Cannot be Blank", Toast.LENGTH_LONG).show();
                 }
-            } **/
-                try {
-                    LoadKeys.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                tmpContact.setName(contactName.getText().toString());
-                tmpContact.setFavourite(favFlag.isChecked());
-                control.saveContact(tmpContact);
-                keyset = true;
-                Intent intent = new Intent(AddContact.this,KeyExchange.class);
-                intent.putExtra("Key",mypub);
-                startActivityForResult(intent,1);
             }
         });
 
@@ -104,13 +141,37 @@ public class AddContact extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent resultIntent) {
-        // Check which request it is that we're responding to
-        //Toast.makeText(this, "INMAIN!@@@@ resultCode: " + resultCode,Toast.LENGTH_LONG).show();
-
         if (resultCode == 1){
             keyset=true;
             tmpContact.setContactPubKey(resultIntent.getStringExtra("KEY"));
             control.updateContact(tmpContact);
+
+            if (contactName.getText().length() > 0) {
+                doneButton.setText(R.string.save_contact);
+                doneButton.setBackgroundColor(getResources().getColor(R.color.colourConfirmation));
+                doneButton.setEnabled(true);
+            }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.general_action_bar, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+
+            case android.R.id.home:
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
 
         }
     }
