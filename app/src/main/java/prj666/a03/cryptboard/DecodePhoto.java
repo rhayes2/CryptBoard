@@ -85,8 +85,8 @@ public class DecodePhoto extends AppCompatActivity {
 
         confirm.setText(R.string.carrier_confirmation);
 //        camera.setText(R.string.carrier_camera_recapture);
-        accept.setText(R.string.OK);
-        gallery.setText(R.string.carrier_reselect_from_storage);
+        //accept.setText(R.string.OK);
+        //gallery.setText(R.string.carrier_reselect_from_storage);
 
 
         List<String> list = frontEndHelper.getInstance().getNames();
@@ -122,6 +122,13 @@ public class DecodePhoto extends AppCompatActivity {
                 startActivityForResult(Intent.createChooser(galleryIntent, "Select Carrier"), PICK_IMAGE);
             }
         });
+
+        if(carrierImage.getDrawable()
+                != getResources().getDrawable(android.R.drawable.ic_menu_gallery)
+                || carrierImage.getDrawable() != null){
+            accept.setEnabled(true);
+            accept.setBackgroundColor(getResources().getColor(R.color.colourConfirmation));
+        }
 
 //        camera.setOnClickListener(new View.OnClickListener() {
 //            @Override

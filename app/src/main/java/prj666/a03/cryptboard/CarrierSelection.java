@@ -15,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -83,9 +84,9 @@ public class CarrierSelection extends AppCompatActivity {
         SearchContacts = findViewById(R.id.ContactSearchBarCarrier);
 
         confirm.setText(R.string.carrier_confirmation);
-        camera.setText(R.string.carrier_camera_recapture);
-        accept.setText(R.string.OK);
-        gallery.setText(R.string.carrier_reselect_from_storage);
+        //camera.setText(R.string.carrier_camera_recapture);
+        //accept.setText(R.string.OK);
+        //gallery.setText(R.string.carrier_reselect_from_storage);
 
 
         List<String> list = frontEndHelper.getInstance().getNames();
@@ -95,6 +96,21 @@ public class CarrierSelection extends AppCompatActivity {
         SearchContacts.setAdapter(dataAdapter);
         SpinnerContact.setAdapter(dataAdapter);
 
+        SpinnerContact.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String selectedContact = adapterView.getItemAtPosition(i).toString();
+                if (selectedContact.length() > 0){
+                    accept.setEnabled(true);
+                    accept.setBackgroundColor(getResources().getColor(R.color.colourConfirmation));
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                accept.setEnabled(false);
+                accept.setBackgroundColor(getResources().getColor(R.color.colourRejection));
+            }
+        });
 
         //Permissions check
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
