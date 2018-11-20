@@ -1,6 +1,8 @@
 package prj666.a03.cryptboard;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -149,6 +151,7 @@ public class Contact_Details extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
+
             case R.id.action_favourite:
                 if (tmp.isFavourite() == true){
                     fav.setIcon(R.drawable.favourite_unselected_24dp);
@@ -162,6 +165,31 @@ public class Contact_Details extends AppCompatActivity {
                 frontEndH = frontEndHelper.getInstance();
                 frontEndH.updateContact(tmp);
                 return true;
+
+
+            case R.id.action_delete_contact:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage(R.string.contactDeletion_confirm).setTitle(R.string.contactDeletion_title);
+
+                builder.setPositiveButton(R.string.response_positive, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        frontEndH = frontEndHelper.getInstance();
+                        frontEndH.deleteContact(tmp);
+                        finish();
+                    }
+                });
+
+                builder.setNegativeButton(R.string.response_negative, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
 
             default:
                 return super.onOptionsItemSelected(item);
