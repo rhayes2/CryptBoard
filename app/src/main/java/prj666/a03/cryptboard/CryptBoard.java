@@ -272,14 +272,10 @@ public class CryptBoard extends InputMethodService
     }
 
     @Override
-    public void swipeDown() {
-        toggleStegMode(false);
-    }
+    public void swipeDown() {}
 
     @Override
-    public void swipeUp() {
-        toggleStegMode(true);
-    }
+    public void swipeUp() {}
 
     private void launchContacts(){
         Intent contacts = new Intent(this, Contact_List_Main.class);
