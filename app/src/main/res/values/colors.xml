@@ -6,9 +6,9 @@
     <color name="colorSecondary">#D6D1CD</color>
     <color name="colorSecondaryDark">#C4A69D</color>
 
-    <color name="colourPrimary">#4A81B2</color>
+    <color name="colourPrimary">#4a81b2</color>
     <color name="colourPrimaryDark">#426A82</color>
     <color name="colourConfirmation">#2AAE7E</color>
-    <color name="colourRejection">#D78744</color>
+    <color name="colourRejection">#d78744</color>
     <color name="colourAccent">#FFFFFF</color>
 </resources>

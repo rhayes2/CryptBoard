@@ -40,18 +40,22 @@ public class Contact_Details extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tmp = (Contact) getIntent().getSerializableExtra("contact");
         setContentView(R.layout.activity_contact__details);
+
+        Toolbar tool = (Toolbar) findViewById(R.id.contact_details_toolbar);
+        setSupportActionBar(tool);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+
+        tmp = (Contact) getIntent().getSerializableExtra("contact");
+
         name = (TextView)findViewById(R.id.contact_Detail_name);
         date = (TextView)findViewById(R.id.keyGenerationDate);
         editContactButton = (Button) findViewById(R.id.editContactButton);
         doneContactButton = (Button) findViewById(R.id.doneContactButton);
 
 
-        Toolbar tool = (Toolbar) findViewById(R.id.contact_details_toolbar);
-        setSupportActionBar(tool);
-        ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
+
 
         name.setText(tmp.getName());
         date.setText(tmp.getDateCreated());
@@ -94,6 +98,11 @@ public class Contact_Details extends AppCompatActivity {
         if (requestCode == 1) {
             if(resultCode == Activity.RESULT_OK){
                 if ((boolean) data.getSerializableExtra("changedStatus") == true) {
+                    if ((boolean) data.getSerializableExtra("deleteContact") == true) {
+                        frontEndH = frontEndHelper.getInstance();
+                        frontEndH.deleteContact(tmp);
+                        finish();
+                    }
 
                     tmp = (Contact) data.getSerializableExtra("updatedContactInfo");
 
@@ -107,13 +116,6 @@ public class Contact_Details extends AppCompatActivity {
 
                     name.setText(tmp.getName());
                     date.setText(tmp.getDateCreated());
-
-                    if (tmp.isFavourite() == true){
-                        favourite.setImageResource(R.drawable.favourite_selected_24dp);
-                    }
-                    else {
-                        favourite.setImageResource(R.drawable.favourite_unselected_24dp);
-                    }
 
                     Toast.makeText(this, "Contact Updated", Toast.LENGTH_SHORT).show();
                 }
