@@ -70,11 +70,6 @@ public class DecodePhoto extends AppCompatActivity {
         Intent parentIntent = getIntent();
         int carrierSelectMode = parentIntent.getIntExtra("MODE", 0);
         Intent intent = new Intent();
-        /*
-         * TODO: Permissions in manifest, check for valid permissions
-         * TODO: Display selected image, offer options to reject and reselect
-         * TODO: Handle both of the start activities from the keyboard
-         * */
 
         accept = findViewById(R.id.acceptCarrier);
 //        camera = findViewById(R.id.recaptureCamera);

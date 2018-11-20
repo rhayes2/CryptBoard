@@ -54,7 +54,7 @@ public class KeyExchange extends AppCompatActivity {
 
 
 
-        //TODO: Wire this up properly when parent activity is implemented
+
         //publicKey = getIntent().getStringExtra("KEY");
         Intent intent = getIntent();
         publicKey = intent.getStringExtra("Key");
@@ -67,7 +67,7 @@ public class KeyExchange extends AppCompatActivity {
         }
 
 
-        //TODO: Check orientation of recognition function/code generation to increase scanning speed
+
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -67,10 +67,13 @@
     <string name="scan_button">Scan QR Code</string>
     <string name="qrScan_instructions">Scan Me!</string>
     <string name="publicKeyQR">QR generated based on public key</string>
+    <string name="keyExchange_positive">Public Key Exchanged</string>
+    <string name="keyExchange_negative">No Public Key</string>
 
     <string name="contactDeletion_confirm">Are you sure you would like to erase this contact?</string>
     <string name="contactDeletion_title">Delete Contact?</string>
 
     <string name="response_positive">Yes</string>
     <string name="response_negative">No</string>
+    <string name="save_contact">Save Contact</string>
 </resources>
