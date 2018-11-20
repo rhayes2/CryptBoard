@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import java.io.InputStream;
 import java.security.InvalidKeyException;
+import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
@@ -28,8 +29,9 @@ import javax.crypto.NoSuchPaddingException;
 
 import prj666.a03.cryptboard.ContactBase.Contact;
 import prj666.a03.cryptboard.ContactBase.DatabaseHandler;
+import prj666.a03.cryptboard.RSAStrings.RSAStrings;
 import prj666.a03.cryptboard.TestSteg.Steg;
-import prj666.a03.cryptboard.TestSteg.Test;
+import prj666.a03.cryptboard.Tests.tester;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -54,11 +56,32 @@ public class MainActivity extends AppCompatActivity {
         String brand = Build.BRAND;
 
 
+        tester x = new tester();
+        /**
         try {
             Test.runTests();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        **/
+        System.out.println(control.getNamesAll());
+        if(control.getNamesAll().size()==0){
+            KeyPair tmp = null;
+            try {
+                tmp = RSAStrings.getKeys();
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+
+
+            String mypub = android.util.Base64.encodeToString(tmp.getPublic().getEncoded(),0);
+            String tmpPriv = android.util.Base64.encodeToString(tmp.getPrivate().getEncoded(),0);
+            boolean favourite = false;
+
+            //// Load Into a Contact var
+            Contact tmpContact = new Contact("Tester holdsPair",favourite,tmpPriv, mypub);
+            control.saveContact(tmpContact);}
 
         if (brand.contains("sam")){ //Handles Samsung's protectionist bs
             step1.setText(R.string.installation_samsung_1);

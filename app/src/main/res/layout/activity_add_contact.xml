@@ -79,4 +79,14 @@
         app:layout_constraintTop_toBottomOf="@+id/keyButton"
         app:layout_constraintVertical_bias="0.739"
         tools:text="Done" />
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:text="Favorite Contact"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@+id/keyStatus"
+        tools:layout_editor_absoluteX="16dp" />
 </android.support.constraint.ConstraintLayout>
