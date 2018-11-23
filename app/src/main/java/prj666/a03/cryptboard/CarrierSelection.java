@@ -33,8 +33,10 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -112,14 +114,14 @@ public class CarrierSelection extends AppCompatActivity {
             }
         });
 
-        //Permissions check
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA},
-                    1);
-        }
+        String[] PERMISSIONS = {
+                android.Manifest.permission.READ_CONTACTS,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.CAMERA
+        };
 
+/*
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,
@@ -127,6 +129,8 @@ public class CarrierSelection extends AppCompatActivity {
                     1);
         }
 
+*/
+        checkAndRequestPermissions();
 
         gallery.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,7 +164,6 @@ public class CarrierSelection extends AppCompatActivity {
                 /*Intent intent = new Intent(getApplicationContext(), CryptBoard.class);
                 setResult(RESULT_OK);
                 startActivity(intent);*/
-
                 final String x = (String) SpinnerContact.getSelectedItem();
                 final Bitmap tocrypts = SelectedImg;
                 final String finmsg = msgForEncryption;
@@ -183,6 +186,13 @@ public class CarrierSelection extends AppCompatActivity {
                         }
                     });
                 PerformEncoding.start();
+
+                try {
+
+                    PerformEncoding.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
                 // TODO ADD STEGtoIMG
                 finishAffinity();
@@ -215,6 +225,36 @@ public class CarrierSelection extends AppCompatActivity {
             startActivityForResult(Intent.createChooser(intent, "Select Carrier"), PICK_IMAGE);
         } else { //Oops
             Toast.makeText(this, "Criss, quelque chose est casse", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private  boolean checkAndRequestPermissions() {
+        int permissionWriteStorage = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int ReadPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        if (ReadPermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+        if (permissionWriteStorage != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),1);
+            return false;
+        }
+        return true;
+    }
+
+
+
+    public void getPermissionRead(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    1);
         }
 
     }
@@ -260,7 +300,7 @@ public class CarrierSelection extends AppCompatActivity {
         OutputStream fOut = null;
         Integer counter = 0;
         File file = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), name+".PNG"); // the File to save ,
+                Environment.DIRECTORY_DOWNLOADS), name+".PNG"); // the File to save ,
         try {
             fOut = new FileOutputStream(file);
             bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fOut); // saving the Bitmap to a file
