@@ -145,6 +145,17 @@ public class DecodePhoto extends AppCompatActivity {
             public void onClick(View view) {
                 String encryptedmsg= null;
                 String output = null;
+                if(frontEndHelper.getInstance().getWorker1()!=null){
+                    System.out.println("thread active?-- "+ frontEndHelper.getInstance().getWorker1().isAlive());
+                    if(frontEndHelper.getInstance().getWorker1().isAlive()){
+                        try {
+                            frontEndHelper.getInstance().getWorker1().join();
+                            System.out.println("thread active22?-- "+ frontEndHelper.getInstance().getWorker1().isAlive());
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
 
                 try {
                     encryptedmsg = Steg.withInput(SelectedImg).decode().intoString();
@@ -235,27 +246,6 @@ public class DecodePhoto extends AppCompatActivity {
 
         } else if (resultCode == RESULT_CANCELED){
             Toast.makeText(this, "Capture Cancelled", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
-    private void saveToInternalStorage(Bitmap bitmapImage, String name){
-
-        String path = Environment.getExternalStorageDirectory().toString();
-        OutputStream fOut = null;
-        Integer counter = 0;
-        File file = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), name+".PNG"); // the File to save ,
-        try {
-            System.out.println(file.exists());
-            fOut = new FileOutputStream(file);
-            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fOut); // saving the Bitmap to a file
-            fOut.flush(); // Not really required
-            fOut.close(); // do not forget to close the stream
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

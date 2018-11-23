@@ -38,6 +38,7 @@ public class frontEndHelper {
     public static String scanTarget;
     private static frontEndHelper sInstance;
     private List<Contact> Clist;
+    private static Thread Worker1;
 
     public frontEndHelper(DatabaseHandler dbpass, Activity tmp) {
         db = dbpass;
@@ -195,8 +196,8 @@ public class frontEndHelper {
     
     public Contact getPos(int pos){return Clist.get(pos);}
 
-
-
+    public void setThread(Thread x){Worker1 = x;}
+    public Thread getWorker1(){return Worker1;}
 
 
 }

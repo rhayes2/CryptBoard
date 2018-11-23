@@ -161,9 +161,21 @@ public class CarrierSelection extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
-                /*Intent intent = new Intent(getApplicationContext(), CryptBoard.class);
-                setResult(RESULT_OK);
-                startActivity(intent);*/
+
+                // This is a check to see if we're actively processing a worker thread
+                if(frontEndHelper.getInstance().getWorker1()!=null){
+                    System.out.println("thread active?-- "+ frontEndHelper.getInstance().getWorker1().isAlive());
+                    if(frontEndHelper.getInstance().getWorker1().isAlive()){
+                        try {
+                            frontEndHelper.getInstance().getWorker1().join();
+                            System.out.println("thread active22?-- "+ frontEndHelper.getInstance().getWorker1().isAlive());
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+
                 final String x = (String) SpinnerContact.getSelectedItem();
                 final Bitmap tocrypts = SelectedImg;
                 final String finmsg = msgForEncryption;
@@ -185,15 +197,8 @@ public class CarrierSelection extends AppCompatActivity {
                             e.printStackTrace();}
                         }
                     });
+                frontEndHelper.getInstance().setThread(PerformEncoding);
                 PerformEncoding.start();
-
-                try {
-
-                    PerformEncoding.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
                 // TODO ADD STEGtoIMG
                 finishAffinity();
             }
