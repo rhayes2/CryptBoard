@@ -15,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -32,8 +33,10 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -83,9 +86,9 @@ public class CarrierSelection extends AppCompatActivity {
         SearchContacts = findViewById(R.id.ContactSearchBarCarrier);
 
         confirm.setText(R.string.carrier_confirmation);
-        camera.setText(R.string.carrier_camera_recapture);
-        accept.setText(R.string.OK);
-        gallery.setText(R.string.carrier_reselect_from_storage);
+        //camera.setText(R.string.carrier_camera_recapture);
+        //accept.setText(R.string.OK);
+        //gallery.setText(R.string.carrier_reselect_from_storage);
 
 
         List<String> list = frontEndHelper.getInstance().getNames();
@@ -95,15 +98,30 @@ public class CarrierSelection extends AppCompatActivity {
         SearchContacts.setAdapter(dataAdapter);
         SpinnerContact.setAdapter(dataAdapter);
 
+        SpinnerContact.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String selectedContact = adapterView.getItemAtPosition(i).toString();
+                if (selectedContact.length() > 0){
+                    accept.setEnabled(true);
+                    accept.setBackgroundColor(getResources().getColor(R.color.colourConfirmation));
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                accept.setEnabled(false);
+                accept.setBackgroundColor(getResources().getColor(R.color.colourRejection));
+            }
+        });
 
-        //Permissions check
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA},
-                    1);
-        }
+        String[] PERMISSIONS = {
+                android.Manifest.permission.READ_CONTACTS,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.CAMERA
+        };
 
+/*
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,
@@ -111,6 +129,8 @@ public class CarrierSelection extends AppCompatActivity {
                     1);
         }
 
+*/
+        checkAndRequestPermissions();
 
         gallery.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,9 +161,20 @@ public class CarrierSelection extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
-                /*Intent intent = new Intent(getApplicationContext(), CryptBoard.class);
-                setResult(RESULT_OK);
-                startActivity(intent);*/
+
+                // This is a check to see if we're actively processing a worker thread
+                if(frontEndHelper.getInstance().getWorker1()!=null){
+                    System.out.println("thread active?-- "+ frontEndHelper.getInstance().getWorker1().isAlive());
+                    if(frontEndHelper.getInstance().getWorker1().isAlive()){
+                        try {
+                            frontEndHelper.getInstance().getWorker1().join();
+                            System.out.println("thread active22?-- "+ frontEndHelper.getInstance().getWorker1().isAlive());
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
 
                 final String x = (String) SpinnerContact.getSelectedItem();
                 final Bitmap tocrypts = SelectedImg;
@@ -166,8 +197,8 @@ public class CarrierSelection extends AppCompatActivity {
                             e.printStackTrace();}
                         }
                     });
+                frontEndHelper.getInstance().setThread(PerformEncoding);
                 PerformEncoding.start();
-
                 // TODO ADD STEGtoIMG
                 finishAffinity();
             }
@@ -199,6 +230,36 @@ public class CarrierSelection extends AppCompatActivity {
             startActivityForResult(Intent.createChooser(intent, "Select Carrier"), PICK_IMAGE);
         } else { //Oops
             Toast.makeText(this, "Criss, quelque chose est casse", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private  boolean checkAndRequestPermissions() {
+        int permissionWriteStorage = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int ReadPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        if (ReadPermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+        if (permissionWriteStorage != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),1);
+            return false;
+        }
+        return true;
+    }
+
+
+
+    public void getPermissionRead(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    1);
         }
 
     }
@@ -244,7 +305,7 @@ public class CarrierSelection extends AppCompatActivity {
         OutputStream fOut = null;
         Integer counter = 0;
         File file = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), name+".PNG"); // the File to save ,
+                Environment.DIRECTORY_DOWNLOADS), name+".PNG"); // the File to save ,
         try {
             fOut = new FileOutputStream(file);
             bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fOut); // saving the Bitmap to a file

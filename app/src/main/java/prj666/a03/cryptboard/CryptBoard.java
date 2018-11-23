@@ -99,7 +99,7 @@ public class CryptBoard extends InputMethodService
             caps = false;
             capsLock = false;
             numMode = false;
-            stegMode = false;
+            stegMode = true;
         }
     }
 

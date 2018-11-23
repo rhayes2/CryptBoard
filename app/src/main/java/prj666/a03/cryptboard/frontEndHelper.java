@@ -38,8 +38,12 @@ public class frontEndHelper {
     public static String scanTarget;
     private static frontEndHelper sInstance;
     private List<Contact> Clist;
+
+    private static Thread Worker1;
+
     private List<Contact> ClistQ;
     private List<Contact> ClistFav;
+
 
 
     public frontEndHelper(DatabaseHandler dbpass, Activity tmp) {
@@ -198,9 +202,14 @@ public class frontEndHelper {
     
     public Contact getPos(int pos){return Clist.get(pos);}
 
+
+    public void setThread(Thread x){Worker1 = x;}
+    public Thread getWorker1(){return Worker1;}
+
     public Contact getPosQ(int pos){return ClistQ.get(pos);} //for quick contacts
 
     public Contact getPosFav(int pos){return ClistFav.get(pos);} //for fav contacts
+
 
 
 }

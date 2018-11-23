@@ -85,8 +85,8 @@ public class DecodePhoto extends AppCompatActivity {
 
         confirm.setText(R.string.carrier_confirmation);
 //        camera.setText(R.string.carrier_camera_recapture);
-        accept.setText(R.string.OK);
-        gallery.setText(R.string.carrier_reselect_from_storage);
+        //accept.setText(R.string.OK);
+        //gallery.setText(R.string.carrier_reselect_from_storage);
 
 
         List<String> list = frontEndHelper.getInstance().getNames();
@@ -123,6 +123,13 @@ public class DecodePhoto extends AppCompatActivity {
             }
         });
 
+        if(carrierImage.getDrawable()
+                != getResources().getDrawable(android.R.drawable.ic_menu_gallery)
+                || carrierImage.getDrawable() != null){
+            accept.setEnabled(true);
+            accept.setBackgroundColor(getResources().getColor(R.color.colourConfirmation));
+        }
+
 //        camera.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -138,6 +145,17 @@ public class DecodePhoto extends AppCompatActivity {
             public void onClick(View view) {
                 String encryptedmsg= null;
                 String output = null;
+                if(frontEndHelper.getInstance().getWorker1()!=null){
+                    System.out.println("thread active?-- "+ frontEndHelper.getInstance().getWorker1().isAlive());
+                    if(frontEndHelper.getInstance().getWorker1().isAlive()){
+                        try {
+                            frontEndHelper.getInstance().getWorker1().join();
+                            System.out.println("thread active22?-- "+ frontEndHelper.getInstance().getWorker1().isAlive());
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
 
                 try {
                     encryptedmsg = Steg.withInput(SelectedImg).decode().intoString();
@@ -228,26 +246,6 @@ public class DecodePhoto extends AppCompatActivity {
 
         } else if (resultCode == RESULT_CANCELED){
             Toast.makeText(this, "Capture Cancelled", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
-    private void saveToInternalStorage(Bitmap bitmapImage, String name){
-
-        String path = Environment.getExternalStorageDirectory().toString();
-        OutputStream fOut = null;
-        Integer counter = 0;
-        File file = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), name+".PNG"); // the File to save ,
-        try {
-            fOut = new FileOutputStream(file);
-            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fOut); // saving the Bitmap to a file
-            fOut.flush(); // Not really required
-            fOut.close(); // do not forget to close the stream
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
