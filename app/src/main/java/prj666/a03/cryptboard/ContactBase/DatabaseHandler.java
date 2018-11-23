@@ -120,4 +120,26 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db6.close();
         return contactList;
     }
+
+    public List<Contact> getContactListFav() {
+        List<Contact> contactList = new ArrayList<>();
+        String selectQuery = "SELECT * FROM contactLog WHERE favourite NOT LIKE 0";
+        SQLiteDatabase db6 = this.getReadableDatabase();
+        Cursor cursor = db6.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                String name = cursor.getString(1);
+                Boolean favourite = ( 1 == cursor.getInt(2) );
+                String myPrivKey = cursor.getString(3);
+                String contactPubKey = cursor.getString(4);
+                String date = cursor.getString(5);
+                Contact currentContact = new Contact(name, favourite, myPrivKey, contactPubKey, date);
+                contactList.add(currentContact);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db6.close();
+        return contactList;
+    }
+
 }
