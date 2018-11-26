@@ -1,6 +1,8 @@
 package prj666.a03.cryptboard;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -14,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -56,6 +59,7 @@ public class CarrierSelection extends AppCompatActivity {
     Bitmap SelectedImg;
     String msgForEncryption;
     AutoCompleteTextView SearchContacts;
+    ProgressDialog save;
 
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -197,7 +201,13 @@ public class CarrierSelection extends AppCompatActivity {
                             e.printStackTrace();}
                         }
                     });
-                frontEndHelper.getInstance().setThread(PerformEncoding);
+                //frontEndHelper.getInstance().setThread(PerformEncoding);
+                save = new ProgressDialog(CarrierSelection.this);
+                save.setMessage("Processing, Please Wait...");
+                save.setTitle("Saving Image");
+                save.setIndeterminate(false);
+                save.setCancelable(false);
+                save.show();
                 PerformEncoding.start();
                 // TODO ADD STEGtoIMG
                 finishAffinity();
@@ -311,6 +321,13 @@ public class CarrierSelection extends AppCompatActivity {
             bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fOut); // saving the Bitmap to a file
             fOut.flush(); // Not really required
             fOut.close(); // do not forget to close the stream
+
+            carrierImage.post(new Runnable() {
+                public void run() {
+                    save.dismiss();
+                }
+            });
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -319,5 +336,12 @@ public class CarrierSelection extends AppCompatActivity {
     }
 
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (save != null) {
+            save.dismiss();
+            save = null;
+        }
+    }
 }
