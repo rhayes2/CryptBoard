@@ -122,7 +122,7 @@
                 android:textColor="#FFFFFF"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:enabled="false"/>
+                android:enabled="true"/>
 
         </LinearLayout>
 

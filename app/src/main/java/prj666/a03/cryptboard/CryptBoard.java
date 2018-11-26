@@ -228,7 +228,7 @@ public class CryptBoard extends InputMethodService
                 break;
             case  KEYCODE_ENCRYPT:
                 Intent EncryptPhoto = new Intent(this, CarrierSelection.class);
-                EncryptPhoto.putExtra("MODE", 2);
+                //EncryptPhoto.putExtra("MODE", 2);
                 EncryptPhoto.putExtra("Msg",getMessage());
                 clearMessage();
                 startActivity(EncryptPhoto);

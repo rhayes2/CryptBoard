@@ -1,8 +1,10 @@
 package prj666.a03.cryptboard;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -14,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -57,7 +60,8 @@ public class CarrierSelection extends AppCompatActivity {
     String msgForEncryption;
     AutoCompleteTextView SearchContacts;
 
-    private File createImageFile() throws IOException {
+
+    /*private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -65,7 +69,7 @@ public class CarrierSelection extends AppCompatActivity {
 
         currentPhotoPath = image.getAbsolutePath();
         return image;
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,9 +155,25 @@ public class CarrierSelection extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                //Intent cameraIntent = new Intent();
-                //cameraIntent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                //startActivityForResult(cameraIntent, CAPTURE_IMAGE);
+                Intent cameraIntent = new Intent();
+                cameraIntent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                if(cameraIntent.resolveActivity(getPackageManager()) != null){
+                    File capture = null;
+                    try{
+                        capture = createImageFile();
+                    } catch (IOException e){
+                        e.printStackTrace();
+                    }
+                    if (capture != null){
+                        Uri captureUri = FileProvider.getUriForFile(CarrierSelection.this,
+                                "prj666.a03.cryptboard.provider",
+                                capture);
+                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, captureUri);
+                        startActivityForResult(cameraIntent, CAPTURE_IMAGE);
+                    }
+
+                }
+
             }
         });
 
@@ -277,18 +297,23 @@ public class CarrierSelection extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                ;
                 carrierImage.setImageURI(selectedImage);
                 //confirm.setText(selectedImage.toString());
                 //Toast.makeText(this, "IMAGE SELECTED! " + selectedImage.toString(), Toast.LENGTH_SHORT).show();
             } else if (requestCode == CAPTURE_IMAGE){
-                Bundle extras = data.getExtras();
-                Bitmap capturedImage = (Bitmap) extras.get("data");
-                carrierImage.setImageBitmap(capturedImage);
+                /*Bitmap capturedImage = (Bitmap) data.getExtras().get("data");
+                File capturedImageFile = new File(
+                        getUriPath(getImageUri(getApplicationContext(), capturedImage))
+                );
+                selectedImage = android.net.Uri.parse(capturedImageFile.toURI().toString());*/
+                carrierImage.setImageURI(Uri.parse(currentPhotoPath));
 
-                /*Uri capturedImage = data.getData();
-                carrierImage.setImageURI(capturedImage);
-                Toast.makeText(this, "IMAGE CAPTURED! " + capturedImage.toString(), Toast.LENGTH_SHORT).show();*/
+                /*try {
+                    SelectedImg = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }*/
+
             }
             //Intent intent = new Intent();
             //intent.setData(RESULT_OK, selectedImage);
@@ -316,6 +341,39 @@ public class CarrierSelection extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "IMG_" + timeStamp;
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName, ".jpg", storageDir
+        );
+
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    private Uri getImageUri(Context actContext, Bitmap capImage){
+        Bitmap output = Bitmap.createScaledBitmap(capImage , capImage.getWidth(), capImage.getHeight(), true);
+        String path = MediaStore.Images.Media.insertImage(actContext.getContentResolver(), output, "Capture", null);
+        return Uri.parse(path);
+    }
+
+    private String getUriPath(Uri uri){
+        String path = "";
+        if (getContentResolver() != null){
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            if (cursor != null){
+                cursor.moveToFirst();
+                int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+                path = cursor.getString(index);
+                cursor.close();
+            }
+        }
+
+        return path;
     }
 
 
