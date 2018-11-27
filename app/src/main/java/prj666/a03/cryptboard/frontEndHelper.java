@@ -46,12 +46,10 @@ public class frontEndHelper {
 
 
 
-    public frontEndHelper(DatabaseHandler dbpass, Activity tmp) {
+    public frontEndHelper(DatabaseHandler dbpass) {
         db = dbpass;
-        MainAct = tmp;
         sInstance = this;
         LoaderList();
-
     }
 
     public static frontEndHelper getInstance(){return sInstance;}
