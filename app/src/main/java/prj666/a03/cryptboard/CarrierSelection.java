@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -327,6 +328,13 @@ public class CarrierSelection extends AppCompatActivity {
                     save.dismiss();
                 }
             });
+
+            MediaScannerConnection.scanFile(this.getApplicationContext(),
+                    new String[] { name + ".PNG" }, null,
+                    new MediaScannerConnection.OnScanCompletedListener() {
+                        public void onScanCompleted(String path, Uri uri) {
+                        }
+                    });
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();

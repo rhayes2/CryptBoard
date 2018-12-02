@@ -46,6 +46,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Calendar;
 
+import prj666.a03.cryptboard.ContactBase.DatabaseHandler;
 import prj666.a03.cryptboard.RSAStrings.RSAStrings;
 
 public class CryptBoard extends InputMethodService
@@ -77,6 +78,9 @@ public class CryptBoard extends InputMethodService
     boolean doubleTap = false;
 
     private String text = null;
+
+    DatabaseHandler db;
+    frontEndHelper control;
 
     @Override
     public void onStartInputView(EditorInfo editorInfo, boolean restarting) {
@@ -287,6 +291,11 @@ public class CryptBoard extends InputMethodService
             }
             keyboardView.invalidateAllKeys();
             stegMode = true;
+
+            if (frontEndHelper.getInstance() == null) {
+                db = DatabaseHandler.getInstance(this);
+                control = new frontEndHelper(db);
+            }
         }
         else {
             if (stegMode) {

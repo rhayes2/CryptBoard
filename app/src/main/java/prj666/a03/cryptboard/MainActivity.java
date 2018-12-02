@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         db = DatabaseHandler.getInstance(this);
-        control = new frontEndHelper(db,this);
+        control = new frontEndHelper(db);
         Button settingsButton, keyboardButton;
         TextView step1;
         ImageView tutorial;
