@@ -55,6 +55,8 @@ public class CarrierSelection extends AppCompatActivity {
     public static final int CAPTURE_IMAGE = 2;
     public final String APP_TAG = "CryptBoard";
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
+    public final int COMPRESSION_LEVEL = 50;
+
     public String photoFileName = "photo.jpg";
     File photoFile;
 
@@ -110,6 +112,8 @@ public class CarrierSelection extends AppCompatActivity {
                 accept.setBackgroundColor(getResources().getColor(R.color.colourRejection));
             }
         });
+
+        
         int PERMISSION_ALL = 1;
         String[] PERMISSIONS = {
                 android.Manifest.permission.READ_CONTACTS,
@@ -118,15 +122,6 @@ public class CarrierSelection extends AppCompatActivity {
                 android.Manifest.permission.CAMERA
         };
 
-/*
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    1);
-        }
-
-*/
         if(!checkAndRequestPermissions(this, PERMISSIONS)){
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
         }
@@ -150,13 +145,6 @@ public class CarrierSelection extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                /*if (ContextCompat.checkSelfPermission(CarrierSelection.this, Manifest.permission.CAMERA)
-                        != PackageManager.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions(CarrierSelection.this,
-                            new String[]{Manifest.permission.CAMERA},
-                            1);
-                }*/
-
                 Intent cameraIntent = new Intent();
                 cameraIntent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -165,22 +153,7 @@ public class CarrierSelection extends AppCompatActivity {
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
 
                 if(cameraIntent.resolveActivity(getPackageManager()) != null){
-                    /*File capture = null;
-                    try{
-                        capture = createImageFile();
-                    } catch (IOException e){
-                        e.printStackTrace();
-                    }
-                    if (capture != null){
-                        Uri captureUri = FileProvider.getUriForFile(CarrierSelection.this,
-                                "prj666.a03.cryptboard.provider",
-                                capture);
-                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, captureUri);
-                        startActivityForResult(cameraIntent, CAPTURE_IMAGE);
-                    }*/
-
                     startActivityForResult(cameraIntent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-
                 }
 
             }
@@ -233,51 +206,10 @@ public class CarrierSelection extends AppCompatActivity {
             }
         });
 
-
-        if (carrierSelectMode == 1){ //Camera Capture
-            Toast.makeText(this, "Launching Camera", Toast.LENGTH_SHORT).show();
-            intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex){
-                System.err.println(ex);
-            }
-            if (photoFile != null){
-                Uri photoURI = FileProvider.getUriForFile(this,
-                        getApplicationContext().getPackageName() + ".provider",
-                        photoFile);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(intent, CAPTURE_IMAGE);
-            } else {
-                //Toast.makeText(this, "Criss, il n'y a pas un ficher de photo", Toast.LENGTH_SHORT).show();
-            }
-
-        } else if (carrierSelectMode == 2){ //Gallery Selection
-            intent.setType("image/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent, "Select Carrier"), PICK_IMAGE);
-        } else { //Oops
-            //Toast.makeText(this, "Criss, quelque chose est casse", Toast.LENGTH_SHORT).show();
-        }
-
     }
 
     private  boolean checkAndRequestPermissions(Context context, String... permissions) {
-        /*int permissionWriteStorage = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        int ReadPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
-        List<String> listPermissionsNeeded = new ArrayList<>();
-        if (ReadPermission != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.READ_EXTERNAL_STORAGE);
-        }
-        if (permissionWriteStorage != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        }
-        if (!listPermissionsNeeded.isEmpty()) {
-            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),1);
-            return false;
-        }*/
+
         if (context != null && permissions != null){
             for (String permission : permissions){
                 if(ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED){
@@ -288,24 +220,11 @@ public class CarrierSelection extends AppCompatActivity {
         return true;
     }
 
-
-
-    public void getPermissionRead(){
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    1);
-        }
-
-    }
-
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         if (resultCode == RESULT_OK){
             Uri selectedImage = null;
+
             if(requestCode == PICK_IMAGE){
                 selectedImage = data.getData();
                 System.out.println("IN PICK");
@@ -315,40 +234,16 @@ public class CarrierSelection extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 carrierImage.setImageURI(selectedImage);
-                //confirm.setText(selectedImage.toString());
-                //Toast.makeText(this, "IMAGE SELECTED! " + selectedImage.toString(), Toast.LENGTH_SHORT).show();
-            } else if (requestCode == CAPTURE_IMAGE){
-                System.out.println("In Cam");
-                /*Bitmap capturedImage = (Bitmap) data.getExtras().get("data");
-                File capturedImageFile = new File(
-                        getUriPath(getImageUri(getApplicationContext(), capturedImage))
-                );
-                selectedImage = android.net.Uri.parse(capturedImageFile.toURI().toString());*/
-
-                selectedImage = Uri.parse(currentPhotoPath);
-                try{
-                    SelectedImg = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-                } catch (IOException e){
-                    e.printStackTrace();
-                }
-                carrierImage.setImageURI(Uri.parse(currentPhotoPath));
-
-                /*try {
-                    SelectedImg = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }*/
 
             } else if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE){
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
 
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                takenImage.compress(Bitmap.CompressFormat.PNG, 50, stream);
+                takenImage.compress(Bitmap.CompressFormat.PNG, COMPRESSION_LEVEL, stream);
 
                 byte[] byteArray = stream.toByteArray();
                 Bitmap compressedImage = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
 
-                //carrierImage.setImageBitmap(takenImage);
                 Uri capturedImage = getImageUri(CarrierSelection.this, compressedImage);
 
                 carrierImage.setImageURI(capturedImage);
@@ -356,8 +251,6 @@ public class CarrierSelection extends AppCompatActivity {
                 SelectedImg = compressedImage;
 
             }
-            //Intent intent = new Intent();
-            //intent.setData(RESULT_OK, selectedImage);
 
         } else if (resultCode == RESULT_CANCELED){
             Toast.makeText(this, "Capture Cancelled", Toast.LENGTH_SHORT).show();
@@ -400,21 +293,6 @@ public class CarrierSelection extends AppCompatActivity {
         Bitmap output = Bitmap.createScaledBitmap(capImage , capImage.getWidth(), capImage.getHeight(), true);
         String path = MediaStore.Images.Media.insertImage(actContext.getContentResolver(), output, "Capture", null);
         return Uri.parse(path);
-    }
-
-    private String getUriPath(Uri uri){
-        String path = "";
-        if (getContentResolver() != null){
-            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-            if (cursor != null){
-                cursor.moveToFirst();
-                int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-                path = cursor.getString(index);
-                cursor.close();
-            }
-        }
-
-        return path;
     }
 
     public File getPhotoFileUri(String filename){
