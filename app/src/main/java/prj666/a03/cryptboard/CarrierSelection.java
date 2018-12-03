@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -44,12 +45,18 @@ import java.util.concurrent.TimeUnit;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.xml.transform.URIResolver;
 
 import prj666.a03.cryptboard.TestSteg.Steg;
 
 public class CarrierSelection extends AppCompatActivity {
     public static final int PICK_IMAGE = 1;
     public static final int CAPTURE_IMAGE = 2;
+    public final String APP_TAG = "CryptBoard";
+    public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
+    public String photoFileName = "photo.jpg";
+    File photoFile;
+
     String currentPhotoPath;
 
     Button accept, camera, gallery;
@@ -157,17 +164,22 @@ public class CarrierSelection extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                if (ContextCompat.checkSelfPermission(CarrierSelection.this, Manifest.permission.CAMERA)
+                /*if (ContextCompat.checkSelfPermission(CarrierSelection.this, Manifest.permission.CAMERA)
                         != PackageManager.PERMISSION_GRANTED){
                     ActivityCompat.requestPermissions(CarrierSelection.this,
                             new String[]{Manifest.permission.CAMERA},
                             1);
-                }
+                }*/
 
                 Intent cameraIntent = new Intent();
                 cameraIntent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                photoFile = getPhotoFileUri(photoFileName);
+                Uri fileProvider = FileProvider.getUriForFile(CarrierSelection.this, "prj666.a03.cryptboard.provider", photoFile);
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
+
                 if(cameraIntent.resolveActivity(getPackageManager()) != null){
-                    File capture = null;
+                    /*File capture = null;
                     try{
                         capture = createImageFile();
                     } catch (IOException e){
@@ -179,7 +191,9 @@ public class CarrierSelection extends AppCompatActivity {
                                 capture);
                         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, captureUri);
                         startActivityForResult(cameraIntent, CAPTURE_IMAGE);
-                    }
+                    }*/
+
+                    startActivityForResult(cameraIntent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 
                 }
 
@@ -327,7 +341,7 @@ public class CarrierSelection extends AppCompatActivity {
 
                 selectedImage = Uri.parse(currentPhotoPath);
                 try{
-                    SelectedImg = MediaStore.Images.Media.getBitmap(CarrierSelection.this.getContentResolver(), selectedImage);
+                    SelectedImg = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
                 } catch (IOException e){
                     e.printStackTrace();
                 }
@@ -338,6 +352,16 @@ public class CarrierSelection extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }*/
+
+            } else if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE){
+                Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+                //Bitmap compressedImage = Bitmap.createScaledBitmap(takenImage, (int) takenImage.getWidth() * 0.5, (int) takenImage.getHeight() * 0.5, false);
+                //carrierImage.setImageBitmap(takenImage);
+                Uri capturedImage = getImageUri(CarrierSelection.this, takenImage);
+
+                carrierImage.setImageURI(capturedImage);
+
+                SelectedImg = takenImage;
 
             }
             //Intent intent = new Intent();
@@ -399,6 +423,18 @@ public class CarrierSelection extends AppCompatActivity {
         }
 
         return path;
+    }
+
+    public File getPhotoFileUri(String filename){
+        File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), APP_TAG);
+
+        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
+            Log.d(APP_TAG, "failed to create directory");
+        }
+
+        File file = new File(mediaStorageDir.getPath() + File.separator + filename);
+
+        return file;
     }
 
 
