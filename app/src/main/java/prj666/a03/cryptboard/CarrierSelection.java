@@ -113,7 +113,7 @@ public class CarrierSelection extends AppCompatActivity {
             }
         });
 
-        
+
         int PERMISSION_ALL = 1;
         String[] PERMISSIONS = {
                 android.Manifest.permission.READ_CONTACTS,
