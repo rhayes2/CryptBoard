@@ -117,7 +117,7 @@ public class CarrierSelection extends AppCompatActivity {
                 accept.setBackgroundColor(getResources().getColor(R.color.colourRejection));
             }
         });
-
+        int PERMISSION_ALL = 1;
         String[] PERMISSIONS = {
                 android.Manifest.permission.READ_CONTACTS,
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -134,7 +134,9 @@ public class CarrierSelection extends AppCompatActivity {
         }
 
 */
-        checkAndRequestPermissions();
+        if(!checkAndRequestPermissions(this, PERMISSIONS)){
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
+        }
 
         gallery.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,6 +155,13 @@ public class CarrierSelection extends AppCompatActivity {
                     System.out.println(Steg.withInput(SelectedImg).decode().intoString());
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+
+                if (ContextCompat.checkSelfPermission(CarrierSelection.this, Manifest.permission.CAMERA)
+                        != PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(CarrierSelection.this,
+                            new String[]{Manifest.permission.CAMERA},
+                            1);
                 }
 
                 Intent cameraIntent = new Intent();
@@ -241,7 +250,7 @@ public class CarrierSelection extends AppCompatActivity {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(intent, CAPTURE_IMAGE);
             } else {
-                Toast.makeText(this, "Criss, il n'y a pas un ficher de photo", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Criss, il n'y a pas un ficher de photo", Toast.LENGTH_SHORT).show();
             }
 
         } else if (carrierSelectMode == 2){ //Gallery Selection
@@ -249,13 +258,13 @@ public class CarrierSelection extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Select Carrier"), PICK_IMAGE);
         } else { //Oops
-            Toast.makeText(this, "Criss, quelque chose est casse", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Criss, quelque chose est casse", Toast.LENGTH_SHORT).show();
         }
 
     }
 
-    private  boolean checkAndRequestPermissions() {
-        int permissionWriteStorage = ContextCompat.checkSelfPermission(this,
+    private  boolean checkAndRequestPermissions(Context context, String... permissions) {
+        /*int permissionWriteStorage = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE);
         int ReadPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
         List<String> listPermissionsNeeded = new ArrayList<>();
@@ -268,6 +277,13 @@ public class CarrierSelection extends AppCompatActivity {
         if (!listPermissionsNeeded.isEmpty()) {
             ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),1);
             return false;
+        }*/
+        if (context != null && permissions != null){
+            for (String permission : permissions){
+                if(ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED){
+                    return false;
+                }
+            }
         }
         return true;
     }
@@ -292,6 +308,7 @@ public class CarrierSelection extends AppCompatActivity {
             Uri selectedImage = null;
             if(requestCode == PICK_IMAGE){
                 selectedImage = data.getData();
+                System.out.println("IN PICK");
                 try {
                     SelectedImg = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
                 } catch (IOException e) {
@@ -301,11 +318,19 @@ public class CarrierSelection extends AppCompatActivity {
                 //confirm.setText(selectedImage.toString());
                 //Toast.makeText(this, "IMAGE SELECTED! " + selectedImage.toString(), Toast.LENGTH_SHORT).show();
             } else if (requestCode == CAPTURE_IMAGE){
+                System.out.println("In Cam");
                 /*Bitmap capturedImage = (Bitmap) data.getExtras().get("data");
                 File capturedImageFile = new File(
                         getUriPath(getImageUri(getApplicationContext(), capturedImage))
                 );
                 selectedImage = android.net.Uri.parse(capturedImageFile.toURI().toString());*/
+
+                selectedImage = Uri.parse(currentPhotoPath);
+                try{
+                    SelectedImg = MediaStore.Images.Media.getBitmap(CarrierSelection.this.getContentResolver(), selectedImage);
+                } catch (IOException e){
+                    e.printStackTrace();
+                }
                 carrierImage.setImageURI(Uri.parse(currentPhotoPath));
 
                 /*try {
