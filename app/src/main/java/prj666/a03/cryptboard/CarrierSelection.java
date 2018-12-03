@@ -28,6 +28,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -67,17 +68,6 @@ public class CarrierSelection extends AppCompatActivity {
     String msgForEncryption;
     AutoCompleteTextView SearchContacts;
 
-
-    /*private File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
-
-        currentPhotoPath = image.getAbsolutePath();
-        return image;
-    }*/
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,10 +87,6 @@ public class CarrierSelection extends AppCompatActivity {
         SearchContacts = findViewById(R.id.ContactSearchBarCarrier);
 
         confirm.setText(R.string.carrier_confirmation);
-        //camera.setText(R.string.carrier_camera_recapture);
-        //accept.setText(R.string.OK);
-        //gallery.setText(R.string.carrier_reselect_from_storage);
-
 
         List<String> list = frontEndHelper.getInstance().getNames();
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
@@ -355,13 +341,19 @@ public class CarrierSelection extends AppCompatActivity {
 
             } else if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE){
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-                //Bitmap compressedImage = Bitmap.createScaledBitmap(takenImage, (int) takenImage.getWidth() * 0.5, (int) takenImage.getHeight() * 0.5, false);
+
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                takenImage.compress(Bitmap.CompressFormat.PNG, 50, stream);
+
+                byte[] byteArray = stream.toByteArray();
+                Bitmap compressedImage = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+
                 //carrierImage.setImageBitmap(takenImage);
-                Uri capturedImage = getImageUri(CarrierSelection.this, takenImage);
+                Uri capturedImage = getImageUri(CarrierSelection.this, compressedImage);
 
                 carrierImage.setImageURI(capturedImage);
 
-                SelectedImg = takenImage;
+                SelectedImg = compressedImage;
 
             }
             //Intent intent = new Intent();
