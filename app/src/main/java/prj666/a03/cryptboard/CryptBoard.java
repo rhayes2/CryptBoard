@@ -1,76 +1,48 @@
+/**
+ * Author: Thomas Luu
+ * Date: Dec 03, 2018
+ * Version: 1.1
+ */
+
 package prj666.a03.cryptboard;
 
 
-import android.app.AppOpsManager;
-import android.content.ClipDescription;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
-import android.media.AudioManager;
-import android.net.Uri;
-import android.os.Build;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RawRes;
-import android.support.v13.view.inputmethod.EditorInfoCompat;
-import android.support.v13.view.inputmethod.InputConnectionCompat;
-import android.support.v13.view.inputmethod.InputContentInfoCompat;
-import android.support.v4.content.FileProvider;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.ExtractedTextRequest;
-import android.view.inputmethod.InputBinding;
 import android.view.inputmethod.InputConnection;
-import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URI;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
 import java.util.Calendar;
 
 import prj666.a03.cryptboard.ContactBase.DatabaseHandler;
-import prj666.a03.cryptboard.RSAStrings.RSAStrings;
 
 public class CryptBoard extends InputMethodService
         implements KeyboardView.OnKeyboardActionListener{
 
     private static final int KEYCODE_ENCRYPT = -100; // ENCRYPT KEYCODE_CAMERA
-    private static final int KEYCODE_PHOTO = -107; // SEND
     private static final int KEYCODE_DECRYPT = -102; // TOGGLE
     private static final int KEYCODE_CONTACTS = -104;
     private static final int KEYCODE_CLEAR = -105;
-    private static final int KEYCODE_CAM = -106;
+    private static final int KEYCODE_SYMBOLS = -200;
 
     private KeyboardView keyboardView;
     private Keyboard keyboard;
     private Keyboard keyboardNum;
     private Keyboard keyboardNormal;
     private Keyboard keyboardNumNormal;
-
+    private Keyboard keyboardSymbols;
+    private Keyboard keyboardSymbolsNormal;
     private InputConnection ic;
     private boolean caps;
     private boolean capsLock;
     private boolean numMode ;
     private boolean stegMode;
-
+    private boolean symMode;
 
     long holdStartTime = 0;
     long lastClickTime = 0;
@@ -93,6 +65,7 @@ public class CryptBoard extends InputMethodService
             capsLock = false;
             numMode = false;
             stegMode = false;
+            symMode = false;
         }
     }
 
@@ -103,7 +76,8 @@ public class CryptBoard extends InputMethodService
         keyboardNum = new Keyboard(this, R.xml.alt_qwerty);
         keyboardNormal = new Keyboard(this, R.xml.qwerty_normal);
         keyboardNumNormal = new Keyboard(this, R.xml.alt_qwerty_normal);
-
+        keyboardSymbols = new Keyboard(this, R.xml.alt_symbols);
+        keyboardSymbolsNormal = new Keyboard(this, R.xml.alt_symbols_normal);
         return keyboardView;
     }
 
@@ -120,10 +94,6 @@ public class CryptBoard extends InputMethodService
             case Keyboard.KEYCODE_DELETE:
                 break;
             case Keyboard.KEYCODE_SHIFT:
-                break;
-            case KEYCODE_CAM:
-                break;
-            case KEYCODE_PHOTO:
                 break;
             case Keyboard.KEYCODE_MODE_CHANGE:
                 break;
@@ -161,6 +131,8 @@ public class CryptBoard extends InputMethodService
     public void onKey(int primaryCode, int[] keyCodes){
         ic = getCurrentInputConnection();
         switch (primaryCode) {
+            case Keyboard.KEYCODE_DONE:
+                break;
             case Keyboard.KEYCODE_DELETE:
                 ic.deleteSurroundingText(1,0);
                 break;
@@ -180,14 +152,10 @@ public class CryptBoard extends InputMethodService
                     keyboardView.invalidateAllKeys();
                 }
                 break;
-            case KEYCODE_CAM:
-                break;
-            case KEYCODE_PHOTO:
-                launchPhotos();
-                break;
             case Keyboard.KEYCODE_MODE_CHANGE:
                 caps = false;
                 capsLock = false;
+                symMode = false;
                 keyboardView.getKeyboard().setShifted(caps);
 
                 numMode = !numMode;
@@ -206,7 +174,30 @@ public class CryptBoard extends InputMethodService
                 keyboardView.invalidateAllKeys();
                 break;
 
-            case Keyboard.KEYCODE_DONE:
+            case KEYCODE_SYMBOLS:
+                if (symMode){
+                    if (stegMode) {
+                        keyboardView.setKeyboard(keyboardNum);
+                    } else {
+                        keyboardView.setKeyboard(keyboardNumNormal);
+                    }
+                    keyboardView.invalidateAllKeys();
+
+                    caps = false;
+                    capsLock = false;
+                    symMode = false;
+                }else{
+                    if (stegMode) {
+                        keyboardView.setKeyboard(keyboardSymbols);
+                    } else {
+                        keyboardView.setKeyboard(keyboardSymbolsNormal);
+                    }
+                    keyboardView.invalidateAllKeys();
+
+                    caps = false;
+                    capsLock = false;
+                    symMode = true;
+                }
                 break;
             case  KEYCODE_ENCRYPT:
                 Intent EncryptPhoto = new Intent(this, CarrierSelection.class);
@@ -264,12 +255,6 @@ public class CryptBoard extends InputMethodService
         startActivity(contacts);
     }
 
-    private void launchPhotos(){
-        Intent photo = new Intent(this, CarrierSelection.class);
-        photo.putExtra("MODE", 2);
-        startActivity(photo);
-    }
-
     private String getMessage(){
         text = ic.getExtractedText(new ExtractedTextRequest(), 0).text.toString();
         return text;
@@ -284,7 +269,9 @@ public class CryptBoard extends InputMethodService
 
     private void toggleStegMode(boolean stegModeOn){
         if (stegModeOn) {
-            if (numMode) {
+            if (symMode) {
+                keyboardView.setKeyboard(keyboardSymbols);
+            } else if (numMode) {
                 keyboardView.setKeyboard(keyboardNum);
             } else {
                 keyboardView.setKeyboard(keyboard);
@@ -299,7 +286,9 @@ public class CryptBoard extends InputMethodService
         }
         else {
             if (stegMode) {
-                if (numMode){
+                if (symMode) {
+                    keyboardView.setKeyboard(keyboardSymbolsNormal);
+                } else if (numMode){
                     keyboardView.setKeyboard(keyboardNumNormal);
                 }
                 else{
