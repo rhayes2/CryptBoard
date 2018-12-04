@@ -7,11 +7,10 @@
     >
 
     <Row >
-        <Key android:codes="-100" android:keyIcon="@drawable/lock" android:keyWidth="21%p" android:keyEdgeFlags="left"/>
-        <Key android:codes="-102" android:keyIcon="@drawable/unlock" android:keyWidth="21%p"/>
-        <Key android:codes="-104" android:keyIcon="@drawable/contacts" android:keyWidth="21%p"/>
-        <Key android:codes="-105" android:keyIcon="@drawable/clear" android:keyWidth="21%p"/>
-        <Key android:codes="-107" android:keyIcon="@drawable/photo" android:keyWidth="21%p" android:keyEdgeFlags="right"/>
+        <Key android:codes="-100" android:keyIcon="@drawable/lock" android:keyWidth="25%p" android:keyEdgeFlags="left"/>
+        <Key android:codes="-102" android:keyIcon="@drawable/unlock" android:keyWidth="25%p"/>
+        <Key android:codes="-104" android:keyIcon="@drawable/contacts" android:keyWidth="25%p"/>
+        <Key android:codes="-105" android:keyIcon="@drawable/clear" android:keyWidth="25%p" android:keyEdgeFlags="right"/>
     </Row>
 
     <Row>
@@ -41,8 +40,8 @@
     </Row>
 
     <Row>
-        <Key android:codes="-1" android:keyLabel="=\&gt;" android:keyWidth="15%p"
-            android:isSticky="true" android:keyEdgeFlags="left"/>
+        <Key android:codes="-200" android:keyLabel="=\&gt;" android:keyWidth="15%p"
+            android:keyEdgeFlags="left"/>
         <Key android:codes="42" android:keyLabel="*"/>
         <Key android:codes="34" android:keyLabel="&quot;"/>
         <Key android:codes="39" android:keyLabel="&apos;"/>
