@@ -75,7 +75,7 @@ public class CarrierSelection extends AppCompatActivity {
     AutoCompleteTextView SearchContacts;
     ProgressDialog save;
 
-    private File createImageFile() throws IOException {
+    /*private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -83,7 +83,7 @@ public class CarrierSelection extends AppCompatActivity {
 
         currentPhotoPath = image.getAbsolutePath();
         return image;
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
