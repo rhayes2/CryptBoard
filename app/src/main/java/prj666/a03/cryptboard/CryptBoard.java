@@ -1,3 +1,9 @@
+/**
+ * Author: Thomas Luu
+ * Date: Dec 03, 2018
+ * Version: 1.1
+ */
+
 package prj666.a03.cryptboard;
 
 
