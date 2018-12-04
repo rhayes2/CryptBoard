@@ -87,10 +87,7 @@ public class MainActivity extends AppCompatActivity {
             String mypub = android.util.Base64.encodeToString(tmp.getPublic().getEncoded(),0);
             String tmpPriv = android.util.Base64.encodeToString(tmp.getPrivate().getEncoded(),0);
             boolean favourite = false;
-
-            //// Load Into a Contact var
-            Contact tmpContact = new Contact("Tester holdsPair",favourite,tmpPriv, mypub);
-            control.saveContact(tmpContact);}
+        }
 
         if (brand.contains("sam")){ //Handles Samsung's protectionist bs
             step1.setText(R.string.installation_samsung_1);

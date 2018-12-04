@@ -103,7 +103,6 @@ public class AddContact extends AppCompatActivity {
 
 
         });
-        //favFlag = findViewById(R.id.checkBox);
 
         keyExchange.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -117,8 +116,6 @@ public class AddContact extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     tmpContact.setName(contactName.getText().toString());
-                    //tmpContact.setFavourite(favFlag.isChecked());
-                    control.saveContact(tmpContact);
                     keyset = true;
                     Intent intent = new Intent(AddContact.this,KeyExchange.class);
                     intent.putExtra("Key",mypub);
@@ -134,6 +131,7 @@ public class AddContact extends AppCompatActivity {
             public void onClick(View view) {
                 if(!keyset) {Toast.makeText(AddContact.this, "You have not Created or Exchanged Keys", Toast.LENGTH_SHORT).show();}
                 else{
+                    control.saveContact(tmpContact);
                     finish();}
             }
         });
@@ -144,8 +142,7 @@ public class AddContact extends AppCompatActivity {
         if (resultCode == 1){
             keyset=true;
             tmpContact.setContactPubKey(resultIntent.getStringExtra("KEY"));
-            control.updateContact(tmpContact);
-
+            keyConfirmation.setText(getResources().getString(R.string.keyExchange_positive));
             if (contactName.getText().length() > 0) {
                 doneButton.setText(R.string.save_contact);
                 doneButton.setBackgroundColor(getResources().getColor(R.color.colourConfirmation));
