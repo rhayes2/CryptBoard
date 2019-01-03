@@ -5,3 +5,8 @@
 # CryptBoard
 CryptBoard is a keyboard application for Android devices that allows users to create and decode messages using a combination of RSA cryptography and Least Significant Bit (LSB) steganography. By hiding encrypted messages within the bit values of innocuous carrier images, which are subsequently attached to plain-text messages, CryptBoard allows users to both send and receive encrypted messages through unencrypted services and circumvent automated keyword-based censorship.
 
+
+## Contributing
+Thanks for your interest in contributing! We welcome many ways to get started; start with our Contributing Guide and then check for open issues for specific tasks.
+
+For contributors looking to suggest improvements, feel free to open an issue to start the discussion.
