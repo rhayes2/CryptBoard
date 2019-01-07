@@ -26,6 +26,23 @@ package prj666.a03.cryptboard;
         import prj666.a03.cryptboard.RSAStrings.RSAStrings;
 
 public class Contact_Edit_Details extends AppCompatActivity {
+
+/*   -----------------------------------------------------------------
+       Contact_Edit_Details Class
+        -----------------------
+        - Makes Contact Text Editable
+        - Saves New Contact Information
+      ------------------------------------------------------------------
+
+        1. User Edits Contact information
+        2. Onpress Saves Contact
+
+      ------------------------------------------------------------------
+        P.O.I
+        
+      ----------------------------------------------------------------- 
+    */
+    
     Contact tmp ;
     EditText name;
     TextView date;

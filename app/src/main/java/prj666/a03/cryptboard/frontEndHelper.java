@@ -33,6 +33,21 @@ import prj666.a03.cryptboard.TestSteg.Steg;
 
 public class frontEndHelper {
 
+     /*------------------------------------------------------------------
+        frontEndHelper Class
+        -----------------------
+        - Holds database Infomation
+        - Updates information
+        - Helper class for database and encryption
+      ------------------------------------------------------------------
+
+
+      ------------------------------------------------------------------
+        
+      ----------------------------------------------------------------- 
+    */
+
+
     public static DatabaseHandler db;
     Activity MainAct;
     public static String scanTarget;

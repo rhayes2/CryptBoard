@@ -28,6 +28,33 @@ import prj666.a03.cryptboard.RSAStrings.RSAStrings;
 
 public class AddContact extends AppCompatActivity {
 
+    /*------------------------------------------------------------------
+        Add Contact Class
+        -----------------
+        - Creates and Saves Contact to Database
+        - Starts KeyExchange Activity
+
+      ------------------------------------------------------------------
+
+        1. Create RSAKey Pair for Crontact
+        2. Load Key into New Contact and Wait KeyExchange
+        3. On KeyExchange Press, Save Name, Start Exchange for Result
+        4. On Result Set NewContact's Public Key
+        5. On Done Press, Save Contact to Database (future keystorage?)
+
+      ------------------------------------------------------------------
+        P.O.I
+
+        L62-80:  Worker Thread to Create Keys, We need a key but only need
+                 it before saving / Display, So the join is done before starting
+                 the Exchange activity.
+
+        L141:     Worker Thread Join before requiring our key
+
+        L158-159: Save this Contact and Finish the activity
+      ----------------------------------------------------------------- 
+    */
+
     Button keyExchange, doneButton;
     EditText contactName;
     TextView keyConfirmation;
@@ -111,7 +138,7 @@ public class AddContact extends AppCompatActivity {
                 if (contactName.getText().length() > 0){
                     control = frontEndHelper.getInstance();
                     try {
-                        LoadKeys.join();
+                        LoadKeys.join();                           // Joining the LoadKeys worker to ensure we have keys
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -131,7 +158,7 @@ public class AddContact extends AppCompatActivity {
             public void onClick(View view) {
                 if(!keyset) {Toast.makeText(AddContact.this, "You have not Created or Exchanged Keys", Toast.LENGTH_SHORT).show();}
                 else{
-                    control.saveContact(tmpContact);
+                    control.saveContact(tmpContact);  // Let's Save this Created Contact
                     finish();}
             }
         });
@@ -168,8 +195,6 @@ public class AddContact extends AppCompatActivity {
 
             default:
                 return super.onOptionsItemSelected(item);
-
-
         }
     }
 
