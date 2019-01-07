@@ -40,6 +40,14 @@ import prj666.a03.cryptboard.Tests.tester;
 
 public class MainActivity extends AppCompatActivity {
 
+    /*-----------------------------------------------
+    *  MainActivity
+    * -----------------------------------------------
+    *  - Initializes the database on first run
+    *  - Provides users with installation instructions
+    *  - Provides users with quick access to their device's keyboard settings to enable CryptBoard
+    * */
+
     DatabaseHandler db;
     frontEndHelper control;
 
@@ -55,13 +63,11 @@ public class MainActivity extends AppCompatActivity {
         control = new frontEndHelper(db);
         Button settingsButton, keyboardButton;
         TextView step1;
-        ImageView tutorial;
 
 
         settingsButton = findViewById(R.id.settingsButton);
         keyboardButton = findViewById(R.id.keyboardSelect);
         step1 = findViewById(R.id.textView2);
-        //tutorial = findViewById(R.id.tutorialImage);
         String brand = Build.BRAND;
 
 
@@ -89,7 +95,14 @@ public class MainActivity extends AppCompatActivity {
             boolean favourite = false;
         }
 
-        if (brand.contains("sam")){ //Handles Samsung's protectionist bs
+        /*
+        * The method for activating third party keyboards can differ between device manufacturers,
+        * depending on any changes that they make to Android's stock UI. This code serves different
+        * installation instructions based on known differences in manufacturers' implementations
+        * */
+
+        //Samsung
+        if (brand.contains("sam")){
             step1.setText(R.string.installation_samsung_1);
             //tutorial.setImageDrawable();
             settingsButton.setOnClickListener(new View.OnClickListener() {
@@ -108,7 +121,9 @@ public class MainActivity extends AppCompatActivity {
             });
 
         }
-        else{ //For everyone that isn't a Samsung
+
+        //Stock
+        else{
             step1.setText(R.string.installation_standard_1);
             settingsButton.setOnClickListener(new View.OnClickListener() {
                 @Override

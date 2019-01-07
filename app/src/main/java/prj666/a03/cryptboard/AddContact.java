@@ -36,7 +36,7 @@ public class AddContact extends AppCompatActivity {
 
       ------------------------------------------------------------------
 
-        1. Create RSAKey Pair for Crontact
+        1. Create RSAKey Pair for Contact
         2. Load Key into New Contact and Wait KeyExchange
         3. On KeyExchange Press, Save Name, Start Exchange for Result
         4. On Result Set NewContact's Public Key
@@ -59,7 +59,6 @@ public class AddContact extends AppCompatActivity {
     EditText contactName;
     TextView keyConfirmation;
     frontEndHelper control;
-    CheckBox favFlag;
     public boolean keyset = false;
     public Contact tmpContact = null;
     public String mypub = null;

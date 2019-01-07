@@ -28,10 +28,19 @@ import java.util.List;
 
 public class KeyExchange extends AppCompatActivity {
 
+    /*
+    * --------------------------------------------
+    *   KeyExchange Class
+    * --------------------------------------------
+    *  - Displays a user's public key for a user's contact to scan
+    *  - Allows a user to start the QR scanning activity to scan their contact's public key
+    *  - Saves a scanned public key to a contact profile and passes confirmation of a key to the
+    *    parent activity
+    */
+
     Button doneButton, scanButton;
     ImageView qrDisplay;
     String scanResult, publicKey;
-    //TextView textContent;
     Bitmap generatedQR;
     Boolean keyScanned = false;
 
@@ -59,7 +68,11 @@ public class KeyExchange extends AppCompatActivity {
         //publicKey = getIntent().getStringExtra("KEY");
         Intent intent = getIntent();
         publicKey = intent.getStringExtra("Key");
-        //Converts Strings into QRCodes
+
+        /*
+        * Converts generated public key into a QR code, which is then displayed in the qrDisplay
+        * ImageView
+        * */
         try {
             generatedQR = QRCodeGenerator.encodeAsBitmap(publicKey);
             qrDisplay.setImageBitmap(generatedQR);
@@ -67,13 +80,12 @@ public class KeyExchange extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        /*scanButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-            }
-        });*/
-
+        /*
+        * This button functions to both start the device's camera to scan a QR code, and a save a
+        * scanned key into a contact entry. The button will programmatically change function depending
+        * on if a key has been scanned by the user
+        * */
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

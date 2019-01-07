@@ -41,7 +41,7 @@ public class Contact_Edit_Details extends AppCompatActivity {
         P.O.I
         
       ----------------------------------------------------------------- 
-    */
+*/
     
     Contact tmp ;
     EditText name;
@@ -77,11 +77,14 @@ public class Contact_Edit_Details extends AppCompatActivity {
         date.setText(tmp.getDateCreated());
 
         name.setText(tmp.getName());
+
+        /*
+        * This TextChangedListener is to prevent a user from saving a contact with a blank name, and
+        * provide the user with visual feedback if a blank name is attempted
+        * */
         name.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -96,9 +99,7 @@ public class Contact_Edit_Details extends AppCompatActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
+            public void afterTextChanged(Editable editable) {}
         });
 
         createNewKeyButton.setOnClickListener(new View.OnClickListener() {

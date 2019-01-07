@@ -58,7 +58,7 @@ public class CarrierSelection extends AppCompatActivity {
  /*------------------------------------------------------------------
         Carrier Selection Class
         -----------------------
-        - Activity Inwhich user selects media to encode
+        - Activity in which user selects media to act as a carrier for encrypted message
         - Starts Encoding
         - Saves File
       ------------------------------------------------------------------

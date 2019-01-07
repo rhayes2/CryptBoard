@@ -83,7 +83,7 @@ public class DecodePhoto extends AppCompatActivity {
         SpinnerContact = findViewById(R.id.spinner);
         SearchContacts = findViewById(R.id.ContactSearchBarDecode);
 
-        confirm.setText(R.string.carrier_confirmation);
+        confirm.setText("Decode Photo?");
 //        camera.setText(R.string.carrier_camera_recapture);
         //accept.setText(R.string.OK);
         //gallery.setText(R.string.carrier_reselect_from_storage);

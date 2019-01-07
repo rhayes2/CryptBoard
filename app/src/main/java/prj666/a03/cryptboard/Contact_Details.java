@@ -31,7 +31,7 @@ public class Contact_Details extends AppCompatActivity {
       ------------------------------------------------------------------
 
         1. Get Serilizable Extra - Contact
-        2. Populate fields with inforation
+        2. Populate fields with information
         3. On press start Edit Contact Activity
         4. On press Delete Contact
 
