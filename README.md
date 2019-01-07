@@ -9,7 +9,7 @@ CryptBoard is a keyboard application for Android devices that allows users to cr
 
 |                            Encode                            |                            Decode                            |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
-| <img src="https://github.com/rhayes2/CryptBoard/blob/add-license-1/Documentation/gifs/encode.gif" height = "500px"/> | <img src="https://github.com/rhayes2/CryptBoard/blob/add-license-1/Documentation/gifs/decode.gif" height = "500px"/> |
+| <img src="https://github.com/rhayes2/CryptBoard/blob/master/Documentation/gifs/encode.gif" height = "500px"/> | <img src="https://github.com/rhayes2/CryptBoard/blob/master/Documentation/gifs/decode.gif" height = "500px"/> |
 
 
 ## Contributing
