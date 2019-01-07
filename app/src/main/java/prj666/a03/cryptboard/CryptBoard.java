@@ -46,7 +46,6 @@ public class CryptBoard extends InputMethodService
 
         onStartInputView - sets starting values including stegmode
         
-
       ----------------------------------------------------------------- 
     */
 
