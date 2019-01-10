@@ -76,4 +76,5 @@
     <string name="response_positive">Yes</string>
     <string name="response_negative">No</string>
     <string name="save_contact">Save Contact</string>
+    <string name="title_activity_load_contact_image">loadContactImage</string>
 </resources>

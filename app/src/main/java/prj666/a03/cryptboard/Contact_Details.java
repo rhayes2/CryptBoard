@@ -69,6 +69,7 @@ public class Contact_Details extends AppCompatActivity {
         doneContactButton = findViewById(R.id.doneContactButton);
 
 
+
         name.setText(tmp.getName());
         date.setText(tmp.getDateCreated());
 

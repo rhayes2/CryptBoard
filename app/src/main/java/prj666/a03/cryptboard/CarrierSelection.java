@@ -1,12 +1,9 @@
 package prj666.a03.cryptboard;
 
-import android.Manifest;
 import android.content.Context;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
@@ -17,11 +14,9 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -42,15 +37,12 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.xml.transform.URIResolver;
 
 import prj666.a03.cryptboard.TestSteg.Steg;
 
@@ -113,7 +105,7 @@ public class CarrierSelection extends AppCompatActivity {
         camera = findViewById(R.id.recaptureCamera);
         gallery = findViewById(R.id.reselectionFromStorage);
         confirm = findViewById(R.id.carrierConfirmation);
-        carrierImage = findViewById(R.id.carrierImage);
+        carrierImage = findViewById(R.id.carrierImagekey);
         SpinnerContact = findViewById(R.id.spinner);
         SearchContacts = findViewById(R.id.ContactSearchBarCarrier);
 

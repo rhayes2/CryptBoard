@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.security.InvalidKeyException;
@@ -22,8 +23,10 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
 
 
 import prj666.a03.cryptboard.ContactBase.Contact;
@@ -40,7 +43,6 @@ public class frontEndHelper {
         - Updates information
         - Helper class for database and encryption
       ------------------------------------------------------------------
-
 
       ------------------------------------------------------------------
         
@@ -132,6 +134,66 @@ public class frontEndHelper {
         return new String(decrypted);
     }
 
+
+
+    //Encryption Method
+    /*
+    @parameter : Message {String}, Secret key {String}
+    @return : Encrypted Message {String}
+     */
+    public static String encryptKey(String message, String secret_key) throws Exception {
+
+        System.out.println("HERE BUT"+ secret_key);
+
+        secret_key = convertKeyTo128bit(secret_key);
+
+        // Creating key and cipher
+        SecretKeySpec aesKey = new SecretKeySpec(secret_key.getBytes(), "AES");
+        Cipher cipher;
+
+        //AES cipher
+        cipher = Cipher.getInstance("AES");
+
+        // encrypt the text
+        cipher.init(Cipher.ENCRYPT_MODE, aesKey);
+
+        byte[] encrypted;
+
+        encrypted =  cipher.doFinal(message.getBytes());
+
+        return android.util.Base64.encodeToString(cipher.doFinal(message.getBytes()),0);
+    }
+
+    //Decryption Method
+    /*
+    @parameter : Encrypted Message {String}, Secret key {String}
+    @return : Message {String}
+     */
+    public static String decryptKey(String encrypted_message, String secret_key) throws Exception {
+
+        Log.d("Decrypt", "message: + " + encrypted_message);
+
+        System.out.println("encrypted: "+ encrypted_message + " Key: "+secret_key);
+        // Creating key and cipher
+        SecretKeySpec aesKey = new SecretKeySpec(secret_key.getBytes(), "AES");
+        Cipher cipher;
+
+        //AES cipher
+        cipher = Cipher.getInstance("AES");
+
+        // decrypting the text
+        cipher.init(Cipher.DECRYPT_MODE, aesKey);
+        String decrypted;
+        byte[] decoded;
+        decoded = android.util.Base64.decode(encrypted_message.getBytes(),0);
+        decrypted = new String(cipher.doFinal(decoded));
+        System.out.println("decrypted: "+ decrypted);
+        //returning decrypted text
+        return decrypted;
+    }
+
+
+
     public void saveContact(Contact toSave){
         db.insertContact(toSave);
         LoaderList();
@@ -215,7 +277,6 @@ public class frontEndHelper {
     
     public Contact getPos(int pos){return Clist.get(pos);}
 
-
     public void setThread(Thread x){Worker1 = x;}
     public Thread getWorker1(){return Worker1;}
 
@@ -223,6 +284,16 @@ public class frontEndHelper {
 
     public Contact getPosFav(int pos){return ClistFav.get(pos);} //for fav contacts
 
-
-
+    public static String convertKeyTo128bit(String secret_key){
+        String result = secret_key;
+        if (secret_key.length() <= 16){
+            for (int i = 0; i < (16 - secret_key.length()); i++){
+                result += "#";
+            }
+        }
+        else {
+            result = result.substring(0, 15);
+        }
+        return result;
+    }
 }

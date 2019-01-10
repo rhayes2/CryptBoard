@@ -55,7 +55,7 @@ public class AddContact extends AppCompatActivity {
       ----------------------------------------------------------------- 
     */
 
-    Button keyExchange, doneButton;
+    Button keyExchange, doneButton, sendKey;
     EditText contactName;
     TextView keyConfirmation;
     frontEndHelper control;
@@ -98,6 +98,8 @@ public class AddContact extends AppCompatActivity {
         doneButton = findViewById(R.id.saveNewContactButton);
         contactName = findViewById(R.id.contactName);
         keyConfirmation = findViewById(R.id.keyConfirmation);
+        sendKey = findViewById(R.id.sendkeyButt);
+        control = frontEndHelper.getInstance();
 
         LoadKeys.start();
 
@@ -135,7 +137,6 @@ public class AddContact extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (contactName.getText().length() > 0){
-                    control = frontEndHelper.getInstance();
                     try {
                         LoadKeys.join();                           // Joining the LoadKeys worker to ensure we have keys
                     } catch (InterruptedException e) {
@@ -157,8 +158,24 @@ public class AddContact extends AppCompatActivity {
             public void onClick(View view) {
                 if(!keyset) {Toast.makeText(AddContact.this, "You have not Created or Exchanged Keys", Toast.LENGTH_SHORT).show();}
                 else{
+                    try {
+                        LoadKeys.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    tmpContact.setName(contactName.getText().toString());
                     control.saveContact(tmpContact);  // Let's Save this Created Contact
                     finish();}
+            }
+        });
+
+
+        sendKey.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AddContact.this,sendKeyEncoding.class);
+                intent.putExtra("Key",mypub);
+                startActivityForResult(intent,1);
             }
         });
     }
@@ -169,6 +186,15 @@ public class AddContact extends AppCompatActivity {
             keyset=true;
             tmpContact.setContactPubKey(resultIntent.getStringExtra("KEY"));
             keyConfirmation.setText(getResources().getString(R.string.keyExchange_positive));
+            if (contactName.getText().length() > 0) {
+                doneButton.setText(R.string.save_contact);
+                doneButton.setBackgroundColor(getResources().getColor(R.color.colourConfirmation));
+                doneButton.setEnabled(true);
+            }
+        }
+        else if (resultCode == 2){
+            keyset = true;
+            keyConfirmation.setText("Key saved, need to load Contacts Public Key");
             if (contactName.getText().length() > 0) {
                 doneButton.setText(R.string.save_contact);
                 doneButton.setBackgroundColor(getResources().getColor(R.color.colourConfirmation));

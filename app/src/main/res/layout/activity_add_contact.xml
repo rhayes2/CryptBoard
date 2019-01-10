@@ -119,4 +119,21 @@
         app:layout_constraintTop_toBottomOf="@+id/keyConfirmation"
         app:layout_constraintVertical_bias="0.097" />
 
+    <Button
+        android:id="@+id/sendkeyButt"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="138dp"
+        android:layout_height="47dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/colourPrimary"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:text="Send Key"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintLeft_toRightOf="@+id/keyButton"
+        app:layout_constraintTop_toBottomOf="@+id/keyConfirmation"
+        app:layout_constraintVertical_bias="0.097" />
+
 </android.support.constraint.ConstraintLayout>

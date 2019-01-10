@@ -14,7 +14,6 @@ import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -26,20 +25,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 import prj666.a03.cryptboard.TestSteg.Steg;
 
@@ -79,9 +68,9 @@ public class DecodePhoto extends AppCompatActivity {
 //        camera = findViewById(R.id.recaptureCamera);
         gallery = findViewById(R.id.reselectionFromStorage);
         confirm = findViewById(R.id.carrierConfirmation);
-        carrierImage = findViewById(R.id.carrierImage);
+        carrierImage = findViewById(R.id.carrierImagekey);
         SpinnerContact = findViewById(R.id.spinner);
-        SearchContacts = findViewById(R.id.ContactSearchBarDecode);
+        SearchContacts = findViewById(R.id.passcodebar);
 
         confirm.setText("Decode Photo?");
 //        camera.setText(R.string.carrier_camera_recapture);
