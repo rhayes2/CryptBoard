@@ -7,7 +7,7 @@
     tools:context=".CarrierSelection">
 
     <ImageView
-        android:id="@+id/carrierImage"
+        android:id="@+id/carrierImagekey"
         android:layout_width="300dp"
         android:layout_height="262dp"
         android:layout_marginStart="8dp"
@@ -83,7 +83,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/carrierImage" />
+        app:layout_constraintTop_toBottomOf="@+id/carrierImagekey" />
 
     <LinearLayout
         android:layout_width="match_parent"

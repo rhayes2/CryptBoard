@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context=".DecodePhoto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".sendKeyEncoding">
 
     <ImageView
         android:id="@+id/carrierImagekey"
@@ -21,29 +21,17 @@ tools:context=".DecodePhoto">
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_gallery" />
 
-    <AutoCompleteTextView
+    <EditText
         android:id="@+id/passcodebar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:hint="Contact..."
+        android:hint="Passcode..."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/carrierConfirmation" />
-
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passcodebar" />
 
     <TextView
         android:id="@+id/carrierConfirmation"
@@ -72,28 +60,28 @@ tools:context=".DecodePhoto">
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
-            android:id="@+id/reselectionFromStorage"
+            android:id="@+id/reselectimgcontact"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="50"
-            android:text="Select Image"
             android:background="@color/colourPrimary"
-            android:textColor="#FFFFFF"
             android:elevation="0dp"
+            android:text="Select Image"
+            android:textColor="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent" />
+
         <Button
-            android:id="@+id/acceptCarrier"
+            android:id="@+id/encodepubkey"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="50"
             android:background="@color/colourRejection"
-            android:textColor="#FFFFFF"
             android:elevation="0dp"
-            android:text="Decode"
-            android:enabled="false"/>
+            android:enabled="false"
+            android:text="Encode"
+            android:textColor="#FFFFFF" />
 
     </LinearLayout>
-
 
 </android.support.constraint.ConstraintLayout>

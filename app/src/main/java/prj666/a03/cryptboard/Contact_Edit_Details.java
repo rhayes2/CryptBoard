@@ -48,6 +48,8 @@ public class Contact_Edit_Details extends AppCompatActivity {
     TextView date;
     Button createNewKeyButton;
     Button saveEditButton;
+    Button loadFromImageButton;
+
 
     Boolean changed = false;
     Boolean deleted = false;
@@ -72,10 +74,10 @@ public class Contact_Edit_Details extends AppCompatActivity {
         date = findViewById(R.id.keyGenerationDate);
 
         createNewKeyButton = findViewById(R.id.keyRefresh);
+        loadFromImageButton = findViewById(R.id.keyfromImg);
         saveEditButton = findViewById(R.id.saveContactButton);
 
         date.setText(tmp.getDateCreated());
-
         name.setText(tmp.getName());
 
         /*
@@ -135,6 +137,22 @@ public class Contact_Edit_Details extends AppCompatActivity {
             }
         });
 
+
+        loadFromImageButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(Contact_Edit_Details.this,loadContactImage.class);
+                startActivityForResult(intent,1);
+            }
+        });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent resultIntent) {
+        if (resultCode == 1){
+            tmp.setContactPubKey(resultIntent.getStringExtra("KEY"));
+            date.setText("Key Loaded from Image");
+        }
     }
 
     @Override
