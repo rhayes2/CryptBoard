@@ -11,6 +11,17 @@ import java.util.List;
 
 
 public class DatabaseHandler extends SQLiteOpenHelper {
+ /*  ------------------------------------------------------------------
+        DatabaseHandler Class
+        -----------------------
+        - Holds Database Instance
+        - Sql helper Class
+        - Loads Last Database
+      -----------------------------------------------------------------
+        
+      ----------------------------------------------------------------- 
+    */
+
     private static DatabaseHandler sInstance;
     public DatabaseHandler(Context context) {
         super(context, "ContactList", null, 13);

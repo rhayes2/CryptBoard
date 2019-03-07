@@ -8,7 +8,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Contact implements Serializable {
-    // keyFile contains the name of the file containing public and private key information .it is not the key itself. file extraction code must be implemented.
+     /*------------------------------------------------------------------
+        Contact Class
+        -----------------------
+        - Serializable for easy passing
+      ------------------------------------------------------------------
+        
+      ----------------------------------------------------------------- 
+    */
     private String name;
     private boolean favourite;
     private String myPrivKey;
@@ -19,14 +26,7 @@ public class Contact implements Serializable {
     public Contact(){
         this.name = null;
     }
-    /*
-        // used for contact creation
-        public Contact(String name, Boolean favourite) {
-            this.name = name;
-            this.favourite = favourite;
-        }
-    */
-    // used for contact creation
+
     public Contact(String name, Boolean favourite, String myKeyFile, String theirKeyFile) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         Date date = new Date();

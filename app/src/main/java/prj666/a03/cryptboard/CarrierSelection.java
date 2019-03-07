@@ -1,12 +1,9 @@
 package prj666.a03.cryptboard;
 
-import android.Manifest;
 import android.content.Context;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
@@ -17,11 +14,9 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -42,19 +37,40 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.xml.transform.URIResolver;
 
 import prj666.a03.cryptboard.TestSteg.Steg;
 
 public class CarrierSelection extends AppCompatActivity {
+ /*------------------------------------------------------------------
+        Carrier Selection Class
+        -----------------------
+        - Activity in which user selects media to act as a carrier for encrypted message
+        - Starts Encoding
+        - Saves File
+      ------------------------------------------------------------------
+
+        1. User Selects Media to be Encoded
+        2. User Selects Public Key to Encode With
+        3. On Encode Press, Encode and Save Image
+        4. On SelectFromStorage Press, Reselect another Image
+        5. On Done Press, Save Contact to Database (future keystorage?)
+
+      ------------------------------------------------------------------
+        P.O.I
+
+        L123-128:  Load Selection Spinner
+
+        L214-231:  Starting worker thread to encode 
+        
+      ----------------------------------------------------------------- 
+    */
+
     public static final int PICK_IMAGE = 1;
     public static final int CAPTURE_IMAGE = 2;
     public final String APP_TAG = "CryptBoard";
@@ -75,16 +91,6 @@ public class CarrierSelection extends AppCompatActivity {
     AutoCompleteTextView SearchContacts;
     ProgressDialog save;
 
-    /*private File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
-
-        currentPhotoPath = image.getAbsolutePath();
-        return image;
-    }*/
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,7 +105,7 @@ public class CarrierSelection extends AppCompatActivity {
         camera = findViewById(R.id.recaptureCamera);
         gallery = findViewById(R.id.reselectionFromStorage);
         confirm = findViewById(R.id.carrierConfirmation);
-        carrierImage = findViewById(R.id.carrierImage);
+        carrierImage = findViewById(R.id.carrierImagekey);
         SpinnerContact = findViewById(R.id.spinner);
         SearchContacts = findViewById(R.id.ContactSearchBarCarrier);
 
@@ -181,11 +187,11 @@ public class CarrierSelection extends AppCompatActivity {
 
                 // This is a check to see if we're actively processing a worker thread
                 if(frontEndHelper.getInstance().getWorker1()!=null){
-                    System.out.println("thread active?-- "+ frontEndHelper.getInstance().getWorker1().isAlive());
+                    //System.out.println("thread active?-- "+ frontEndHelper.getInstance().getWorker1().isAlive());
                     if(frontEndHelper.getInstance().getWorker1().isAlive()){
                         try {
                             frontEndHelper.getInstance().getWorker1().join();
-                            System.out.println("thread active22?-- "+ frontEndHelper.getInstance().getWorker1().isAlive());
+                            //System.out.println("thread active22?-- "+ frontEndHelper.getInstance().getWorker1().isAlive());
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }

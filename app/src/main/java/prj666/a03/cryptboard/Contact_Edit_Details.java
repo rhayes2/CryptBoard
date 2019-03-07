@@ -26,11 +26,30 @@ package prj666.a03.cryptboard;
         import prj666.a03.cryptboard.RSAStrings.RSAStrings;
 
 public class Contact_Edit_Details extends AppCompatActivity {
+
+/*   -----------------------------------------------------------------
+       Contact_Edit_Details Class
+        -----------------------
+        - Makes Contact Text Editable
+        - Saves New Contact Information
+      ------------------------------------------------------------------
+
+        1. User Edits Contact information
+        2. Onpress Saves Contact
+
+      ------------------------------------------------------------------
+        P.O.I
+        
+      ----------------------------------------------------------------- 
+*/
+    
     Contact tmp ;
     EditText name;
     TextView date;
     Button createNewKeyButton;
     Button saveEditButton;
+    Button loadFromImageButton;
+
 
     Boolean changed = false;
     Boolean deleted = false;
@@ -55,16 +74,19 @@ public class Contact_Edit_Details extends AppCompatActivity {
         date = findViewById(R.id.keyGenerationDate);
 
         createNewKeyButton = findViewById(R.id.keyRefresh);
+        loadFromImageButton = findViewById(R.id.keyfromImg);
         saveEditButton = findViewById(R.id.saveContactButton);
 
         date.setText(tmp.getDateCreated());
-
         name.setText(tmp.getName());
+
+        /*
+        * This TextChangedListener is to prevent a user from saving a contact with a blank name, and
+        * provide the user with visual feedback if a blank name is attempted
+        * */
         name.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -79,9 +101,7 @@ public class Contact_Edit_Details extends AppCompatActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
+            public void afterTextChanged(Editable editable) {}
         });
 
         createNewKeyButton.setOnClickListener(new View.OnClickListener() {
@@ -117,6 +137,22 @@ public class Contact_Edit_Details extends AppCompatActivity {
             }
         });
 
+
+        loadFromImageButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(Contact_Edit_Details.this,loadContactImage.class);
+                startActivityForResult(intent,1);
+            }
+        });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent resultIntent) {
+        if (resultCode == 1){
+            tmp.setContactPubKey(resultIntent.getStringExtra("KEY"));
+            date.setText("Key Loaded from Image");
+        }
     }
 
     @Override

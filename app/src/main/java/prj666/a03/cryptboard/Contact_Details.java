@@ -20,6 +20,27 @@ import prj666.a03.cryptboard.ContactBase.Contact;
 
 
 public class Contact_Details extends AppCompatActivity {
+
+    /*------------------------------------------------------------------
+        Contact Details Class
+        -----------------
+        - Displays Information about he contact
+        - Provides a way to edit Contacts
+        - Provides a way to delete Contacts
+
+      ------------------------------------------------------------------
+
+        1. Get Serilizable Extra - Contact
+        2. Populate fields with information
+        3. On press start Edit Contact Activity
+        4. On press Delete Contact
+
+      ------------------------------------------------------------------
+        P.O.I
+
+      ----------------------------------------------------------------- 
+    */
+
     Contact tmp;
     TextView name;
     TextView date;
@@ -46,6 +67,7 @@ public class Contact_Details extends AppCompatActivity {
         date = findViewById(R.id.keyGenerationDate);
         editContactButton = findViewById(R.id.editContactButton);
         doneContactButton = findViewById(R.id.doneContactButton);
+
 
 
         name.setText(tmp.getName());

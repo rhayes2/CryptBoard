@@ -24,6 +24,31 @@ import prj666.a03.cryptboard.ContactBase.DatabaseHandler;
 public class CryptBoard extends InputMethodService
         implements KeyboardView.OnKeyboardActionListener{
 
+    /*------------------------------------------------------------------
+        CryptBoard Class
+        -----------------
+        - Keyboard Class
+        - Provides Toolbar buttons
+        - Fetches Input Onpress / Clears
+
+      ------------------------------------------------------------------
+       Information:
+       ------------
+       Keyboard Mode Toggle(C): A function accessed by using a swipe up on the keyboard. Switches between normal key mode and StegMode toolbar.
+
+       •	To activate steganography mode, press and hold on the enter key for 2 seconds before releasing. 
+       This will cause an additional bar of icons to appear above the top row of alphanumeric keys.
+
+       •	From left to right, these icons represent: Message Encoding, Message Decoding, Contacts, and Clear Field
+
+      ------------------------------------------------------------------
+        P.O.I
+
+        onStartInputView - sets starting values including stegmode
+        
+      ----------------------------------------------------------------- 
+    */
+
     private static final int KEYCODE_ENCRYPT = -100; // ENCRYPT KEYCODE_CAMERA
     private static final int KEYCODE_DECRYPT = -102; // TOGGLE
     private static final int KEYCODE_CONTACTS = -104;
@@ -64,7 +89,7 @@ public class CryptBoard extends InputMethodService
             caps = false;
             capsLock = false;
             numMode = false;
-            stegMode = false;
+            stegMode = false;  
             symMode = false;
         }
     }
