@@ -2,17 +2,13 @@ package prj666.a03.cryptboard;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
-import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
@@ -28,11 +24,9 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 
-
 import prj666.a03.cryptboard.ContactBase.Contact;
 import prj666.a03.cryptboard.ContactBase.DatabaseHandler;
 import prj666.a03.cryptboard.RSAStrings.RSAStrings;
-import prj666.a03.cryptboard.TestSteg.Steg;
 
 public class frontEndHelper {
 
