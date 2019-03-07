@@ -13,6 +13,6 @@ CryptBoard is a keyboard application for Android devices that allows users to cr
 
 
 ## Contributing
-Thanks for your interest in contributing! We welcome many ways to get started; start with our Contributing Guide and then check for open issues for specific tasks.
+Thanks for your interest in contributing! We welcome many ways to get started; start with our [Contributing Guide](https://github.com/rhayes/CryptBoard/blob/master/CONTRIBUTING.md) and then check for open [issues](https://github.com/rhayes2/CryptBoard/issues) for specific tasks.
 
 For contributors looking to suggest improvements, feel free to open an issue to start the discussion.
