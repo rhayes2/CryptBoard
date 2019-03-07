@@ -217,6 +217,7 @@ public class DecodePhoto extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                ;
                 carrierImage.setImageURI(selectedImage);
                 //confirm.setText(selectedImage.toString());
                 //Toast.makeText(this, "IMAGE SELECTED! " + selectedImage.toString(), Toast.LENGTH_SHORT).show();

@@ -100,7 +100,7 @@ public class frontEndHelper {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public String scanKey() {
+    public String scanKey() throws NoSuchAlgorithmException, InvalidKeySpecException {
         String stringKey = null;
         System.out.println("Testing Scan Key");
         // scan key here
@@ -113,7 +113,7 @@ public class frontEndHelper {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void displayKey(String key, Activity act) {
+    public void displayKey(String key, Activity act) throws NoSuchAlgorithmException, InvalidKeySpecException {
         // GenKey and display to UI
         // CALLS TO QR STUFF
 

@@ -107,7 +107,7 @@ public class sendKeyEncoding extends AppCompatActivity {
         Intent intent = getIntent();
         publicKey = intent.getStringExtra("Key");
         intent = new Intent();
-        encodeKey = findViewById(R.id.encodepubkey);
+        encodeKey = (Button) findViewById(R.id.encodepubkey);
         gallery = findViewById(R.id.reselectimgcontact);
         passcodeField = findViewById(R.id.passcodebar);
         carrierImage = findViewById(R.id.carrierImagekey);
@@ -167,7 +167,7 @@ public class sendKeyEncoding extends AppCompatActivity {
                         Bitmap crypts = null;
                         String passcodeThread = passcode;
                         try {
-                            Ecrypted = frontEndHelper.encryptKey(inThreadkey,passcodeThread);
+                            Ecrypted = frontEndHelper.getInstance().encryptKey(inThreadkey,passcodeThread);
                             crypts = Steg.withInput(inThreadToEncode).encode(Ecrypted).intoBitmap();
                             saveToInternalStorage(crypts, "Encodedkey");
                         } catch (NoSuchAlgorithmException | InvalidKeySpecException | IllegalBlockSizeException | InvalidKeyException | BadPaddingException | NoSuchPaddingException e) {
