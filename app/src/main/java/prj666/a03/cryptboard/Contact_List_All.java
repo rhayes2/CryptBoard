@@ -1,20 +1,14 @@
 package prj666.a03.cryptboard;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.ListFragment;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import prj666.a03.cryptboard.ContactBase.Contact;

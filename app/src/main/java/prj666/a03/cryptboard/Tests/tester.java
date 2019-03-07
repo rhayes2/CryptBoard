@@ -2,7 +2,6 @@ package prj666.a03.cryptboard.Tests;
 
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
-import java.security.interfaces.RSAPublicKey;
 
 import prj666.a03.cryptboard.RSAStrings.RSAStrings;
 import prj666.a03.cryptboard.frontEndHelper;
