@@ -110,7 +110,7 @@ public class Steg {
     return encode(string.getBytes());
   }
 
-  public EncodedObject encode(@NonNull byte[] bytes) throws Exception {
+  public EncodedObject encode(@NonNull byte[] bytes) {
 
     // Check there is enough space for bitmap to be encoded into image
     if (bytes.length>bytesAvaliableInBitmap()){

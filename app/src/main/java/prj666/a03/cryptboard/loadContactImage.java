@@ -101,7 +101,7 @@ public class loadContactImage extends AppCompatActivity {
         setContentView(R.layout.activity_load_contact_image);
 
 
-        decodeKey = (Button) findViewById(R.id.decodepubkey);
+        decodeKey = findViewById(R.id.decodepubkey);
         gallery = findViewById(R.id.reselectimgContact);
         passcodeField = findViewById(R.id.passcodebar);
         carrierImage = findViewById(R.id.carrierImagekey);
@@ -153,7 +153,7 @@ public class loadContactImage extends AppCompatActivity {
                 try {
 
                     encryptedmsg = Steg.withInput(SelectedImg).decode().intoString();
-                    output = frontEndHelper.getInstance().decryptKey(encryptedmsg, frontEndHelper.convertKeyTo128bit(passcodeField.getText().toString()));
+                    output = frontEndHelper.decryptKey(encryptedmsg, frontEndHelper.convertKeyTo128bit(passcodeField.getText().toString()));
                 } catch (Exception e) {
                     e.printStackTrace();
                     Status.setText("Invalid Passcode!");

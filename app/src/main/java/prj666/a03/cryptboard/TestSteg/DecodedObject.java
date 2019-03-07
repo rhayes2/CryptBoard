@@ -23,7 +23,7 @@ public class DecodedObject {
     return new String(bytes);
   }
 
-  public File intoFile(String path) throws IOException {
+  public File intoFile(String path) {
     return intoFile(new File(path));
   }
 
